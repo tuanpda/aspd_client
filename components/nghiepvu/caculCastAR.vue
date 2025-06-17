@@ -2560,10 +2560,10 @@ export default {
           const res = await this.$axios.get(
             `/api/nguoihuong/tim-kiem-thong-tin-hgd?soBhxh=${item.masobhxh}&SO_DDCN_CCCD_BCA=${item.cccd}`
           );
-          console.log(res);
+          // console.log(res);
 
           const ttHgd = res.data.thongtinHgd;
-          console.log(ttHgd);
+          // console.log(ttHgd);
 
           Swal.fire({
             html: `
@@ -3780,6 +3780,8 @@ export default {
           );
           this.dulieuTravedeinbienlai = rsIdtity.data;
           this.isLoading = false;
+          console.log(this.dulieuTravedeinbienlai);
+
           this.lockButtonXacnhaninbldt = true; // khoá nút xác nhận biên lai điện tử
 
           Swal.fire({

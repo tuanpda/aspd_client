@@ -135,14 +135,14 @@
                 &ensp; Tra cứu Hồ sơ kê khai (tìm kiếm)
               </nuxt-link> -->
               <nuxt-link to="/nhanviendailythu/taokekhai" class="navbar-item">
-                <span style="color: #3850b7" class="icon is-small is-left">
+                <span style="color: #0d6efd" class="icon is-small is-left">
                   <i class="fas fa-file-signature"></i>
                 </span>
                 &ensp; Tạo kê khai
               </nuxt-link>
               <nuxt-link to="/nhanviendailythu/hogiadinh" class="navbar-item">
-                <span style="color: #3850b7" class="icon is-small is-left">
-                  <i class="fab fa-creative-commons-by"></i>
+                <span style="color: #6610f2" class="icon is-small is-left">
+                  <i class="fas fa-id-card-alt"></i>
                 </span>
                 &ensp; Tìm kiếm thông tin HGĐ
               </nuxt-link>
@@ -150,7 +150,7 @@
                 to="/nhanviendailythu/tracuuhanthe"
                 class="navbar-item"
               >
-                <span style="color: #3850b7" class="icon is-small is-left">
+                <span style="color: #ffc107" class="icon is-small is-left">
                   <i class="fas fa-server"></i>
                 </span>
                 &ensp; Tra cứu hạn thẻ
@@ -180,19 +180,19 @@
               v-show="isDropdownOpen_danhmuc"
             >
               <nuxt-link to="/nhanviendailythu/timkiemhoso" class="navbar-item">
-                <span style="color: #3850b7" class="icon is-small is-left">
-                  <i class="fas fa-search"></i>
+                <span style="color: #198754" class="icon is-small is-left">
+                  <i class="far fa-edit"></i>
                 </span>
-                &ensp; Tìm kiếm & Phân loại hồ sơ
+                &ensp; Phê duyệt hồ sơ
               </nuxt-link>
               <nuxt-link
                 to="/nhanviendailythu/xuatfiledayivan"
                 class="navbar-item"
               >
-                <span style="color: #3850b7" class="icon is-small is-left">
+                <span style="color: #fd7e14" class="icon is-small is-left">
                   <i class="fas fa-cloud-download-alt"></i>
                 </span>
-                &ensp; Xuất file đẩy Ivan
+                &ensp; Xuất File đẩy Ivan
               </nuxt-link>
               <nuxt-link
                 to="/nhanviendailythu/quanlybienlai"
@@ -201,7 +201,7 @@
                 <span style="color: #dc3545" class="icon is-small is-left">
                   <i class="fab fa-cc-mastercard"></i>
                 </span>
-                &ensp; Quản lý biên lai
+                &ensp; Quản lý Biên lai điện tử
               </nuxt-link>
             </div>
           </div>
