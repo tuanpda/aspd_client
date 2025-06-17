@@ -4104,6 +4104,18 @@ export default {
       if (!str) return "";
       return str.charAt(0).toUpperCase() + str.slice(1);
     },
+
+    async importKekhai() {
+      // thêm các thứ sau. 1. import XLSX from "xlsx"
+      // 2. thêm isActive_import (vào data); 3. thêm fileName: "", và selectedFile: null, vào data
+      // thêm @click="importKekhai" cho button trên cùng
+      this.isActive_import = true;
+    },
+
+    cancelImport() {
+      this.isActive_import = false;
+      this.items = [];
+    },
   },
 };
 </script>
