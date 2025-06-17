@@ -132,14 +132,17 @@
                 <td style="text-align: center">{{ index + 1 }}</td>
                 <td style="">{{ item._id }}</td>
                 <td style="text-align: center">
-                  <span
-                    :style="{
-                      fontWeight: 700,
-                      color: item.active ? '#ffc107' : 'green',
-                    }"
-                  >
-                    {{ item.active ? "Đã huỷ duyệt" : "Đã duyệt" }}
-                  </span>
+                  <template v-if="item.active === 1">
+                    <!-- So sánh kiểu boolean với số -->
+                    <span style="font-weight: 700; color: #ffc107"
+                      >Đã huỷ duyệt</span
+                    >
+                  </template>
+                  <template v-else>
+                    <span style="font-weight: 700; color: #ffc107"
+                      >Đã huỷ duyệt</span
+                    >
+                  </template>
                 </td>
                 <td style="text-align: center">
                   <a @click="xemBienLai(item)">
