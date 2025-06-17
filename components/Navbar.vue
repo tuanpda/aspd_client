@@ -6,13 +6,8 @@
   >
     <div class="container">
       <div class="navbar-brand">
-        <!-- <nuxt-link to="/" class="navbar-item">
-          <div style="font-weight: bold; font-size: 20px; color: #f1aeb5">
-            e.VSS
-          </div>
-        </nuxt-link> -->
         <nuxt-link to="/" class="navbar-item">
-          <img src="@/assets/logos/evss.svg" height="50" />
+          <img src="@/assets/logos/evss.svg" />
         </nuxt-link>
 
         <a
@@ -284,7 +279,6 @@
                           v-model="user.name"
                           class="input is-small"
                           type="text"
-                          disabled
                         />
                       </div>
                     </div>
@@ -303,12 +297,22 @@
                       </div>
                     </div>
                     <div class="field">
+                      <label class="label">Số điện thoại</label>
+                      <div class="control">
+                        <input
+                          v-model="user.sodienthoai"
+                          class="input is-small"
+                          type="text"
+                        />
+                      </div>
+                    </div>
+                    <div class="field">
                       <label class="label">Mật khẩu</label>
                       <div class="control">
                         <input
                           v-model="changePassword.oldPassword"
                           class="input is-small"
-                          type="password"
+                          type="text"
                           placeholder="Mật khẩu hiện tại"
                         />
                       </div>
@@ -318,7 +322,7 @@
                         <input
                           v-model="changePassword.newPassword"
                           class="input is-small"
-                          type="password"
+                          type="text"
                           placeholder="Mật khẩu mới"
                         />
                       </div>
@@ -328,7 +332,7 @@
                         <input
                           v-model="changePassword.re_newPassword"
                           class="input is-small"
-                          type="password"
+                          type="text"
                           placeholder="Nhập lại mật khẩu mới"
                         />
                       </div>
@@ -338,15 +342,54 @@
                     <div class="field">
                       <label class="label">Ảnh đại diện</label>
                       <div class="control" style="text-align: center">
-                        <div id="preview" class="box">
+                        <div id="preview1" class="box">
                           <figure class="image is-128x128">
                             <img class="is-rounded" :src="user.avatar" />
                           </figure>
                         </div>
                       </div>
                     </div>
+
+                    <div class="field">
+                      <div class="file is-small has-name is-info">
+                        <label class="file-label">
+                          <input
+                            ref="fileInput"
+                            @change="onFileChange"
+                            class="file-input"
+                            type="file"
+                            name="resume"
+                          />
+                          <span class="file-cta">
+                            <span class="file-icon">
+                              <i class="fas fa-upload"></i>
+                            </span>
+                            <span class="file-label">
+                              Sửa lại ảnh đại diện
+                            </span>
+                          </span>
+                          <span class="file-name">
+                            {{ fileName }}
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+
+                    <div class="field">
+                      <div v-if="url" class="column">
+                        <div id="preview1">
+                          <img :src="url" />
+                        </div>
+                        <span style="color: red" class="icon is-small is-left">
+                          <i @click="remove" class="far fa-trash-alt"
+                            ><a>Xóa ảnh</a></i
+                          >
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
+
                 <div class="columns">
                   <div class="column">
                     <button
@@ -386,6 +429,10 @@ export default {
 
       isActive: false,
 
+      fileName: "",
+      selectedFile: null,
+      url: "",
+
       changePassword: {
         oldPassword: "",
         newPassword: "",
@@ -415,6 +462,23 @@ export default {
 
     toggleDropdown_user() {
       this.isDropdownOpen_user = !this.isDropdownOpen_user;
+    },
+
+    onFileChange(e) {
+      this.fileName = e.target.files[0];
+      this.url = URL.createObjectURL(this.fileName);
+      this.fileName = e.target.files[0].name;
+      this.selectedFile = e.target.files[0];
+    },
+
+    /* Hủy file đính kèm */
+    remove() {
+      //console.log("removed");
+      this.selectedFile = "";
+      this.fileName = "";
+      this.url = null;
+      this.$refs.fileInput.type = "text";
+      this.$refs.fileInput.type = "file";
     },
 
     async logout() {
@@ -471,17 +535,31 @@ export default {
               title: `Mật khẩu mới không khớp nhau`,
             });
           } else {
-            const dataUpdate = {
-              _id: this.user._id,
-              email: this.user.email,
-              password: this.changePassword.oldPassword,
-              newPassword: this.changePassword.newPassword,
-            };
-            // console.log(dataUpdate);
             try {
+              const current = new Date();
+              let data = new FormData();
+              data.append("_id", this.user._id);
+              data.append("email", this.user.email);
+              data.append("name", this.user.name);
+              data.append("password", this.changePassword.oldPassword);
+              data.append("newPassword", this.changePassword.newPassword);
+              data.append("sodienthoai", this.user.sodienthoai);
+              if (this.selectedFile) {
+                data.append(
+                  "avatar",
+                  this.selectedFile,
+                  this.selectedFile.name
+                );
+                data.append("avatarOld", this.user.avatar);
+              } else {
+                data.append("avatar", this.user.avatar);
+              }
+              data.append("updatedAt", current);
+              data.append("updatedBy", this.user.username);
+
               const res = await this.$axios.post(
-                `/api/users/user/changepass`,
-                dataUpdate
+                `/api/users/user/fix-info-pass`,
+                data
               );
               // console.log(res.data.success);
               if (res.data.success == 5) {
@@ -501,20 +579,13 @@ export default {
                   title: `Mật khẩu hiện tại không đúng`,
                 });
               } else {
-                const Toast = Swal.mixin({
-                  toast: true,
-                  position: "top-end",
-                  showConfirmButton: false,
-                  timer: 2000,
-                  timerProgressBar: true,
-                  didOpen: (toast) => {
-                    toast.addEventListener("mouseenter", Swal.stopTimer);
-                    toast.addEventListener("mouseleave", Swal.resumeTimer);
-                  },
-                });
-                Toast.fire({
+                Swal.fire({
                   icon: "success",
-                  title: `Đã cập nhật thông tin`,
+                  title: "Đã cập nhật thông tin",
+                  text: "Hệ thống sẽ đăng xuất bạn. Bấm OK để tiếp tục.",
+                  confirmButtonText: "OK",
+                }).then(() => {
+                  this.logout();
                 });
               }
             } catch (error) {
@@ -523,31 +594,32 @@ export default {
           }
         }
       } else {
-        const dataUpdate = {
-          _id: this.user._id,
-          email: this.user.email,
-        };
         try {
-          const res = await this.$axios.post(
-            `/api/users/user/changeemail`,
-            dataUpdate
-          );
+          const current = new Date();
+          let data = new FormData();
+          data.append("_id", this.user._id);
+          data.append("email", this.user.email);
+          data.append("name", this.user.name);
+          data.append("sodienthoai", this.user.sodienthoai);
+          if (this.selectedFile) {
+            data.append("avatar", this.selectedFile, this.selectedFile.name);
+            data.append("avatarOld", this.user.avatar);
+          } else {
+            data.append("avatar", this.user.avatar);
+          }
+          data.append("updatedAt", current);
+          data.append("updatedBy", this.user.username);
+
+          const res = await this.$axios.post(`/api/users/user/fix-info`, data);
           // console.log(res);
           if (res.status == 200) {
-            const Toast = Swal.mixin({
-              toast: true,
-              position: "top-end",
-              showConfirmButton: false,
-              timer: 2000,
-              timerProgressBar: true,
-              didOpen: (toast) => {
-                toast.addEventListener("mouseenter", Swal.stopTimer);
-                toast.addEventListener("mouseleave", Swal.resumeTimer);
-              },
-            });
-            Toast.fire({
+            Swal.fire({
               icon: "success",
-              title: `Đã cập nhật thông tin`,
+              title: "Đã cập nhật thông tin",
+              text: "Hệ thống sẽ đăng xuất bạn. Bấm OK để tiếp tục.",
+              confirmButtonText: "OK",
+            }).then(() => {
+              this.logout();
             });
           }
         } catch (error) {
@@ -584,9 +656,21 @@ export default {
   height: 50px;
 }
 
+#preview1 {
+  display: flex;
+  justify-content: left;
+  align-items: left;
+}
+
+#preview1 img {
+  max-width: 100px;
+  max-height: 100px;
+  padding: 5px;
+}
+
 .modal-card {
-  width: 620px;
-  height: 500px;
+  width: 720px;
+  height: 600px;
 }
 
 .navbar {
