@@ -3,7 +3,7 @@
     <div style="margin-top: 20px">
       <div class="columns">
         <div class="column">
-          <div
+          <!-- <div
             class="field is-grouped is-grouped-multiline is-justify-content-flex-end"
           >
             <p class="control">
@@ -22,7 +22,7 @@
                 <span>Import tờ khai</span>
               </button>
             </p>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="table_wrapper">
@@ -181,7 +181,7 @@
 
               <td style="text-align: center">
                 <input
-                  v-model="hanthecu"
+                  v-model="item.hanthecu"
                   type="text"
                   placeholder="MM/YYYY"
                   class="input is-small"
@@ -2133,7 +2133,7 @@ export default {
               this.items[index].dienthoai = data.soDienThoai;
 
               // gán hạn thẻ cũ lên form
-              this.hanthecu = data.denThang;
+              this.items[index].hanthecu = data.denThang;
               // this.items[index].tuthang = data.denThang;
               const [thangStr, namStr] = data.denThang.split("/"); // "04/2025"
               let thang = parseInt(thangStr);
@@ -2796,6 +2796,7 @@ export default {
           status_hosoloi: 0,
           status_naptien: 0,
           hinhthucnap: 1,
+          hanthecu: "",
         });
 
         // console.log(this.items);

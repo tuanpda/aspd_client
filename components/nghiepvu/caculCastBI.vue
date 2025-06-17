@@ -15,11 +15,19 @@
               </button>
             </p> -->
             <p class="control">
-              <button class="button is-small is-info">
+              <button @click="importKekhai" class="button is-small is-info">
                 <span class="icon">
                   <i class="fas fa-file-import"></i>
                 </span>
-                <span>Import tờ khai</span>
+                <span>Import kê khai</span>
+              </button>
+            </p>
+            <p class="control">
+              <button class="button is-small is-warning">
+                <span class="icon">
+                  <i class="fas fa-file-download"></i>
+                </span>
+                <span>Tải về mẫu Import</span>
               </button>
             </p>
           </div>
@@ -207,7 +215,11 @@
                 />
               </td> -->
               <td style="text-align: center">
-                <input v-model="hanthecu" type="text" class="input is-small" />
+                <input
+                  v-model="item.hanthecu"
+                  type="text"
+                  class="input is-small"
+                />
               </td>
 
               <td style="text-align: center">
@@ -1633,7 +1645,7 @@ export default {
 
               // CODE TÌM HẠN THẺ TỪ 05/06/2025
               // gán hạn thẻ cũ lên form
-              this.hanthecu = data.denNgay;
+              this.items[index].hanthecu = data.denNgay;
               const denNgayStr = data.denNgay; // vd: "10/10/2024"
               // const denNgayStr = "15/03/2025";
 
@@ -1730,8 +1742,8 @@ export default {
                 this.items[index].gioitinh = data.gioiTinh;
                 this.items[index].dienthoai = data.soDienThoai;
 
-                if (data.hanThe !== "") {
-                  this.hanthecu = data.hanThe.split("-")[1]; // Kết quả: "31/12/2025"
+                if (data.hanThe !== null && data.hanThe !== "") {
+                  this.items[index] = data.hanThe.split("-")[1]; // Kết quả: "31/12/2025"
 
                   // this.hanthecu = "31/04/2025"; -- dùng để test
                   // console.log(this.hanthecu);
@@ -1750,7 +1762,7 @@ export default {
                   };
 
                   const today = new Date();
-                  const denNgay = parseDate(this.hanthecu);
+                  const denNgay = parseDate(this.items[index].hanthecu);
                   const bienLai = today;
 
                   // console.log(denNgay);
@@ -1778,7 +1790,7 @@ export default {
                   this.items[index].tungay = formatDate(tuNgay);
                   // console.log("🎯 Hạn thẻ từ (tungay):", this.items[index].tungay);
                 } else {
-                  this.hanthecu = "Không tìm thấy hạn thẻ cũ";
+                  this.items[index].hanthecu = "Không tìm thấy hạn thẻ cũ";
                   // Gán ngày hiện tại + 30 ngày
                   const today = new Date();
                   const next30 = new Date();
@@ -2713,6 +2725,7 @@ export default {
           status_hosoloi: 0,
           status_naptien: 0,
           hinhthucnap: 1,
+          hanthecu: "",
         });
 
         // console.log(this.items);
