@@ -1174,6 +1174,7 @@ export default {
       this.dulieuPheduyet = [];
       this.dulieuHuyPheDuyet = [];
       this.isActive = false;
+      this.filterData(1);
     },
 
     closeDanhsachhuyDuyet() {
@@ -1181,6 +1182,7 @@ export default {
       this.dulieuPheduyet = [];
       this.dulieuHuyPheDuyet = [];
       this.isActive_fix = false;
+      this.filterData(1);
     },
 
     // pagi
