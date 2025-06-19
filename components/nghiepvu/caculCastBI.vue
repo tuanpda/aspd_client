@@ -103,7 +103,7 @@
                   v-model="item.masobhxh"
                   class="input is-small"
                   type="number"
-                  ref="masobhxhInput"
+                  :ref="'masobhxhInput' + item._id"
                   @blur="findNguoihuong(item.masobhxh, index)"
                 />
               </td>
@@ -112,7 +112,7 @@
                   v-model="item.hoten"
                   class="input is-small"
                   type="text"
-                  ref="nameInput"
+                  :ref="'nameInput' + item._id"
                 />
               </td>
               <td style="text-align: center">
@@ -120,7 +120,7 @@
                   <input
                     v-model="item.ngaysinh"
                     class="input is-small"
-                    ref="ngaysinhInput"
+                    :ref="'ngaysinhInput' + item._id"
                   />
                 </template>
                 <template v-else>
@@ -128,7 +128,7 @@
                     v-model="item.ngaysinh"
                     class="input is-small"
                     type="date"
-                    ref="ngaysinhInput"
+                    :ref="'ngaysinhInput' + item._id"
                   />
                 </template>
               </td>
@@ -148,7 +148,7 @@
                   v-model="item.cccd"
                   class="input is-small"
                   type="number"
-                  ref="cccdInput"
+                  :ref="'cccdInput' + item._id"
                 />
               </td>
               <td style="text-align: center">
@@ -156,7 +156,6 @@
                   v-model="item.dienthoai"
                   class="input is-small"
                   type="number"
-                  ref="dienthoaiInput"
                 />
               </td>
               <td style="text-align: center">
@@ -164,7 +163,7 @@
                   <select
                     v-model="item.maphuongan"
                     @change="phuonganChange($event, index)"
-                    ref="phuonganSelect"
+                    :ref="'phuonganSelect' + item._id"
                   >
                     <option selected disabled>- Chọn phương án -</option>
                     <option
@@ -182,7 +181,7 @@
                   <select
                     v-model="item.manguoithu"
                     @change="nguoithuChange($event, index)"
-                    ref="nguoithuSelect"
+                    :ref="'nguoithuSelect' + item._id"
                   >
                     <option disabled value="">- Chọn người thứ ? -</option>
                     <option
@@ -227,7 +226,7 @@
                   <select
                     v-model="item.maphuongthucdong"
                     @change="phuongthucdChange($event, index)"
-                    ref="phuongthucdongSelect"
+                    :ref="'phuongthucdongSelect' + item._id"
                   >
                     <option selected disabled>- Chọn phương thức đóng -</option>
                     <option
@@ -271,7 +270,7 @@
                 <div class="select is-fullwidth is-small">
                   <select
                     @change="quanhuyenChange($event, index)"
-                    ref="quanhuyenSelect"
+                    :ref="'quanhuyenSelect' + item._id"
                   >
                     <option selected disabled>
                       {{ item.maquanhuyen }} -
@@ -293,7 +292,7 @@
                   <select
                     @change="xaphuongChange($event, index)"
                     :disabled="isDisabled_Xaphuong"
-                    ref="xaphuongSelect"
+                    :ref="'xaphuongSelect' + item._id"
                   >
                     <option selected disabled>
                       {{ item.maxaphuong }} -
@@ -315,7 +314,7 @@
                   v-model="item.tothon"
                   class="input is-small"
                   type="text"
-                  ref="tothonInput"
+                  :ref="'tothonInput' + item._id"
                 />
               </td>
               <!-- tỉnh bệnh viện -->
@@ -341,6 +340,7 @@
                   <select
                     v-model="item.mabenhvien"
                     @change="hopChangeReset($event, index)"
+                    :ref="'hopInput' + item._id"
                   >
                     <option
                       v-for="(nt, idx) in item.info_benhvien"
@@ -377,7 +377,7 @@
                   <select
                     @change="hinhthucNap($event, addedIndex)"
                     v-model="item.hinhthucnap"
-                    ref="hinhthucnapInput"
+                    :ref="'hinhthucnapInput' + item._id"
                   >
                     <option value="0">Tiền mặt</option>
                     <option value="1">Chuyển khoản</option>
@@ -1992,7 +1992,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.masobhxhInput[index]?.focus();
         return false;
       }
 
@@ -2001,13 +2000,11 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.masobhxhInput[index]?.focus();
         return false;
       }
 
       if (!item.hoten) {
         this.$toasted.show("Thiếu họ tên", { duration: 3000, theme: "bubble" });
-        this.$refs.nameInput[index]?.focus();
         return false;
       }
 
@@ -2016,7 +2013,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.ngaysinhInput[index]?.focus();
         return false;
       }
 
@@ -2025,13 +2021,11 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.gioitinhSelect[index]?.focus();
         return false;
       }
 
       if (!item.cccd) {
         this.$toasted.show("Thiếu CCCD", { duration: 3000, theme: "bubble" });
-        this.$refs.cccdInput[index]?.focus();
         return false;
       }
 
@@ -2040,7 +2034,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.cccdInput[index]?.focus();
         return false;
       }
 
@@ -2049,7 +2042,14 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.phuonganSelect[index]?.focus();
+        return false;
+      }
+
+      if (!item.nguoithu) {
+        this.$toasted.show("Người thứ mấy", {
+          duration: 3000,
+          theme: "bubble",
+        });
         return false;
       }
 
@@ -2058,7 +2058,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.tungayInput[index]?.focus();
         return false;
       }
 
@@ -2067,7 +2066,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.phuongthucdongSelect[index]?.focus();
         return false;
       }
 
@@ -2076,7 +2074,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.quanhuyenSelect[index]?.focus();
         return false;
       }
 
@@ -2085,7 +2082,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.xaphuongSelect[index]?.focus();
         return false;
       }
 
@@ -2094,7 +2090,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.hopInput[index]?.focus();
         return false;
       }
 
@@ -2103,7 +2098,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.hinhthucnapInput[index]?.focus();
         return false;
       }
 

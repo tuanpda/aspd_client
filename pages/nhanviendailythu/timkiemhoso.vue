@@ -43,11 +43,17 @@
               <select @change="handleChange">
                 <option selected disabled>- Chọn loại hình -</option>
                 <option value="">Không chọn</option>
-                <option value="AR">Bảo hiểm y tế - Nông lâm - MSTB</option>
-                <option value="BI">Bảo hiểm y tế - HGĐ</option>
-                <option value="IS">Bảo hiểm xã hội tự nguyện</option>
+                <option value="AR">Bảo hiểm y tế - Nông lâm - MSTB (AR)</option>
+                <option value="BI">Bảo hiểm y tế - HGĐ (BI)</option>
+                <option value="IS">Bảo hiểm xã hội tự nguyện (IS)</option>
                 <option value="IL">
-                  Người tham gia lực lượng An ninh cơ sở
+                  Người tham gia lực lượng An ninh cơ sở (IL)
+                </option>
+                <option value="IT">
+                  Bảo hiểm xã hội tự nguyện - ngoại tỉnh (IT)
+                </option>
+                <option value="WI">
+                  BHYT Người tham gia lực lượng An ninh cơ sở (WI)
                 </option>
               </select>
             </div>
@@ -78,59 +84,31 @@
         </div>
         <div class="columns">
           <div class="column">
-            <label class="label">Đợt Kê khai</label>
-            <div class="input-group">
-              <input
-                type="number"
-                min="1"
-                max="12"
-                class="input is-small"
-                placeholder="Đợt kê khai của hồ sơ"
-                v-model="dotkekhai"
-              />
+            <label class="label">Trạng thái hồ sơ</label>
+            <div class="select is-small is-fullwidth">
+              <select @change="handleTrangThaiChange">
+                <option selected disabled>- Chọn trạng thái -</option>
+                <option value="">Không chọn</option>
+                <option value="dapheduyet">Đã phê duyệt</option>
+                <option value="chuapheduyet">Chưa phê duyệt</option>
+                <option value="dahuyduyet">Đã hủy duyệt</option>
+              </select>
             </div>
           </div>
           <div class="column">
             <label class="label">Số hồ sơ</label
-            ><input
-              v-model="sohoso"
-              type="text"
-              class="input is-small"
-              placeholder="Số hồ sơ đã nạp"
-            />
+            ><input v-model="sohoso" type="text" class="input is-small" />
           </div>
           <div class="column">
             <label class="label">Mã số BHXH</label
-            ><input
-              v-model="masobhxh"
-              type="text"
-              class="input is-small"
-              placeholder="Số hồ sơ đã nạp"
-            />
+            ><input v-model="masobhxh" type="text" class="input is-small" />
           </div>
           <div class="column">
             <label class="label">Họ tên</label
-            ><input
-              v-model="hoten"
-              type="text"
-              class="input is-small"
-              placeholder="Số hồ sơ đã nạp"
-            />
+            ><input v-model="hoten" type="text" class="input is-small" />
           </div>
         </div>
-        <div class="columns">
-          <!-- <div class="column is-2">
-            <label class="label">Nhóm tham gia</label>
-            <div class="select is-small is-fullwidth">
-              <select @change="handleChange">
-                <option selected disabled>- Chọn loại hình -</option>
-                <option value="BI">Bảo hiểm y tế</option>
-                <option value="AR">Bảo hiểm y tế - HGĐ</option>
-                <option value="IS">Bảo hiểm xã hội tự nguyện</option>
-              </select>
-            </div>
-          </div> -->
-        </div>
+
         <hr class="navbar-divider" />
         <footer class="has-text-right">
           <div class="buttons is-right">
@@ -162,9 +140,14 @@
               </span>
               <span>HUỶ duyệt hồ sơ</span>
             </button>
-
-            <!-- <ExportExcel_Viettel :data_execl="data_kekhai" />
-            <ExportExcel_Vnpt :data_execl="data_kekhai" /> -->
+            <ExportExcel_VNPT_D05
+              :disabled="!isExport"
+              :data_execl="selectedItems_execl_export"
+            />
+            <ExportExcel_Vnpt
+              :disabled="!isExport"
+              :data_execl="selectedItems_execl_export"
+            />
           </div>
         </footer>
       </div>
@@ -177,6 +160,15 @@
             <thead style="font-weight: bold">
               <tr style="font-size: small; background-color: #faf0e6">
                 <td rowspan="2" style="text-align: center">
+                  Chọn để <br />xuất execl<br />
+                  <input
+                    type="checkbox"
+                    v-model="selectAll_execl"
+                    @change="toggleAll_execl"
+                  />
+                </td>
+                <td rowspan="2" style="text-align: center">
+                  Chọn để <br />duyệt/hủy<br />
                   <input
                     type="checkbox"
                     v-model="selectAll"
@@ -185,17 +177,30 @@
                 </td>
                 <td rowspan="2" style="text-align: center; width: 3%">STT</td>
                 <td rowspan="2" style="text-align: center">_ID</td>
-                <td style="text-align: center">Trạng thái</td>
+                <td
+                  style="text-align: center; cursor: pointer"
+                  @click="sortByField('trangthai')"
+                >
+                  Trạng thái
+                  <span v-if="sortBy === 'trangthai'">
+                    <i v-if="!sortDesc" class="fas fa-sort-up"></i>
+                    <i v-else class="fas fa-sort-down"></i>
+                  </span>
+                </td>
+
                 <td style="text-align: center">Biên lai</td>
-                <td rowspan="2" style="text-align: center">Số hồ sơ</td>
+                <td rowspan="2" style="text-align: center">
+                  Reset <br />
+                  hồ sơ
+                </td>
                 <td rowspan="2" style="text-align: center">Mã đại lý</td>
                 <td rowspan="2" style="text-align: center">Tên đại lý</td>
-                <td rowspan="2" style="text-align: center">Họ tên</td>
+                <td rowspan="2" style="text-align: center">Người tạo</td>
                 <td rowspan="2" style="text-align: center">Loại hình</td>
                 <td rowspan="2" style="text-align: center">Kỳ kê khai</td>
                 <td rowspan="2" style="text-align: center">Ngày kê khai</td>
                 <td rowspan="2" style="text-align: center">Mã số BHXH</td>
-                <td rowspan="2" style="text-align: center">Họ tên</td>
+                <td rowspan="2" style="text-align: center">Người hưởng</td>
                 <td rowspan="2" style="text-align: center">Ngày sinh</td>
                 <td rowspan="2" style="text-align: center">Giới tính</td>
                 <td rowspan="2" style="text-align: center">CCCD</td>
@@ -220,10 +225,18 @@
                   <input
                     class=""
                     type="checkbox"
+                    v-model="selectedItems_execl_export"
+                    :value="item"
+                  />
+                </td>
+                <td style="text-align: center">
+                  <input
+                    class=""
+                    type="checkbox"
                     v-model="selectedItems"
                     :value="item"
                     :disabled="
-                      item.status_naptien === true || item.trangthai === 1
+                      item.trangthai !== 0 || item.status_naptien === true
                     "
                   />
                 </td>
@@ -237,7 +250,7 @@
                     ></template
                   >
                   <template v-else>
-                    <template v-if="item.status_naptien == 1">
+                    <template v-if="item.status_naptien == true">
                       <span style="font-weight: 700; color: #00947e"
                         >Đã duyệt</span
                       >
@@ -256,7 +269,13 @@
                     </span>
                   </a>
                 </td>
-                <td style="text-align: center">{{ item.sohoso }}</td>
+                <td style="text-align: center">
+                  <a @click="resetHoso(item)" v-show="user.role === 2">
+                    <span style="color: #dc3545" class="icon is-small is-left">
+                      <i class="fas fa-compress-alt"></i>
+                    </span>
+                  </a>
+                </td>
                 <td style="text-align: center">{{ item.madaily }}</td>
                 <td style="text-align: left">{{ item.tendaily }}</td>
                 <td style="text-align: left">{{ item.tennguoitao }}</td>
@@ -287,6 +306,9 @@
               </tr>
             </tbody>
           </table>
+        </div>
+        <div style="margin: 5px; font-weight: 700; color: #dc3545">
+          Tổng tiền: {{ totalSoTien | formatNumber }}
         </div>
         <!-- Phân trang -->
         <div v-if="data_kekhai.length > 0" style="margin-top: 10px">
@@ -498,7 +520,7 @@
 </template>
 
 <script>
-import ExportExcel_Viettel from "@/components/exportExecl/viettel";
+import ExportExcel_VNPT_D05 from "@/components/exportExecl/vnptD05";
 import ExportExcel_Vnpt from "@/components/exportExecl/vnpt";
 import Swal from "sweetalert2";
 import ExcelJS from "exceljs";
@@ -525,7 +547,7 @@ import editAR from "@/components/nghiepvu/editAR";
 export default {
   name: "DanhsachKekhaiPage",
   components: {
-    ExportExcel_Viettel,
+    ExportExcel_VNPT_D05,
     ExportExcel_Vnpt,
     editAR,
   },
@@ -555,6 +577,9 @@ export default {
       masobhxh: "",
       hoten: "",
       maloaihinh: "",
+      trangthaihs: "",
+      sortBy: null, // ví dụ: 'trangthai'
+      sortDesc: false, // true = giảm dần, false = tăng dần
 
       data_kekhai_details: [],
       isRoleSent: false,
@@ -573,11 +598,14 @@ export default {
       editKey: 0,
 
       selectedItems: [], // chứa danh sách các dòng đã được chọn
+      selectedItems_execl_export: [], // ds xuất execl
       selectAll: false,
+      selectAll_execl: false,
 
       dulieuPheduyet: [],
       dulieuHuyPheDuyet: [],
       isLoading: false,
+      isExport: false,
     };
   },
 
@@ -630,20 +658,21 @@ export default {
     },
 
     totalSoTien() {
-      if (this.data_xuatmau && this.data_xuatmau.length > 0) {
-        return this.data_xuatmau.reduce((acc, item) => {
-          // Xóa tất cả dấu phẩy và sau đó chuyển đổi thành số
-          const sotienStr = item.sotien.toString().replace(/,/g, ""); // Loại bỏ dấu phẩy
-          let numericValue = parseFloat(sotienStr); // Chuyển thành số
-
-          if (isNaN(numericValue)) {
-            numericValue = 0; // Xử lý nếu giá trị không hợp lệ
-          }
-
-          return acc + numericValue; // Cộng vào tổng
-        }, 0);
+      if (this.data_kekhai && this.data_kekhai.length > 0) {
+        return this.data_kekhai
+          .filter(
+            (item) => item.trangthai === 0 && item.status_naptien === true
+          )
+          .reduce((acc, item) => {
+            const sotienStr = item.sotien?.toString().replace(/,/g, "");
+            let numericValue = parseFloat(sotienStr);
+            if (isNaN(numericValue)) {
+              numericValue = 0;
+            }
+            return acc + numericValue;
+          }, 0);
       }
-      return 0; // Trường hợp không có dữ liệu
+      return 0;
     },
 
     visiblePages() {
@@ -670,29 +699,48 @@ export default {
   },
 
   methods: {
-    // toggleAll() {
-    //   if (this.selectAll) {
-    //     // Lấy toàn bộ các dòng, không lọc gì nữa
-    //     this.selectedItems = [...this.data_kekhai];
-    //     // console.log(this.selectedItems);
-    //   } else {
-    //     this.selectedItems = [];
-    //   }
-    // },
+    sortByField(field) {
+      if (this.sortBy === field) {
+        this.sortDesc = !this.sortDesc;
+      } else {
+        this.sortBy = field;
+        this.sortDesc = false;
+      }
+
+      this.data_kekhai.sort((a, b) => {
+        const aValue = a[field];
+        const bValue = b[field];
+
+        if (aValue == null) return 1;
+        if (bValue == null) return -1;
+
+        if (aValue < bValue) return this.sortDesc ? 1 : -1;
+        if (aValue > bValue) return this.sortDesc ? -1 : 1;
+        return 0;
+      });
+    },
 
     toggleAll() {
       if (this.selectAll) {
-        // Chỉ thêm các item thỏa điều kiện vào selectedItems
-        // console.log(typeof this.data_kekhai[0].trangthai);
-        // trangthai kiểu number còn status_naptien kiểu boolean
-
+        // Chỉ chọn các item có trangthai = 0 và status_naptien = false
         this.selectedItems = this.data_kekhai.filter(
-          (item) => item.status_naptien === false && item.trangthai === 0
+          (item) => item.trangthai === 0 && item.status_naptien === false
         );
       } else {
         // Bỏ chọn tất cả
         this.selectedItems = [];
       }
+    },
+
+    toggleAll_execl() {
+      if (this.selectAll_execl) {
+        this.selectedItems_execl_export = this.data_kekhai;
+      } else {
+        // Bỏ chọn tất cả
+        this.selectedItems_execl_export = [];
+      }
+
+      // console.log(this.selectedItems_execl_export);
     },
 
     handleClick(item) {
@@ -827,8 +875,23 @@ export default {
     async handleChange(event) {
       const selectedValue = event.target.value; // Lấy giá trị của option được chọn
       // console.log("Selected value:", selectedValue);
-      this.maloaihinh = selectedValue;
-      // console.log(this.loaihinh);
+      if (selectedValue === "") {
+        this.maloaihinh = selectedValue;
+        this.isExport = false; // Không xuất khi không có loại hình nào được chọn
+      } else {
+        this.maloaihinh = selectedValue;
+        this.isExport = true;
+      }
+
+      // console.log(this.maloaihinh);
+      // console.log(this.isExport);
+    },
+
+    async handleTrangThaiChange(event) {
+      const selectedValue = event.target.value; // Lấy giá trị của option được chọn
+      // console.log("Selected value:", selectedValue);
+      this.trangthaihs = selectedValue;
+      // console.log(this.trangthaihs);
     },
 
     async filterData(page) {
@@ -848,9 +911,10 @@ export default {
           // const res = await this.$axios.get(
           //   `/api/kekhai/kykekhai-search-hoso?kykekhai=${this.kykekhai}&dotkekhai=${this.dotkekhai}&ngaykekhai=${this.ngaykekhaitu}&ngaykekhaiden=${this.ngaykekhaiden}&sohoso=${this.sohoso}&masobhxh=${this.masobhxh}&hoten=${this.hoten}&tendaily=${this.diemthu}&maloaihinh=${this.maloaihinh}&page=${page}`
           // );
-          // tạm thời bỏ điểm thu ra code ngày 07/5/2025
+          // tạm thời bỏ điểm thu ra code ngày 07/5/2025. code sửa ngày 18/06/2025 bỏ kỳ kê khai ra khỏi thành phần tìm kiếm. thay vào đó là
+          // trạng thái hồ sơ. đẩy query tên trangthaihs (đại diện thay cho trangthai và status_naptien)
           const res = await this.$axios.get(
-            `/api/kekhai/kykekhai-search-hoso?kykekhai=${this.kykekhai}&dotkekhai=${this.dotkekhai}&ngaykekhai=${this.ngaykekhaitu}&ngaykekhaiden=${this.ngaykekhaiden}&sohoso=${this.sohoso}&masobhxh=${this.masobhxh}&hoten=${this.hoten}&maloaihinh=${this.maloaihinh}&page=${page}`
+            `/api/kekhai/kykekhai-search-hoso?trangthaihs=${this.trangthaihs}&dotkekhai=${this.dotkekhai}&ngaykekhai=${this.ngaykekhaitu}&ngaykekhaiden=${this.ngaykekhaiden}&sohoso=${this.sohoso}&masobhxh=${this.masobhxh}&hoten=${this.hoten}&maloaihinh=${this.maloaihinh}&page=${page}`
           );
           // console.log(res);
           if (res.data.results.length > 0) {
@@ -896,7 +960,7 @@ export default {
       } else {
         try {
           const res = await this.$axios.get(
-            `/api/kekhai/kykekhai-search-hoso-diemthu?kykekhai=${this.kykekhai}&dotkekhai=${this.dotkekhai}&ngaykekhai=${this.ngaykekhaitu}&ngaykekhaiden=${this.ngaykekhaiden}&sohoso=${this.sohoso}&masobhxh=${this.masobhxh}&hoten=${this.hoten}&madaily=${this.madaily}&maloaihinh=${this.maloaihinh}&page=${page}`
+            `/api/kekhai/kykekhai-search-hoso-diemthu?trangthaihs=${this.trangthaihs}&dotkekhai=${this.dotkekhai}&ngaykekhai=${this.ngaykekhaitu}&ngaykekhaiden=${this.ngaykekhaiden}&sohoso=${this.sohoso}&masobhxh=${this.masobhxh}&hoten=${this.hoten}&madaily=${this.madaily}&maloaihinh=${this.maloaihinh}&page=${page}`
           );
           if (res.data.results.length > 0) {
             this.data_kekhai = res.data.results;
@@ -962,7 +1026,6 @@ export default {
       if (result.isConfirmed) {
         let ketquaTongHop = [];
         this.isLoading = true;
-
         for (const item of this.selectedItems) {
           try {
             const res = await this.$axios.post(
@@ -1011,74 +1074,6 @@ export default {
     },
 
     // HÀM HUỶ DUYỆT HỒ SƠ TRANGTHAI=1
-    async xacHUYNhanBienLai1() {
-      if (!this.selectedItems || this.selectedItems.length === 0) {
-        Swal.fire({
-          icon: "warning",
-          title: "Chưa chọn hồ sơ",
-          text: "Vui lòng chọn ít nhất một hồ sơ trước khi xác nhận.",
-        });
-        return;
-      }
-
-      const result = await Swal.fire({
-        title: `Xác nhận HUỶ phê duyệt hồ sơ?`,
-        showDenyButton: true,
-        confirmButtonText: "Xác nhận",
-        denyButtonText: `Hủy gửi`,
-      });
-
-      if (result.isConfirmed) {
-        let ketquaTongHop = [];
-
-        for (const item of this.selectedItems) {
-          try {
-            const res = await this.$axios.post(
-              "/api/kekhai/cancel-invoice-status",
-              {
-                _id: item._id,
-                hoten: item.hoten,
-                masobhxh: item.masobhxh,
-                hosoIdentity: item.hosoIdentity,
-              }
-            );
-
-            if (res.data.success) {
-              ketquaTongHop.push({
-                _id: res.data.data._id,
-                hoten: res.data.data.hoten,
-                masobhxh: res.data.data.masobhxh,
-                status: "✅ Thành công",
-                message: res.data.message,
-              });
-            } else {
-              ketquaTongHop.push({
-                _id: res.data.data._id,
-                hoten: res.data.data.hoten,
-                masobhxh: res.data.data.masobhxh,
-                status: "❌ Thất bại",
-                error: res.data.message,
-              });
-            }
-          } catch (error) {
-            ketquaTongHop.push({
-              _id: item._id,
-              hoten: item.hoten,
-              masobhxh: item.masobhxh,
-              status: "❌ Lỗi hệ thống",
-              error: error.response?.data?.message || error.message,
-            });
-          }
-        }
-
-        // Hiển thị kết quả ra console (bạn có thể dùng để show lên modal)
-        // console.table(ketquaTongHop);
-        this.dulieuHuyPheDuyet = ketquaTongHop;
-        this.dulieuPheduyet = []; // Reset dữ liệu phê duyệt
-
-        this.isActive_fix = true;
-      }
-    },
 
     async xacHUYNhanBienLai() {
       // console.log(this.selectedItems);
@@ -1095,7 +1090,6 @@ export default {
       const { value: lyDo, isConfirmed } = await Swal.fire({
         title: "Lý do hủy duyệt",
         input: "textarea",
-        inputLabel: "Nhập lý do hủy duyệt hồ sơ",
         inputPlaceholder: "Nhập lý do tại đây...",
         inputAttributes: {
           "aria-label": "Nhập lý do hủy duyệt hồ sơ",
@@ -1232,6 +1226,93 @@ export default {
       }
     },
 
+    async resetHoso(data) {
+      // khi reset hồ sơ sẽ đặt như sau
+      // lấy toàn bộ thông tin trạng thái của hồ sơ hiện tại
+      // console.log(data.trangthai, data.status_naptien); // 0 - True
+      // xác định:
+      // 1: nếu trangthai=1 là hồ sơ đã bị huỷ duyệt
+      // 2: nếu trangthai=0 và status_naptien=true là hồ sơ đã duyệt
+      if (this.user.role != 2) {
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: "Bạn không có quyền thực hiện chức năng này.",
+        });
+        return;
+      }
+      // trường hợp 1 là hồ sơ bị huỷ rồi giờ rs lại
+      if (data.trangthai === 1) {
+        const result = await Swal.fire({
+          title: `Hồ sơ đã bị huỷ! Xác nhận phục hồi hồ sơ?`,
+          showDenyButton: true,
+          confirmButtonText: "Xác nhận",
+          denyButtonText: `Hủy`,
+        });
+
+        if (result.isConfirmed) {
+          try {
+            const res = await this.$axios.post(
+              "/api/kekhai/reset-hoso-from-dahuy-to-chuaduyet",
+              {
+                _id: data._id,
+                hosoIdentity: data.hosoIdentity,
+              }
+            );
+
+            // console.log(res);
+
+            if (res.data.success) {
+              Swal.fire("Thành công", "Hồ sơ đã được phục hồi.", "success");
+              this.filterData(1);
+            } else {
+              this.filterData(1);
+              Swal.fire("Thất bại", res.data.message, "error");
+            }
+          } catch (error) {
+            this.filterData(1);
+            console.error("Lỗi khi phục hồi hồ sơ:", error);
+            Swal.fire("Lỗi", "Không thể phục hồi hồ sơ.", "error");
+          }
+        }
+      }
+      // trường hợp 2 là hồ sơ đã duyệt rồi giờ rs lại
+      else if (data.trangthai === 0 && data.status_naptien === true) {
+        const result = await Swal.fire({
+          title: `Hồ sơ đã được duyệt! Xác nhận phục hồi hồ sơ?`,
+          showDenyButton: true,
+          confirmButtonText: "Xác nhận",
+          denyButtonText: `Hủy`,
+        });
+
+        if (result.isConfirmed) {
+          try {
+            const res = await this.$axios.post(
+              "/api/kekhai/reset-hoso-from-daduyet-to-chuaduyet",
+              {
+                _id: data._id,
+                hosoIdentity: data.hosoIdentity,
+              }
+            );
+
+            // console.log(res);
+
+            if (res.data.success) {
+              Swal.fire("Thành công", "Hồ sơ đã được phục hồi.", "success");
+              this.filterData(1);
+            } else {
+              this.filterData(1);
+              Swal.fire("Thất bại", res.data.message, "error");
+            }
+          } catch (error) {
+            this.filterData(1);
+            console.error("Lỗi khi phục hồi hồ sơ:", error);
+            Swal.fire("Lỗi", "Không thể phục hồi hồ sơ.", "error");
+          }
+        }
+      }
+    },
+
     async xemBienLai(item) {
       // console.log(item.hosoIdentity);
 
@@ -1247,7 +1328,7 @@ export default {
           const fileName = `${hs.sobienlai}_${encodeURIComponent(
             hs.hoten
           )}.pdf`;
-          const pdfUrl = `http://14.224.148.17:4042/bienlaidientu/${hs.urlNameInvoice}.pdf`;
+          const pdfUrl = `http://14.224.129.177:1970/bienlaidientu/${hs.urlNameInvoice}.pdf`;
           // const pdfUrl = `http://localhost:1970/bienlaidientu/${hs.urlNameInvoice}.pdf`;
           // console.log(pdfUrl);
 

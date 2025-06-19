@@ -105,7 +105,7 @@
                   v-model="item.masobhxh"
                   class="input is-small"
                   type="number"
-                  ref="masobhxhInput"
+                  :ref="'masobhxhInput' + item._id"
                   @blur="findNguoihuong(item.masobhxh, index)"
                 />
               </td>
@@ -114,7 +114,7 @@
                   v-model="item.hoten"
                   class="input is-small"
                   type="text"
-                  ref="nameInput"
+                  :ref="'nameInput' + item._id"
                 />
               </td>
               <td style="text-align: center">
@@ -122,7 +122,7 @@
                   <input
                     v-model="item.ngaysinh"
                     class="input is-small"
-                    ref="ngaysinhInput"
+                    :ref="'ngaysinhInput' + item._id"
                   />
                 </template>
                 <template v-else>
@@ -130,7 +130,7 @@
                     v-model="item.ngaysinh"
                     class="input is-small"
                     type="date"
-                    ref="ngaysinhInput"
+                    :ref="'ngaysinhInput' + item._id"
                   />
                 </template>
               </td>
@@ -150,7 +150,7 @@
                   v-model="item.cccd"
                   class="input is-small"
                   type="number"
-                  ref="cccdInput"
+                  :ref="'cccdInput' + item._id"
                 />
               </td>
               <td style="text-align: center">
@@ -158,7 +158,7 @@
                   v-model="item.dienthoai"
                   class="input is-small"
                   type="number"
-                  ref="dienthoaiInput"
+                  :ref="'dienthoaiInput' + item._id"
                 />
               </td>
               <td style="text-align: center">
@@ -166,7 +166,7 @@
                   <select
                     v-model="item.maphuongan"
                     @change="phuonganChange($event, index)"
-                    ref="phuonganSelect"
+                    :ref="'phuonganSelect' + item._id"
                   >
                     <option selected disabled>- Chọn phương án -</option>
                     <option
@@ -229,7 +229,7 @@
                   <select
                     v-model="item.maphuongthucdong"
                     @change="phuongthucdChange($event, index)"
-                    ref="phuongthucdongSelect"
+                    :ref="'phuongthucdongSelect' + item._id"
                   >
                     <option selected disabled>- Chọn phương thức đóng -</option>
                     <option
@@ -273,7 +273,7 @@
                 <div class="select is-fullwidth is-small">
                   <select
                     @change="quanhuyenChange($event, index)"
-                    ref="quanhuyenSelect"
+                    :ref="'quanhuyenSelect' + item._id"
                   >
                     <option selected disabled>
                       {{ item.maquanhuyen }} -
@@ -295,7 +295,7 @@
                   <select
                     @change="xaphuongChange($event, index)"
                     :disabled="isDisabled_Xaphuong"
-                    ref="xaphuongSelect"
+                    :ref="'xaphuongSelect' + item._id"
                   >
                     <option selected disabled>
                       {{ item.maxaphuong }} -
@@ -317,7 +317,7 @@
                   v-model="item.tothon"
                   class="input is-small"
                   type="text"
-                  ref="tothonInput"
+                  :ref="'tothonInput' + item._id"
                 />
               </td>
 
@@ -364,7 +364,7 @@
                   <select
                     v-model="item.mabenhvien"
                     @change="hopChangeReset($event, index)"
-                    ref="hopInput"
+                    :ref="'hopInput' + item._id"
                   >
                     <option
                       v-for="(nt, idx) in item.info_benhvien"
@@ -382,7 +382,7 @@
                   <select
                     v-model="item.hinhthucnap"
                     @change="hinhthucNap($event, index)"
-                    ref="hinhthucnapInput"
+                    :ref="'hinhthucnapInput'"
                   >
                     <option value="0">Tiền mặt</option>
                     <option value="1">Chuyển khoản</option>
@@ -398,28 +398,6 @@
                   type="text"
                 />
               </td>
-
-              <!-- biên lai -->
-              <!-- <td style="text-align: center">
-                <input
-                  @blur="checkSobienlai(item.sobienlai)"
-                  v-model="item.sobienlai"
-                  class="input is-small"
-                  type="number"
-                  ref="sobienlaiInput"
-                  maxlength="7"
-                  minlength="7"
-                />
-              </td>
-              <td style="text-align: center">
-                <input
-                  @blur="checkNowDateNgaybienlai(item.ngaybienlai)"
-                  v-model="item.ngaybienlai"
-                  class="input is-small"
-                  type="date"
-                  ref="ngaybienlaiInput"
-                />
-              </td> -->
             </tr>
           </tbody>
         </table>
@@ -1854,139 +1832,6 @@ export default {
   },
 
   methods: {
-    async findNguoihuongTest(masobhxh, index) {
-      const resHGD = await this.$axios.get(
-        `/api/nguoihuong/tim-kiem-thong-tin-hgd?soBhxh=${masobhxh}&SO_DDCN_CCCD_BCA=''`
-      );
-      // console.log(resHGD);
-      if (resHGD.data.canhan !== null) {
-        // console.log(resHGD);
-        this.isLoading = false;
-        const data = resHGD.data.canhan;
-        try {
-          this.items[index].hoten = data.hoTen;
-          this.items[index].ngaysinh = data.ngaySinh;
-          // console.log(typeof data.gioiTinh);
-          this.items[index].cccd = data.SO_DDCN_CCCD_BCA;
-          this.items[index].gioitinh = data.gioiTinh;
-          this.items[index].dienthoai = data.soDienThoai;
-
-          if (data.hanThe !== "") {
-            this.items[index].hanthecu = data.hanThe.split("-")[1]; // Kết quả: "31/12/2025"
-
-            // this.hanthecu = "11/01/2024"; // dùng để test
-            // console.log(this.hanthecu);
-            // Hàm parse định dạng dd/mm/yyyy thành Date
-            const parseDate = (str) => {
-              const [day, month, year] = str.split("/").map(Number);
-              return new Date(year, month - 1, day);
-            };
-
-            // Hàm format Date về dd/mm/yyyy
-            const formatDate = (date) => {
-              const d = String(date.getDate()).padStart(2, "0");
-              const m = String(date.getMonth() + 1).padStart(2, "0");
-              const y = date.getFullYear();
-              return `${d}/${m}/${y}`;
-            };
-
-            const today = new Date();
-            const denNgay = parseDate(this.items[index].hanthecu);
-            const bienLai = today;
-
-            // console.log(denNgay);
-
-            let tuNgay;
-
-            if (denNgay >= today) {
-              // Chưa hết hạn → ngày kế tiếp
-              const nextDay = new Date(denNgay);
-              nextDay.setDate(nextDay.getDate() + 1);
-              tuNgay = nextDay;
-            } else {
-              const daysDiff = (today - denNgay) / (1000 * 60 * 60 * 24);
-              if (daysDiff > 90) {
-                // Hết hạn > 3 tháng → sau hôm nay 30 ngày
-                const next30 = new Date();
-                next30.setDate(next30.getDate() + 30);
-                tuNgay = next30;
-              } else {
-                // Hết hạn < 3 tháng → dùng ngày biên lai
-                tuNgay = bienLai;
-              }
-            }
-
-            this.items[index].tungay = formatDate(tuNgay);
-            console.log("🎯 Hạn thẻ từ (tungay):", this.items[index].tungay);
-          } else {
-            this.items[index].hanthecu = "Không tìm thấy hạn thẻ cũ";
-            // Gán ngày hiện tại + 30 ngày
-            const today = new Date();
-            const next30 = new Date();
-            next30.setDate(today.getDate() + 30);
-
-            const formatDate = (date) => {
-              const d = String(date.getDate()).padStart(2, "0");
-              const m = String(date.getMonth() + 1).padStart(2, "0");
-              const y = date.getFullYear();
-              return `${d}/${m}/${y}`;
-            };
-
-            this.items[index].tungay = formatDate(next30);
-            // console.log(
-            //   "⚠️ Không có hạn thẻ → gán tungay:",
-            //   this.items[index].tungay
-            // );
-          }
-
-          const filename = data.tenFile;
-          const parts = filename.split("_");
-
-          const maTinh = parts[4].replace("TTT", "");
-          const maHuyen = parts[5].replace("HH", "");
-          const maXa = parts[6];
-
-          // console.log("Mã tỉnh:", maTinh); // "42"
-          // console.log("Mã huyện:", maHuyen); // "449"
-          // console.log("Mã xã:", maXa); // "18754"
-
-          this.items[index].matinh = maTinh;
-          // đi tìm tên tỉnh
-          const res_tinh = await this.$axios.get(
-            `/api/nguoihuong/find-tentinh?matinh=${maTinh}`
-          );
-          if (res_tinh.data.length > 0) {
-            this.items[index].tentinh = res_tinh.data[0].tentinh;
-            // console.log(this.items[index].tentinh);
-          }
-          this.items[index].maquanhuyen = maHuyen;
-          // đi tìm tên quận huyện
-          const res_huyen = await this.$axios.get(
-            `/api/nguoihuong/find-tenhuyen?matinh=${maTinh}&maquanhuyen=${maHuyen}`
-          );
-          if (res_huyen.data.length > 0) {
-            this.items[index].tenquanhuyen = res_huyen.data[0].tenquanhuyen;
-            // console.log(this.items[index].tenquanhuyen);
-          }
-          this.items[index].maxaphuong = maXa;
-          // đi tìm tên xã
-          const res_xa = await this.$axios.get(
-            `/api/nguoihuong/find-tenxa?matinh=${maTinh}&maquanhuyen=${maHuyen}&maxaphuong=${maXa}`
-          );
-          // console.log(res_xa);
-
-          if (res_xa.data.length > 0) {
-            this.items[index].tenxaphuong = res_xa.data[0].tenxaphuong;
-            // console.log(this.items[index].tenxaphuong);
-          }
-          this.items[index].tothon = data.diaChi;
-          this.items[index].benhvientinh = maTinh;
-        } catch (error) {
-          console.log(error.message);
-        }
-      }
-    },
-
     async findNguoihuong(masobhxh, index) {
       if (masobhxh !== "") {
         const isDuplicate = this.items.some(
@@ -2408,7 +2253,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.masobhxhInput[index]?.focus();
         return false;
       }
 
@@ -2417,13 +2261,11 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.masobhxhInput[index]?.focus();
         return false;
       }
 
       if (!item.hoten) {
         this.$toasted.show("Thiếu họ tên", { duration: 3000, theme: "bubble" });
-        this.$refs.nameInput[index]?.focus();
         return false;
       }
 
@@ -2432,7 +2274,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.ngaysinhInput[index]?.focus();
         return false;
       }
 
@@ -2441,13 +2282,11 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.gioitinhSelect[index]?.focus();
         return false;
       }
 
       if (!item.cccd) {
         this.$toasted.show("Thiếu CCCD", { duration: 3000, theme: "bubble" });
-        this.$refs.cccdInput[index]?.focus();
         return false;
       }
 
@@ -2456,7 +2295,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.cccdInput[index]?.focus();
         return false;
       }
 
@@ -2465,7 +2303,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.phuonganSelect[index]?.focus();
         return false;
       }
 
@@ -2474,7 +2311,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.tungayInput[index]?.focus();
         return false;
       }
 
@@ -2483,7 +2319,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.phuongthucdongSelect[index]?.focus();
         return false;
       }
 
@@ -2492,7 +2327,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.quanhuyenSelect[index]?.focus();
         return false;
       }
 
@@ -2501,7 +2335,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.xaphuongSelect[index]?.focus();
         return false;
       }
 
@@ -2510,7 +2343,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.hopInput[index]?.focus();
         return false;
       }
 
@@ -2519,7 +2351,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.hinhthucnapInput[index]?.focus();
         return false;
       }
 

@@ -1804,7 +1804,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.masobhxhInput[index]?.focus();
         return false;
       }
 
@@ -1813,13 +1812,11 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.masobhxhInput[index]?.focus();
         return false;
       }
 
       if (!item.hoten) {
         this.$toasted.show("Thiếu họ tên", { duration: 3000, theme: "bubble" });
-        this.$refs.nameInput[index]?.focus();
         return false;
       }
 
@@ -1828,7 +1825,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.ngaysinhInput[index]?.focus();
         return false;
       }
 
@@ -1837,13 +1833,11 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.gioitinhSelect[index]?.focus();
         return false;
       }
 
       if (!item.cccd) {
         this.$toasted.show("Thiếu CCCD", { duration: 3000, theme: "bubble" });
-        this.$refs.cccdInput[index]?.focus();
         return false;
       }
 
@@ -1852,7 +1846,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.cccdInput[index]?.focus();
         return false;
       }
 
@@ -1861,7 +1854,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.phuonganSelect[index]?.focus();
         return false;
       }
 
@@ -1870,7 +1862,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.phuongthucdongSelect[index]?.focus();
         return false;
       }
 
@@ -1879,7 +1870,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.quanhuyenSelect[index]?.focus();
         return false;
       }
 
@@ -1888,7 +1878,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.xaphuongSelect[index]?.focus();
         return false;
       }
 
@@ -1897,7 +1886,6 @@ export default {
           duration: 3000,
           theme: "bubble",
         });
-        this.$refs.hinhthucnapInput[index]?.focus();
         return false;
       }
 

@@ -1,6 +1,10 @@
 <template>
   <div>
-    <button @click="exportExcel" class="button is-small is-info">
+    <button
+      @click="exportExcel"
+      :disabled="disabled"
+      class="button is-small is-info"
+    >
       <span class="icon">
         <i class="fas fa-file-download"></i>
       </span>
@@ -20,6 +24,10 @@ export default {
   props: {
     // Prop để nhận dữ liệu từ bên ngoài
     data_execl: [],
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {};

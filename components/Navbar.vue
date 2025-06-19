@@ -180,7 +180,7 @@
                 </span>
                 &ensp; Phê duyệt hồ sơ
               </nuxt-link>
-              <nuxt-link
+              <!-- <nuxt-link
                 to="/nhanviendailythu/xuatfiledayivan"
                 class="navbar-item"
               >
@@ -188,7 +188,7 @@
                   <i class="fas fa-cloud-download-alt"></i>
                 </span>
                 &ensp; Xuất File đẩy Ivan
-              </nuxt-link>
+              </nuxt-link> -->
               <nuxt-link
                 to="/nhanviendailythu/quanlybienlai"
                 class="navbar-item"

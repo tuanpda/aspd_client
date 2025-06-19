@@ -16,108 +16,108 @@
   },
   {
     "id": 4,
-    "diengiai": "Mã phòng ban",
-    "tentruong": "MaPhongBan"
-  },
-  {
-    "id": 5,
     "diengiai": "Loại khai báo",
     "tentruong": "Loai"
   },
   {
-    "id": 6,
+    "id": 5,
     "diengiai": "Phương án",
     "tentruong": "PA"
   },
   {
+    "id": 6,
+    "diengiai": "Mức tiền đóng",
+    "tentruong": "MucTien"
+  },
+  {
     "id": 7,
-    "diengiai": "Tỷ lệ NSDP",
-    "tentruong": "TyleNSDP"
+    "diengiai": "Từ tháng",
+    "tentruong": "Tuthang"
   },
   {
     "id": 8,
-    "diengiai": "Ngày biên lai",
-    "tentruong": "NgayBienLai"
+    "diengiai": "Số tháng",
+    "tentruong": "Sothang"
   },
   {
     "id": 9,
-    "diengiai": "Số biên lai",
-    "tentruong": "SoBienLai"
+    "diengiai": "Tỷ lệ đóng (%)",
+    "tentruong": "Tyle"
   },
   {
     "id": 10,
-    "diengiai": "Người tham gia thứ",
-    "tentruong": "NguoiThamGiaThu"
+    "diengiai": "Tỷ lên NSNN hỗ trợ (%)",
+    "tentruong": "TyleNSNN"
   },
   {
     "id": 11,
-    "diengiai": "Mức tiền đóng",
-    "tentruong": "Tiendong"
+    "diengiai": "Tiền NSNN hỗ trợ",
+    "tentruong": "TienHotro"
   },
   {
     "id": 12,
-    "diengiai": "Số tiền thực tế",
-    "tentruong": "TienDongThucTe"
+    "diengiai": "Tỷ lệ NSDP (%)",
+    "tentruong": "TyleNSDP"
   },
   {
     "id": 13,
-    "diengiai": "Mức hưởng BHYT",
-    "tentruong": "MucHuong"
+    "diengiai": "Tiền NSDP",
+    "tentruong": "TienNSDP"
   },
   {
     "id": 14,
-    "diengiai": "Từ ngày",
-    "tentruong": "TuNgay"
+    "diengiai": "Tỷ lệ hỗ trợ khác (%)",
+    "tentruong": "TyleHotroKhac"
   },
   {
     "id": 15,
-    "diengiai": "Ngày chết",
-    "tentruong": "NgayChet"
+    "diengiai": "Tiền hỗ trợ khác",
+    "tentruong": "TienHotroKhac"
   },
   {
     "id": 16,
-    "diengiai": "Hỗ trợ khác",
-    "tentruong": "HotroKhac"
+    "diengiai": "Tiền tự nguyện đóng",
+    "tentruong": "TienTudong"
   },
   {
     "id": 17,
-    "diengiai": "Tỉnh đang sinh sống",
-    "tentruong": "TenTinhDangSS"
+    "diengiai": "Tổng tiền đóng",
+    "tentruong": "Tongtien"
   },
   {
     "id": 18,
-    "diengiai": "Mã tỉnh đang sinh sống",
-    "tentruong": "Matinh_DangSS"
+    "diengiai": "Tỉnh - Địa chỉ đang sinh sống",
+    "tentruong": "TenTinhDangSS"
   },
   {
     "id": 19,
-    "diengiai": "Huyện đang sinh sống",
-    "tentruong": "TenhuyenDangSS"
+    "diengiai": "Mã Tỉnh - Địa chỉ đang sinh sống",
+    "tentruong": "Matinh_DangSS"
   },
   {
     "id": 20,
-    "diengiai": "Mã huyện đang sinh sống",
-    "tentruong": "Mahuyen_DangSS"
+    "diengiai": "Huyện - Địa chỉ đang sinh sống",
+    "tentruong": "TenhuyenDangSS"
   },
   {
     "id": 21,
-    "diengiai": "Xã đang sinh sống",
-    "tentruong": "TenxaDangSS"
+    "diengiai": "Mã Huyện - Địa chỉ đang sinh sống",
+    "tentruong": "Mahuyen_DangSS"
   },
   {
     "id": 22,
-    "diengiai": "Mã xã đang sinh sống",
-    "tentruong": "Maxa_DangSS"
+    "diengiai": "Xã - Địa chỉ đang sinh sống",
+    "tentruong": "TenxaDangSS"
   },
   {
     "id": 23,
-    "diengiai": "Địa chỉ đang sinh sống",
-    "tentruong": "Diachi_DangSS"
+    "diengiai": "Mã xã - Địa chỉ đang sinh sống",
+    "tentruong": "Maxa_DangSS"
   },
   {
     "id": 24,
-    "diengiai": "Số tháng",
-    "tentruong": "Sothang"
+    "diengiai": "Địa chỉ đang sinh sống",
+    "tentruong": "Diachi_DangSS"
   },
   {
     "id": 25,
@@ -126,232 +126,241 @@
   },
   {
     "id": 26,
-    "diengiai": "Ngày sinh",
-    "tentruong": "NgaySinh"
-  },
-  {
-    "id": 27,
-    "diengiai": "Giới tính",
-    "tentruong": "GioiTinh"
-  },
-  {
-    "id": 28,
-    "diengiai": "Số CCCD/CMND/ĐDCN/Hộ chiếu",
-    "tentruong": "SoCCCD"
-  },
-  {
-    "id": 29,
-    "diengiai": "Mã nhân viên thu",
-    "tentruong": "MaNhanvienThu"
-  },
-  {
-    "id": 30,
-    "diengiai": "Tỉnh - Bệnh viện",
-    "tentruong": "TenTinhBenhVien"
-  },
-  {
-    "id": 31,
-    "diengiai": "Mã tỉnh - Bệnh viện",
-    "tentruong": "MaTinhBenhVien"
-  },
-
-  {
-    "id": 32,
-    "diengiai": "Bệnh viện (KCB ban đầu)",
-    "tentruong": "TenBenhVien"
-  },
-  {
-    "id": 33,
-    "diengiai": "Mã Bệnh viện",
-    "tentruong": "MaBenhVien"
-  },
-  {
-    "id": 34,
-    "diengiai": "Mã vùng sinh sống",
-    "tentruong": "MavungSS"
-  },
-  {
-    "id": 35,
-    "diengiai": "Bổ sung thêm TK1",
-    "tentruong": "Tk1_Save"
-  },
-  {
-    "id": 36,
-    "diengiai": "CMND",
-    "tentruong": "CMND"
-  },
-  {
-    "id": 37,
-    "diengiai": "Mã hộ gia đình",
-    "tentruong": "Maho_Giadinh"
-  },
-  {
-    "id": 38,
-    "diengiai": "Quốc tịch",
-    "tentruong": "TenQuocTich"
-  },
-  {
-    "id": 39,
-    "diengiai": "Mã quốc tịch",
-    "tentruong": "QuocTich"
-  },
-  {
-    "id": 40,
-    "diengiai": "Dân tộc",
-    "tentruong": "TenDanToc"
-  },
-  {
-    "id": 41,
-    "diengiai": "Mã dân tộc",
-    "tentruong": "DanToc"
-  },
-  {
-    "id": 42,
-    "diengiai": "Tỉnh - Khai sinh",
-    "tentruong": "TenTinhKS"
-  },
-  {
-    "id": 43,
-    "diengiai": "Mã tỉnh - Khai sinh",
-    "tentruong": "Matinh_KS"
-  },
-  {
-    "id": 44,
-    "diengiai": "Huyện - Khai sinh",
-    "tentruong": "TenHuyenKS"
-  },
-  {
-    "id": 45,
-    "diengiai": "Mã huyện - Khai sinh",
-    "tentruong": "Mahuyen_KS"
-  },
-  {
-    "id": 46,
-    "diengiai": "Xã - Khai sinh",
-    "tentruong": "TenXaKS"
-  },
-  {
-    "id": 47,
-    "diengiai": "Mã xã - Khai sinh",
-    "tentruong": "Maxa_KS"
-  },
-  {
-    "id": 48,
-    "diengiai": "Tỉnh - Địa chỉ liên hệ",
-    "tentruong": "TenTinhNN"
-  },
-  {
-    "id": 49,
-    "diengiai": "Mã tỉnh - Địa chỉ liên hệ",
-    "tentruong": "Matinh_NN"
-  },
-  {
-    "id": 50,
-    "diengiai": "Huyện - Địa chỉ liên hệ",
-    "tentruong": "TenHuyenNN"
-  },
-  {
-    "id": 51,
-    "diengiai": "Mã huyện - Địa chỉ liên hệ",
-    "tentruong": "Mahuyen_NN"
-  },
-  {
-    "id": 52,
-    "diengiai": "Xã - Địa chỉ liên hệ",
-    "tentruong": "TenXaNN"
-  },
-  {
-    "id": 53,
-    "diengiai": "Mã xã - Địa chỉ liên hệ",
-    "tentruong": "Maxa_NN"
-  },
-  {
-    "id": 54,
-    "diengiai": "Địa chỉ nhận hồ sơ",
-    "tentruong": "Diachi_NN"
-  },
-  {
-    "id": 55,
-    "diengiai": "Tên cha/mẹ/người giám hộ",
-    "tentruong": "Ten_ChaMe_Giamho"
-  },
-  {
-    "id": 56,
-    "diengiai": "Điện thoại liên hệ",
-    "tentruong": "Dienthoai_LH"
-  },
-  {
-    "id": 57,
-    "diengiai": "Mức tiền đóng TN",
-    "tentruong": "Mucdong"
-  },
-  {
-    "id": 58,
     "diengiai": "Phương thức đóng",
     "tentruong": "Phuongthuc"
   },
   {
+    "id": 27,
+    "diengiai": "Hệ số (%)",
+    "tentruong": "Heso"
+  },
+  {
+    "id": 28,
+    "diengiai": "Số CCCD/ CMND/ ĐDCN/ Hộ chiếu",
+    "tentruong": "SoCCCD"
+  },
+  {
+    "id": 29,
+    "diengiai": "Số Biên Lai",
+    "tentruong": "SoBienLai"
+  },
+  {
+    "id": 30,
+    "diengiai": "Ngày Biên Lai",
+    "tentruong": "NgayBienLai"
+  },
+  {
+    "id": 31,
+    "diengiai": "Mã nhân viên thu",
+    "tentruong": "MaNhanvienThu"
+  },
+  {
+    "id": 32,
+    "diengiai": "Bổ sung thêm TK1",
+    "tentruong": "Tk1_Save"
+  },
+  {
+    "id": 33,
+    "diengiai": "CMND",
+    "tentruong": "CMND"
+  },
+  {
+    "id": 34,
+    "diengiai": "Mã hộ gia đình",
+    "tentruong": "Maho_Giadinh"
+  },
+  {
+    "id": 35,
+    "diengiai": "Ngày sinh",
+    "tentruong": "NgaySinh"
+  },
+  {
+    "id": 36,
+    "diengiai": "Giới tính",
+    "tentruong": "GioiTinh"
+  },
+  {
+    "id": 37,
+    "diengiai": "Quốc tịch",
+    "tentruong": "TenQuocTich"
+  },
+  {
+    "id": 38,
+    "diengiai": "Mã quốc tịch",
+    "tentruong": "QuocTich"
+  },
+  {
+    "id": 39,
+    "diengiai": "Dân tộc",
+    "tentruong": "TenDanToc"
+  },
+  {
+    "id": 40,
+    "diengiai": "Mã Dân tộc",
+    "tentruong": "DanToc"
+  },
+  {
+    "id": 41,
+    "diengiai": "Tỉnh - Bệnh viện",
+    "tentruong": "TenTinhBenhVien"
+  },
+  {
+    "id": 42,
+    "diengiai": "Mã Tỉnh - Bệnh viện",
+    "tentruong": "MaTinhBenhVien"
+  },
+  {
+    "id": 43,
+    "diengiai": "Bệnh viện (KCB ban đầu)",
+    "tentruong": "TenBenhVien"
+  },
+  {
+    "id": 44,
+    "diengiai": "Mã bệnh viện",
+    "tentruong": "MaBenhVien"
+  },
+  {
+    "id": 45,
+    "diengiai": "Tỉnh - Khai sinh",
+    "tentruong": "TenTinhKS"
+  },
+  {
+    "id": 46,
+    "diengiai": "Mã Tỉnh - Khai sinh",
+    "tentruong": "Matinh_KS"
+  },
+  {
+    "id": 47,
+    "diengiai": "Huyện - Khai sinh",
+    "tentruong": "TenHuyenKS"
+  },
+  {
+    "id": 48,
+    "diengiai": "Mã huyện - Khai sinh",
+    "tentruong": "Mahuyen_KS"
+  },
+  {
+    "id": 49,
+    "diengiai": "Xã - Khai sinh",
+    "tentruong": "TenXaKS"
+  },
+  {
+    "id": 50,
+    "diengiai": "Mã xã - Khai sinh",
+    "tentruong": "Maxa_KS"
+  },
+  {
+    "id": 51,
+    "diengiai": "Tỉnh - Địa chỉ liên hệ",
+    "tentruong": "TenTinhNN"
+  },
+  {
+    "id": 52,
+    "diengiai": "Mã tỉnh - Địa chỉ liên hệ",
+    "tentruong": "Matinh_NN"
+  },
+  {
+    "id": 53,
+    "diengiai": "Huyện - Địa chỉ liên hệ",
+    "tentruong": "TenHuyenNN"
+  },
+  {
+    "id": 54,
+    "diengiai": "Mã Huyện - Địa chỉ liên hệ",
+    "tentruong": "Mahuyen_NN"
+  },
+  {
+    "id": 55,
+    "diengiai": "Xã - Địa chỉ liên hệ",
+    "tentruong": "TenXaNN"
+  },
+  {
+    "id": 56,
+    "diengiai": "Mã xã - Địa chỉ liên hệ",
+    "tentruong": "Maxa_NN"
+  },
+  {
+    "id": 57,
+    "diengiai": "Địa chỉ nhận hồ sơ",
+    "tentruong": "Diachi_NN"
+  },
+  {
+    "id": 58,
+    "diengiai": "Tên cha/mẹ/người giám hộ",
+    "tentruong": "Ten_ChaMe_Giamho"
+  },
+  {
     "id": 59,
+    "diengiai": "Điện thoại liên hệ",
+    "tentruong": "Dienthoai_LH"
+  },
+  {
+    "id": 60,
+    "diengiai": "Mức tiền đóng",
+    "tentruong": "Mucdong"
+  },
+  {
+    "id": 61,
     "diengiai": "Nội dung yêu cầu thay đổi",
     "tentruong": "Noidung_Thaydoi"
   },
   {
-    "id": 60,
+    "id": 62,
     "diengiai": "Hồ sơ kèm theo",
     "tentruong": "HosoKemtheo"
   },
   {
-    "id": 61,
+    "id": 63,
     "diengiai": "Email liên hệ",
     "tentruong": "Email_LH"
   },
   {
-    "id": 62,
+    "id": 64,
     "diengiai": "Địa chỉ khai sinh",
     "tentruong": "Diachi_KS"
   },
   {
-    "id": 63,
+    "id": 65,
     "diengiai": "Nhận bản điện tử",
-    "tentruong": "Nhan_BanDienTu"
+    "tentruong": "Nhan_BanDientu"
   },
   {
-    "id": 64,
+    "id": 66,
     "diengiai": "Nhận bản giấy",
     "tentruong": "Nhan_Bangiay"
   },
   {
-    "id": 65,
+    "id": 67,
     "diengiai": "Địa chỉ nhận bản giấy",
     "tentruong": "Diachi_NhanBangiay"
   },
   {
-    "id": 66,
+    "id": 68,
     "diengiai": "Tỉnh - Địa chỉ nhận bản giấy",
     "tentruong": "Tinh_NhanBangiay"
   },
   {
-    "id": 67,
+    "id": 69,
     "diengiai": "Mã tỉnh - Địa chỉ nhận bản giấy",
     "tentruong": "Matinh_NhanBangiay"
   },
   {
-    "id": 68,
+    "id": 70,
     "diengiai": "Huyện - Địa chỉ nhận bản giấy",
     "tentruong": "Huyen_NhanBangiay"
   },
   {
-    "id": 69,
+    "id": 71,
     "diengiai": "Mã huyện - Địa chỉ nhận bản giấy",
     "tentruong": "Mahuyen_NhanBangiay"
   },
   {
-    "id": 70,
+    "id": 72,
     "diengiai": "Xã - Địa chỉ nhận bản giấy",
     "tentruong": "Xa_NhanBangiay"
   },
   {
-    "id": 71,
+    "id": 73,
     "diengiai": "Mã xã - Địa chỉ nhận bản giấy",
     "tentruong": "Maxa_NhanBangiay"
   }

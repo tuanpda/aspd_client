@@ -3,12 +3,12 @@
     <button
       @click="exportExcel"
       :disabled="disabled"
-      class="button is-small is-primary"
+      class="button is-small is-info"
     >
       <span class="icon">
         <i class="fas fa-file-download"></i>
       </span>
-      <span>Xuất D03</span>
+      <span>Xuất D05</span>
     </button>
   </div>
 </template>
@@ -17,7 +17,7 @@ const countries = require("../../data/countries");
 const dantoc = require("../../data/dantoc");
 const reles = require("../../data/moiquanhe");
 const mhbhyt = require("../../data/muchuongbhyt");
-const titleVnpt = require("../../data/titleVnpt");
+const titleVnptD05 = require("../../data/titleVnptD05");
 
 import ExcelJS from "exceljs";
 const { DateTime } = require("luxon");
@@ -36,12 +36,12 @@ export default {
   },
 
   methods: {
-    // từ A - BD
+    // từ A - BU
     generateColumnNamesAtoBD() {
       const columns = [];
       let columnName = "";
       let num = 1;
-      while (columnName !== "BS") {
+      while (columnName !== "BU") {
         let tempNum = num;
         columnName = "";
         while (tempNum > 0) {
@@ -326,11 +326,11 @@ export default {
 
       // ROW 2
       // Tạo tiêu đề cho dòng thứ 2
-      const headerTitles = titleVnpt.map((item) => item.diengiai); // Lấy giá trị "diengiai"
+      const headerTitles = titleVnptD05.map((item) => item.diengiai); // Lấy giá trị "diengiai"
       const row2 = worksheet.addRow(headerTitles);
       row2.height = 40;
       // Tạo tiêu đề cho dòng thứ 3
-      const headerTitlesTitle = titleVnpt.map((item) => item.tentruong); // Lấy giá trị "tentruong"
+      const headerTitlesTitle = titleVnptD05.map((item) => item.tentruong); // Lấy giá trị "tentruong"
       const row3 = worksheet.addRow(headerTitlesTitle);
       row3.height = 1;
 
@@ -410,15 +410,111 @@ export default {
         row.getCell(2).value = item.hoten; // Cột B
         row.getCell(3).value = item.masobhxh; // Cột C
 
-        // Cột F
+        // Cột E
         if ((item.maphuongan = "ON")) {
-          row.getCell(6).value = "TM - Tăng mới";
+          row.getCell(5).value = "TM - Tăng mới";
         } else if ((item.maphuongan = "TM")) {
-          row.getCell(6).value = "ON - Đóng tiếp";
+          row.getCell(5).value = "ON - Đóng tiếp";
         }
 
-        // row.getCell(7).value = item.tylengansachdiaphuong; // Cột G ngân sách địa phương\
-        row.getCell(7).value = "20"; // để 0 theo quỳnh nói
+        row.getCell(6).value = item.muctiendong; // cột F
+        row.getCell(7).value = item.tuthang; // cột g
+        row.getCell(8).value = item.maphuongthucdong; // cột H
+        row.getCell(9).value = "22"; // cột I
+
+        // tạm thời làm thủ công sau sửa sau
+        // Cột J
+        if (item.madoituong !== null || item.madoituong !== "") {
+          if (item.madoituong == "BT") {
+            row.getCell(10).value = "10";
+          } else if (item.madoituong == "CN") {
+            row.getCell(10).value = "25";
+          } else {
+            row.getCell(10).value = "30";
+          }
+        }
+
+        // Cột K
+        if (item.madoituong !== null || item.madoituong !== "") {
+          if (item.madoituong == "BT") {
+            const tienNSNNHT = (((1500000 * 22) / 100) * 10) / 100;
+            row.getCell(11).value = tienNSNNHT * item.maphuongthucdong;
+          } else if (item.madoituong == "CN") {
+            const tienNSNNHT = (((1500000 * 22) / 100) * 25) / 100;
+            row.getCell(11).value = tienNSNNHT * item.maphuongthucdong;
+          } else {
+            const tienNSNNHT = (((1500000 * 22) / 100) * 30) / 100;
+            row.getCell(11).value = tienNSNNHT * item.maphuongthucdong;
+          }
+        }
+
+        // cột L
+        row.getCell(12).value = "20";
+
+        // cột M
+        const tienNSDP = (((1500000 * 22) / 100) * 20) / 100;
+        row.getCell(13).value = tienNSDP * item.maphuongthucdong;
+
+        // cột P
+        row.getCell(16).value = item.sotien;
+
+        // // row.getCell(7).value = item.tylengansachdiaphuong; // Cột G ngân sách địa phương\
+        // row.getCell(7).value = "20"; // để 0 theo quỳnh nói
+
+        // if (item.ngaybienlai !== null || item.ngaybienlai !== "") {
+        //   const [datePart] = item.ngaybienlai.split(" ");
+        //   const [day, month, year] = datePart.split("-");
+
+        //   const formattedDate = `${day}/${month}/${year}`;
+
+        //   row.getCell(8).value = formattedDate; // Cột H ngày biên lai
+        // }
+        // row.getCell(9).value = item.sobienlai; // Cột I số biên lai
+
+        // // console.log(item.manguoithu);
+
+        // if (item.manguoithu == null || item.manguoithu == "") {
+        //   row.getCell(10).value = "Mặc định";
+        //   row.getCell(11).value = item.tienluongcs; // Cột K lương cs
+        // } else {
+        //   if (item.manguoithu !== 1) {
+        //     row.getCell(10).value = item.manguoithu; // Cột J người thứ
+        //     // gán luôn cột mức tiền đóng
+        //     // console.log(typeof item.tienluongcs);
+        //     if (item.manguoithu == 2) {
+        //       row.getCell(11).value = "1638000";
+        //     } else if (item.manguoithu == 3) {
+        //       row.getCell(11).value = "1404000";
+        //     } else if (item.manguoithu == 4) {
+        //       row.getCell(11).value = "1170000";
+        //     } else if (item.manguoithu == 5) {
+        //       row.getCell(11).value = "936000";
+        //     }
+        //   } else {
+        //     row.getCell(10).value = "Mặc định";
+        //     row.getCell(11).value = item.tienluongcs; // Cột K lương cs
+        //   }
+        // }
+
+        // row.getCell(12).value = item.sotien; // Cột L tiền thực tế
+
+        // row.getCell(14).value = item.tungay; // Cột N
+
+        row.getCell(18).value = item.tentinh; // Cột R
+        row.getCell(19).value = item.matinh; // Cột S
+        row.getCell(20).value = item.tenquanhuyen; // Cột T
+        row.getCell(21).value = item.maquanhuyen; // Cột U
+        row.getCell(22).value = item.tenxaphuong; // Cột V
+        row.getCell(23).value = item.maxaphuong; // Cột W
+
+        row.getCell(24).value = item.tothon; // Cột X
+        row.getCell(
+          25
+        ).value = `Số biên lai: ${item.sobienlai}. Người nhập: ${item.tennguoitao}`; // Cột Y
+        row.getCell(26).value = item.maphuongthucdong; // Cột Z
+
+        row.getCell(28).value = item.cccd; // Cột AB
+        row.getCell(29).value = item.sobienlai; // Cột AC
 
         if (item.ngaybienlai !== null || item.ngaybienlai !== "") {
           const [datePart] = item.ngaybienlai.split(" ");
@@ -426,66 +522,21 @@ export default {
 
           const formattedDate = `${day}/${month}/${year}`;
 
-          row.getCell(8).value = formattedDate; // Cột H ngày biên lai
-        }
-        row.getCell(9).value = item.sobienlai; // Cột I số biên lai
-
-        // console.log(item.manguoithu);
-
-        if (item.manguoithu == null || item.manguoithu == "") {
-          row.getCell(10).value = "Mặc định";
-          row.getCell(11).value = item.tienluongcs; // Cột K lương cs
-        } else {
-          if (item.manguoithu !== 1) {
-            row.getCell(10).value = item.manguoithu; // Cột J người thứ
-            // gán luôn cột mức tiền đóng
-            // console.log(typeof item.tienluongcs);
-            if (item.manguoithu == 2) {
-              row.getCell(11).value = "1638000";
-            } else if (item.manguoithu == 3) {
-              row.getCell(11).value = "1404000";
-            } else if (item.manguoithu == 4) {
-              row.getCell(11).value = "1170000";
-            } else if (item.manguoithu == 5) {
-              row.getCell(11).value = "936000";
-            }
-          } else {
-            row.getCell(10).value = "Mặc định";
-            row.getCell(11).value = item.tienluongcs; // Cột K lương cs
-          }
+          row.getCell(30).value = formattedDate; // Cột AD ngày biên lai
         }
 
-        row.getCell(12).value = item.sotien; // Cột L tiền thực tế
+        row.getCell(31).value = `NV${item.cccd}`; // Cột AE
 
-        row.getCell(14).value = item.tungay; // Cột N
-
-        row.getCell(17).value = item.tentinh; // Cột Q
-        row.getCell(18).value = item.matinh; // Cột R
-        row.getCell(19).value = item.tenquanhuyen; // Cột S
-        row.getCell(20).value = item.maquanhuyen; // Cột T
-        row.getCell(21).value = item.tenxaphuong; // Cột U
-        row.getCell(22).value = item.maxaphuong; // Cột V
-        row.getCell(23).value = item.tothon; // Cột V
-
-        row.getCell(24).value = item.maphuongthucdong; // Cột X
-        row.getCell(
-          25
-        ).value = `Số biên lai: ${item.sobienlai}. Người nhập: ${item.tennguoitao}`; // Cột Y
-        row.getCell(26).value = item.ngaysinh; // Cột Z
+        row.getCell(33).value = item.cccd; // Cột AG
+        row.getCell(35).value = item.ngaysinh; // Cột AI
         if (item.gioitinh == "Nam") {
-          row.getCell(27).value = "1"; // Cột AA
+          row.getCell(36).value = "1"; // Cột AJ
         } else {
-          row.getCell(27).value = "0"; // Cột AA
+          row.getCell(36).value = "0"; // Cột AJ
         }
 
-        row.getCell(28).value = item.cccd; // Cột AB
-        row.getCell(30).value = item.tentinh; // Cột AD
-        row.getCell(31).value = item.matinh; // Cột AE
-        row.getCell(32).value = item.tenbenhvien; // Cột AF
-        row.getCell(33).value = item.mabenhvien.slice(2); // Cột AG
-        row.getCell(36).value = item.cccd; // Cột AJ
-        row.getCell(54).value = item.tennguoitao; // Cột BB
-        row.getCell(56).value = item.dienthoai; // Cột BD
+        row.getCell(57).value = item.tennguoitao; // Cột BE
+        row.getCell(59).value = item.dienthoai; // Cột BG
 
         row.commit(); // Xác nhận thay đổi cho hàng
       });

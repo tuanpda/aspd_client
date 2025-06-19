@@ -43,10 +43,6 @@
             <label class="label">Mã số BHXH</label
             ><input v-model="masobhxh" type="text" class="input is-small" />
           </div>
-          <div class="column">
-            <label class="label">Họ tên</label
-            ><input v-model="hoten" type="text" class="input is-small" />
-          </div>
         </div>
         <div class="columns">
           <div class="column is-3">
@@ -61,6 +57,10 @@
           <div class="column is-3">
             <label class="label">Loại hình</label
             ><input v-model="loaihinh" type="text" class="input is-small" />
+          </div>
+          <div class="column is-3">
+            <label class="label">Họ tên</label
+            ><input v-model="hoten" type="text" class="input is-small" />
           </div>
         </div>
         <hr class="navbar-divider" />
@@ -135,14 +135,12 @@
                 <td style="">{{ item._id }}</td>
                 <td style="text-align: center">
                   <template v-if="item.active === true">
-                    <span style="font-weight: 700; color: #ffc107"
+                    <span style="font-weight: 700; color: #198754"
                       >Đã phê duyệt</span
                     >
                   </template>
                   <template v-else>
-                    <span style="font-weight: 700; color: #ffc107"
-                      >Đã huỷ hoặc chưa duyệt</span
-                    >
+                    <span style="font-weight: 700; color: #dc3545">Đã huỷ</span>
                   </template>
                 </td>
                 <td style="text-align: center">
@@ -508,6 +506,7 @@ export default {
 
           if (res.data.results.length > 0) {
             this.data_kekhai = res.data.results;
+            // console.log(this.data_kekhai);
             this.totalPages = res.data.info.pages;
             this.currentPage = page;
             this.isLoading = false;
