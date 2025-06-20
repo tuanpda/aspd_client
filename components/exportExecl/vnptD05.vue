@@ -411,13 +411,9 @@ export default {
         row.getCell(3).value = item.masobhxh; // Cột C
 
         // Cột E
-        if ((item.maphuongan = "ON")) {
-          row.getCell(5).value = "TM - Tăng mới";
-        } else if ((item.maphuongan = "TM")) {
-          row.getCell(5).value = "ON - Đóng tiếp";
-        }
+        row.getCell(6).value = `${item.maphuongan} - ${tenphuongan}`;
 
-        row.getCell(6).value = item.muctiendong; // cột F
+        row.getCell(6).value = Number(item.muctiendong); // cột F
         row.getCell(7).value = item.tuthang; // cột g
         row.getCell(8).value = item.maphuongthucdong; // cột H
         row.getCell(9).value = "22"; // cột I
@@ -514,6 +510,11 @@ export default {
         row.getCell(26).value = item.maphuongthucdong; // Cột Z
 
         row.getCell(28).value = item.cccd; // Cột AB
+        // cột AA hệ số
+        let mucdong = item.muctiendong || 0;
+        let heso = Math.floor((mucdong - 1500000) / 50000);
+        heso = heso < 0 ? 0 : heso;
+        row.getCell(27).value = heso;
         row.getCell(29).value = item.sobienlai; // Cột AC
 
         if (item.ngaybienlai !== null || item.ngaybienlai !== "") {
@@ -525,7 +526,8 @@ export default {
           row.getCell(30).value = formattedDate; // Cột AD ngày biên lai
         }
 
-        row.getCell(31).value = `NV${item.cccd}`; // Cột AE
+        const maNhanVienThu = item.sohoso.split("/").pop();
+        row.getCell(31).value = `NV${maNhanVienThu}`; // Cột AE
 
         row.getCell(33).value = item.cccd; // Cột AG
         row.getCell(35).value = item.ngaysinh; // Cột AI
@@ -554,7 +556,7 @@ export default {
       // Tạo thẻ <a> để kích hoạt tải xuống
       const a = document.createElement("a");
       a.href = url;
-      a.download = "data.xlsx";
+      a.download = `D05_VNPT.xlsx`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

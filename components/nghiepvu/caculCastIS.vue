@@ -2532,6 +2532,7 @@ export default {
                 this.items[i].nvt_cccd = this.user.cccd;
                 this.items[i].kykekhai = kyKeKhaiFrm;
                 this.items[i].ngaykekhai = formattedDate;
+                this.items[i].ngaybienlai = formattedDate;
 
                 const uniqueString = this.generateUniqueString();
                 this.items[i].hosoIdentity =
@@ -4671,7 +4672,8 @@ export default {
       if (data.maloaihinh == "AR" || data.maloaihinh == "BI") {
         noidungText = `Tiền đóng BHYT, phương thức đóng ${data.soThang} tháng, từ ngày ${data.tuNgay} đến ngày ${data.denNgay}`;
       } else {
-        noidungText = `Đóng tiền tham gia BHXH Tự nguyện`;
+        if (item.maphuongan !== "DB")
+          noidungText = `Đóng tiền tham gia BHXH Tự nguyện, phương thức đóng ${data.soThang} tháng, từ ngày ${data.tuThang} đến ngày ${data.denThang}`;
       }
 
       doc.text(`Nội dung: `, toadoXInfo, toadoYInfo + 16, {

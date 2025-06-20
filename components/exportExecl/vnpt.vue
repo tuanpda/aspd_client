@@ -411,11 +411,7 @@ export default {
         row.getCell(3).value = item.masobhxh; // Cột C
 
         // Cột F
-        if ((item.maphuongan = "ON")) {
-          row.getCell(6).value = "TM - Tăng mới";
-        } else if ((item.maphuongan = "TM")) {
-          row.getCell(6).value = "ON - Đóng tiếp";
-        }
+        row.getCell(6).value = `${item.maphuongan} - ${tenphuongan}`;
 
         // row.getCell(7).value = item.tylengansachdiaphuong; // Cột G ngân sách địa phương\
         row.getCell(7).value = "20"; // để 0 theo quỳnh nói
@@ -455,7 +451,7 @@ export default {
           }
         }
 
-        row.getCell(12).value = item.sotien; // Cột L tiền thực tế
+        row.getCell(12).value = Number(item.sotien); // Cột L tiền thực tế
 
         row.getCell(14).value = item.tungay; // Cột N
 
@@ -479,6 +475,8 @@ export default {
         }
 
         row.getCell(28).value = item.cccd; // Cột AB
+        const maNhanVienThu = item.sohoso.split("/").pop();
+        row.getCell(29).value = `NV${maNhanVienThu}`; // Cột AC
         row.getCell(30).value = item.tentinh; // Cột AD
         row.getCell(31).value = item.matinh; // Cột AE
         row.getCell(32).value = item.tenbenhvien; // Cột AF
@@ -503,7 +501,7 @@ export default {
       // Tạo thẻ <a> để kích hoạt tải xuống
       const a = document.createElement("a");
       a.href = url;
-      a.download = "data.xlsx";
+      a.download = "D03_VNPT.xlsx";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
