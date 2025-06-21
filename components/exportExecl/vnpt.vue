@@ -411,7 +411,7 @@ export default {
         row.getCell(3).value = item.masobhxh; // Cột C
 
         // Cột F
-        row.getCell(6).value = `${item.maphuongan} - ${tenphuongan}`;
+        row.getCell(6).value = `${item.maphuongan} - ${item.tenphuongan}`;
 
         // row.getCell(7).value = item.tylengansachdiaphuong; // Cột G ngân sách địa phương\
         row.getCell(7).value = "20"; // để 0 theo quỳnh nói

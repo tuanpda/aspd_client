@@ -411,7 +411,7 @@ export default {
         row.getCell(3).value = item.masobhxh; // Cột C
 
         // Cột E
-        row.getCell(6).value = `${item.maphuongan} - ${tenphuongan}`;
+        row.getCell(6).value = `${item.maphuongan} - ${item.tenphuongan}`;
 
         row.getCell(6).value = Number(item.muctiendong); // cột F
         row.getCell(7).value = item.tuthang; // cột g

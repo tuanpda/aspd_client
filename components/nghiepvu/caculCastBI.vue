@@ -116,21 +116,12 @@
                 />
               </td>
               <td style="text-align: center">
-                <template v-if="item.ngaysinh !== ''">
-                  <input
+                <input
                     v-model="item.ngaysinh"
                     class="input is-small"
+                    type="text"
                     :ref="'ngaysinhInput' + item._id"
                   />
-                </template>
-                <template v-else>
-                  <input
-                    v-model="item.ngaysinh"
-                    class="input is-small"
-                    type="date"
-                    :ref="'ngaysinhInput' + item._id"
-                  />
-                </template>
               </td>
               <td style="text-align: center">
                 <div class="select is-fullwidth is-small">
@@ -1859,9 +1850,22 @@ export default {
 
               Swal.fire({
                 text: "Không có thông tin cấp thẻ hiện tại của BHXH, đây chỉ là thông tin thẻ hiện đang có trong Hộ gia đình (Hoặc có thể không có). Đề nghị kiểm tra kỹ hồ sơ rồi mới kê khai nhé!",
-                // text: "Đã gửi thông tin hồ sơ lên cổng BHXH VN!",
                 icon: "success",
               });
+            } else {
+              Swal.fire({
+                text: "Người này hiện không có trong dữ liệu của phần mềm chúng tôi. Bạn hãy tự nhập mới toàn bộ. Hạn thẻ từ ngày sẽ tính sau 30 ngày nữa.",
+                icon: "success",
+              });
+
+              const today = new Date();
+              const next30 = new Date();
+              next30.setDate(today.getDate() + 30);
+              const d = String(next30.getDate()).padStart(2, "0");
+              const m = String(next30.getMonth() + 1).padStart(2, "0");
+              const y = next30.getFullYear();
+              this.items[index].tungay = `${d}/${m}/${y}`;
+              this.items[index].hanthecu = "Không tìm thấy hạn thẻ";
             }
           }
           this.isLoading = false;

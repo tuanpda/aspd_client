@@ -108,21 +108,12 @@
                 />
               </td>
               <td style="text-align: center">
-                <template v-if="item.ngaysinh !== ''">
-                  <input
+                <input
                     v-model="item.ngaysinh"
                     class="input is-small"
-                    ref="ngaysinhInput"
+                    type="text"
+                    :ref="'ngaysinhInput' + item._id"
                   />
-                </template>
-                <template v-else>
-                  <input
-                    v-model="item.ngaysinh"
-                    class="input is-small"
-                    type="date"
-                    ref="ngaysinhInput"
-                  />
-                </template>
               </td>
               <td style="text-align: center">
                 <div class="select is-fullwidth is-small">
@@ -2074,80 +2065,6 @@ export default {
       }
     },
 
-    async findNguoihuongTest(masobhxh, index) {
-      // 2. Trường hợp không có trong dữ liệu thẻ thì đi tìm trong DL HGD
-      const resHGD = await this.$axios.get(
-        `/api/nguoihuong/tim-kiem-thong-tin-hgd?soBhxh=${masobhxh}&SO_DDCN_CCCD_BCA=''`
-      );
-      // console.log(resHGD);
-      if (resHGD.data.canhan !== null) {
-        // console.log(resHGD);
-        this.isLoading = false;
-        const data = resHGD.data.canhan;
-        try {
-          this.items[index].hoten = data.hoTen;
-          this.items[index].ngaysinh = data.ngaySinh;
-          // console.log(typeof data.gioiTinh);
-          this.items[index].cccd = data.SO_DDCN_CCCD_BCA;
-          this.items[index].gioitinh = data.gioiTinh;
-          this.items[index].dienthoai = data.soDienThoai;
-
-          const today = new Date();
-          const thang = String(today.getMonth() + 1).padStart(2, "0"); // tháng bắt đầu từ 0
-          const nam = today.getFullYear();
-
-          const thangNam = `${thang}/${nam}`;
-          // console.log(thangNam); // Ví dụ: "06/2025"
-          this.items[index].tuthang = thangNam;
-
-          const filename = data.tenFile;
-          const parts = filename.split("_");
-
-          const maTinh = parts[4].replace("TTT", "");
-          const maHuyen = parts[5].replace("HH", "");
-          const maXa = parts[6];
-
-          // console.log("Mã tỉnh:", maTinh); // "42"
-          // console.log("Mã huyện:", maHuyen); // "449"
-          // console.log("Mã xã:", maXa); // "18754"
-
-          this.items[index].matinh = maTinh;
-          // đi tìm tên tỉnh
-          const res_tinh = await this.$axios.get(
-            `/api/nguoihuong/find-tentinh?matinh=42`
-          );
-          if (res_tinh.data.length > 0) {
-            this.items[index].tentinh = res_tinh.data[0].tentinh;
-            // console.log(this.items[index].tentinh);
-          }
-          this.items[index].maquanhuyen = maHuyen;
-          // đi tìm tên quận huyện
-          const res_huyen = await this.$axios.get(
-            `/api/nguoihuong/find-tenhuyen?matinh=${maTinh}&maquanhuyen=${maHuyen}`
-          );
-          if (res_huyen.data.length > 0) {
-            this.items[index].tenquanhuyen = res_huyen.data[0].tenquanhuyen;
-            // console.log(this.items[index].tenquanhuyen);
-          }
-          this.items[index].maxaphuong = maXa;
-          // đi tìm tên xã
-          const res_xa = await this.$axios.get(
-            `/api/nguoihuong/find-tenxa?matinh=${maTinh}&maquanhuyen=${maHuyen}&maxaphuong=${maXa}`
-          );
-          // console.log(res_xa);
-
-          if (res_xa.data.length > 0) {
-            this.items[index].tenxaphuong = res_xa.data[0].tenxaphuong;
-            // console.log(this.items[index].tenxaphuong);
-          }
-          this.items[index].tothon = data.diaChi;
-          this.items[index].benhvientinh = maTinh;
-        } catch (error) {
-          console.log(error.message);
-        }
-      }
-    },
-
     async findNguoihuong(masobhxh, index) {
       if (masobhxh !== "") {
         const isDuplicate = this.items.some(
@@ -2351,6 +2268,18 @@ export default {
                 // text: "Đã gửi thông tin hồ sơ lên cổng BHXH VN!",
                 icon: "success",
               });
+            } else {
+              Swal.fire({
+                text: "Người này hiện không có trong dữ liệu của phần mềm chúng tôi. Bạn hãy tự nhập mới toàn bộ. Từ tháng sẽ là tháng hiện tại kể từ tháng mua thẻ.",
+                icon: "success",
+              });
+
+              const today = new Date();
+              const m = String(today.getMonth() + 1).padStart(2, "0");
+              const y = today.getFullYear();
+              this.items[index].tuthang = `${m}/${y}`;
+              this.items[index].hanthecu = "Không tìm thấy hạn thẻ";
+
             }
           }
           this.isLoading = false;
@@ -2553,6 +2482,7 @@ export default {
               tentinh: item.tentinh,
               currentYear: currentYear,
               urlNameInvoice: urlNameInvoice,
+              maphuongan: item.maphuongan,
             };
 
             const ghibienlai = await this.$axios.post(
@@ -4365,236 +4295,6 @@ export default {
       }
     },
 
-    async onSave1() {
-      const matochuc = this.user.matochuc;
-      const parts = matochuc.split("-");
-      const mst = parts[parts.length - 1];
-      // Xây dựng đường dẫn API dựa trên mã số thuế
-
-      if (this.items.length <= 0) {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.addEventListener("mouseenter", Swal.stopTimer);
-            toast.addEventListener("mouseleave", Swal.resumeTimer);
-          },
-        });
-        Toast.fire({
-          icon: "error",
-          title: "Chưa có bản ghi nào !",
-        });
-        return;
-      } else {
-        // Kiểm tra dữ liệu trước khi ghi
-        const isDataValid = await this.checkFormData();
-        if (!isDataValid) {
-          // Dừng quá trình lưu dữ liệu nếu dữ liệu không hợp lệ
-          return;
-        }
-
-        const result = await Swal.fire({
-          title: `Xác nhận gửi hồ sơ kê khai ?`,
-          showDenyButton: true,
-          confirmButtonText: "Xác nhận",
-          denyButtonText: `Hủy gửi`,
-        });
-        if (result.isConfirmed) {
-          const nowInVietnam = DateTime.now().setZone("Asia/Ho_Chi_Minh");
-          const formattedDate = nowInVietnam.toFormat("dd-MM-yyyy HH:mm:ss");
-          const kyKeKhaiFrm = nowInVietnam.toFormat("MM/yyyy");
-          // Bắt đầu hiển thị biểu tượng loading
-          this.isLoading = true;
-          let dataKekhai = [];
-          try {
-            for (let i = 0; i < this.items.length; i++) {
-              this.items[i].sotien = this.items[i].sotien.replace(/,/g, "");
-
-              this.items[i].muctiendong = this.items[i].muctiendong.replace(
-                /,/g,
-                ""
-              );
-
-              // Nếu ngày sinh từ db người hưởng sẽ có dạng text không cần chuyển đổi
-              // Nếu từ input dạng yyyy-mm-dd thì phải đổi thành text
-              // const dateFormat = this.identifyDateFormat(
-              //   this.items[i].ngaysinh
-              // );
-              // if (dateFormat == "YYYY-MM-DD") {
-              //   const ngaysinhTranform = this.convertDate(
-              //     this.items[i].ngaysinh
-              //   );
-              //   this.items[i].ngaysinh = ngaysinhTranform;
-              // }
-
-              this.items[i].denthang = this.tinhDenThang(
-                this.items[i].tuthang,
-                this.items[i].maphuongthucdong
-              );
-
-              // console.log(this.user.name);
-
-              this.items[i].tennguoitao = this.user.name;
-
-              // ngày biên lai
-              // const ngaybienlaiTranform = this.convertDate(
-              //   this.items[i].ngaybienlai
-              // );
-              // this.items[i].ngaybienlai = ngaybienlaiTranform;
-
-              // info add db
-              this.items[i].createdAt = formattedDate;
-              this.items[i].createdBy = this.user.username;
-              this.items[i].updatedAt = "";
-              this.items[i].updatedBy = "";
-
-              // **** thêm các thông tin để gửi dữ liệu lên cổng tiếp nhận BHXH VN
-              // số tiền, số tháng kiểu float và kiểu int cho từng loại
-              // mã tổ chức dịch vụ thu cho công ty an sinh hưng nguyên
-              // IS0104S: BHXH tự nguyện
-              // IL0001S: Lực lượng tham gia bảo vệ ANTT ở cơ sở
-              // BI0099S: BHYT Hộ gia đình
-              // AR0099S: BHYT HGĐ làm nông lâm ngư Nghiệp
-              // Vậy đối với AR thì mã TCDV thu là: AR0099S
-
-              // mã tổ chức dịch vụ thu cho công ty An sinh 159
-              // BI0214M	Tổ chức dịch vụ thu BHYT HGĐ - Công ty TNHH An Sinh 159
-              // AR0212M	Tổ chức dịch vụ thu BHYT HGĐ có MSTB - Công ty TNHH An Sinh 159
-              // IS0212M	Tổ chức dịch vụ thu BHXH TN - Công ty TNHH An Sinh 159
-
-              let maToChucDvt = "IS0212M";
-              let soTien = this.items[i].sotien;
-              let soThang = this.items[i].maphuongthucdong;
-              let maNhanVienThu = "NVT" + this.user.cccd;
-              let tenNhanVienThu = this.user.name;
-              let maCqBhxh = this.user.macqbhxh;
-              let tenCqBhxh = this.user.tencqbhxh;
-              let key = "0123"; // do bhxh vn cung cấp
-              let tuNgay = this.items[i].tuthang;
-              let denNgay = this.tinhDenThang(tuNgay, soThang);
-
-              // thông tin bộ hồ sơ nạp
-              this.items[i].nvt_masobhxh = this.user.masobhxh;
-              this.items[i].nvt_cccd = this.user.cccd;
-              this.items[i].kykekhai = kyKeKhaiFrm;
-              this.items[i].ngaykekhai = formattedDate;
-
-              const uniqueString = this.generateUniqueString();
-              this.items[i].hosoIdentity =
-                uniqueString +
-                this.items[i].masobhxh +
-                this.items[i].cccd +
-                this.user.username;
-              // Loại bỏ dữ liệu không cần thiết bằng destructuring
-              const {
-                info_benhvien,
-                info_huyen,
-                info_phuongan,
-                info_tinh,
-                info_xaphuong,
-                phuongthucdong,
-                ...filteredItem
-              } = this.items[i];
-
-              // Thêm vào mảng mới
-              // Tạo một đối tượng chứa các phần khai báo mới
-              const additionalData = {
-                maToChucDvt,
-                soTien,
-                soThang,
-                maNhanVienThu,
-                tenNhanVienThu,
-                maCqBhxh,
-                tenCqBhxh,
-                key,
-                tuNgay,
-                denNgay,
-              };
-
-              // Thêm cả filteredItem và additionalData vào mảng dataKekhai
-              dataKekhai.push({
-                ...filteredItem,
-                ...additionalData,
-              });
-
-              // thông tin biên lai
-              const currentYear = new Date().getFullYear();
-
-              // lấy tên biên lai để lưu
-              const formattedForFilename = formattedDate.replace(/[-: ]/g, "_");
-              // console.log(formattedForFilename);
-
-              const urlNameInvoice = `${this.items[i].hosoIdentity}_${formattedForFilename}_${this.items[i].hoten}`;
-              // console.log(urlNameInvoice);
-
-              const dataPost = {
-                hosoIdentity: this.items[i].hosoIdentity,
-                maSoBhxh: this.items[i].masobhxh,
-                hoTen: this.items[i].hoten,
-                soCccd: this.items[i].cccd,
-                ngaySinh: this.items[i].ngaysinh,
-                gioiTinh: this.items[i].gioitinh,
-                soDienThoai: this.items[i].dienthoai,
-                nguoithutien: this.items[i].tennguoitao,
-                loaiDt: this.items[i].tenloaihinh,
-                soTien: this.items[i].sotien,
-                soThang: this.items[i].maphuongthucdong,
-                tuNgay: this.items[i].tungay,
-                denNgay: this.items[i].denngay,
-                tuThang: this.items[i].tuthang,
-                denThang: this.items[i].denthang,
-                maDaiLy: this.items[i].madaily,
-                tenDaiLy: this.items[i].tendaily,
-                createdBy: this.user.username,
-                sobienlai: "",
-                ngaybienlai: formattedDate,
-                maloaihinh: this.items[i].maloaihinh,
-                tothon: this.items[i].tothon,
-                tenquanhuyen: this.items[i].tenquanhuyen,
-                tentinh: this.items[i].tentinh,
-                currentYear: currentYear,
-                urlNameInvoice: urlNameInvoice,
-              };
-
-              // console.log(dataPost);
-
-              const ghibienlai = await this.$axios.post(
-                `/api/kekhai/ghidulieubienlai`,
-                dataPost
-              );
-
-              // lưu biên lai vào máy chủ
-              await this.inBienLaiDientu(dataPost);
-              // console.log("xongbienlai");
-            }
-
-            const result = await this.$axios.post(
-              `/api/kekhai/add-kekhai-series`,
-              dataKekhai
-            );
-
-            if (result.status === 200) {
-              Swal.fire({
-                title: "Kê khai thành công hồ sơ!",
-                // text: "Đã gửi thông tin hồ sơ lên cổng BHXH VN!",
-                icon: "success",
-              });
-
-              this.isLoading = false;
-              this.isActive_xacnhan = false;
-              this.items = [];
-            }
-          } catch (error) {
-            // console.log(error);
-            this.isLoading = false;
-          }
-        }
-      }
-    },
-
     async inBienLaiDientu(data) {
       // console.log(data);
 
@@ -4781,8 +4481,11 @@ export default {
       if (data.maloaihinh == "AR" || data.maloaihinh == "BI") {
         noidungText = `Tiền đóng BHYT, phương thức đóng ${data.soThang} tháng, từ ngày ${data.tuNgay} đến ngày ${data.denNgay}`;
       } else {
-        if (item.maphuongan !== "DB")
-          noidungText = `Đóng tiền tham gia BHXH Tự nguyện, phương thức đóng ${data.soThang} tháng, từ ngày ${data.tuThang} đến ngày ${data.denThang}`;
+        if (data.maphuongan !== "DB"){
+          noidungText = `Tiền đóng BHXH Tự nguyện, phương thức đóng ${data.soThang} tháng, từ tháng ${data.tuThang} đến tháng ${data.denThang}`;
+        } else {
+          noidungText = `Tiền đóng BHXH Tự nguyện, phương thức đóng bù`;
+        } 
       }
 
       doc.text(`Nội dung: `, toadoXInfo, toadoYInfo + 16, {
