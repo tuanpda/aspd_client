@@ -1166,7 +1166,7 @@ export default {
           const fileName = `${hs.sobienlai}_${encodeURIComponent(
             hs.hoten
           )}.pdf`;
-          const pdfUrl = `http://14.224.148.17:4042/bienlaidientu/${fileName}`;
+          const pdfUrl = `http://14.224.148.17:4042/bienlaidientu/daky/${fileName}`;
           // console.log(pdfUrl);
 
           window.open(pdfUrl, "_blank");

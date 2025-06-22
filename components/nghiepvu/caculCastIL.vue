@@ -3163,6 +3163,119 @@ export default {
       return tienCanNap;
     },
 
+    tinhTienPhaiDongXXX(
+      madoituong,
+      muctiendong,
+      maphuongthucdong,
+      tuthang,
+      dadongdenthang
+    ) {
+      console.log(
+        "\u0110\u00e3 \u0111\u00f3ng \u0111\u1ebfn th\u00e1ng n\u0103m: ",
+        dadongdenthang
+      );
+      // console.log("H\u1ea1n t\u1eeb th\u00e1ng m\u1edbi:", tuthang);
+
+      const denthang = this.tinhDenThang(tuthang, maphuongthucdong);
+      // console.log("H\u1ea1n \u0111\u1ebfn th\u00e1ng m\u1edbi:", denthang);
+
+      const [dongDenMonth, dongDenYear] = dadongdenthang.split("/").map(Number);
+      const today = new Date();
+      const monthHienTai = today.getMonth() + 1;
+      const yearHienTai = today.getFullYear();
+
+      // Tính chênh lệch tháng kèm theo yêu cầu nghiệp vụ (tính cả tháng đã đóng)
+      const checkDongLaiChamDong =
+        (yearHienTai - dongDenYear) * 12 + (monthHienTai - dongDenMonth) + 1;
+
+      // console.log(
+      //   "Hiệu chính xác giữa hạn cũ và hiện tại là:",
+      //   checkDongLaiChamDong
+      // );
+
+      const [startMonth, startYear] = tuthang.split("/").map(Number);
+      const [endMonth, endYear] = denthang.split("/").map(Number);
+
+      let tongThang = 0;
+      let thangTu2026 = 0;
+      let thangHotroTW = 0;
+
+      let month = startMonth;
+      let year = startYear;
+
+      while (year < endYear || (year === endYear && month <= endMonth)) {
+        tongThang++;
+        if (year >= 2026) {
+          thangTu2026++;
+        }
+        if (
+          (year > 2025 || (year === 2025 && month >= 7)) &&
+          (year < 2030 || (year === 2030 && month <= 12))
+        ) {
+          thangHotroTW++;
+        }
+        month++;
+        if (month > 12) {
+          month = 1;
+          year++;
+        }
+      }
+
+      const tyleDong = this.tyledongbhyt / 100;
+      const castMucdong = muctiendong * tyleDong;
+      const castSubTwhotro = this.chuanngheo * tyleDong;
+
+      const doituong = this.doituongdong.find(
+        (d) => d.madoituong === madoituong
+      );
+      let tyleHotroTW = doituong ? doituong.tylehotro : 0;
+
+      // Cộng thêm hỗ trợ địa phương nếu trong khoảng từ 07/2025 đến 12/2030
+      let congThem = 0;
+      if (madoituong === "BT") congThem = 5;
+      else if (madoituong === "CN") congThem = 25;
+      else if (madoituong === "N") congThem = 30;
+
+      const tyleHotroTW_TONG = tyleHotroTW + congThem;
+      const hotroTW = castSubTwhotro * (tyleHotroTW_TONG / 100);
+
+      let tienCanNap = 0;
+
+      if (checkDongLaiChamDong <= 1) {
+        // console.log(
+        //   "không phải đóng lãi. hạn thẻ mới sẽ được tính tháng liên kề tháng đang đóng đến hiện tại"
+        // );
+        const tienHotro = (castMucdong - hotroTW) * thangHotroTW;
+        const tienKhongHotro =
+          (castMucdong - castSubTwhotro * (tyleHotroTW / 100)) * thangTu2026;
+        tienCanNap = tienHotro + tienKhongHotro;
+      } else {
+        let thangQuenDong = 0;
+        const phuongthuc = Number(maphuongthucdong);
+        if (phuongthuc === 1 && checkDongLaiChamDong > 1)
+          thangQuenDong = checkDongLaiChamDong - 1;
+        if (phuongthuc === 3 && checkDongLaiChamDong > 3)
+          thangQuenDong = checkDongLaiChamDong - 3;
+        if (phuongthuc === 6 && checkDongLaiChamDong > 4)
+          thangQuenDong = checkDongLaiChamDong - 4;
+        if (phuongthuc === 12 && checkDongLaiChamDong > 7)
+          thangQuenDong = checkDongLaiChamDong - 7;
+
+        // console.log("phải tính lãi chậm đóng. tháng quên đóng:", thangQuenDong);
+
+        const laiSuat = 0.00322;
+        const tongDongCoLai =
+          castMucdong * phuongthuc * Math.pow(1 + laiSuat, thangQuenDong);
+        const tongHotro =
+          hotroTW * thangHotroTW +
+          castSubTwhotro * (tyleHotroTW / 100) * thangTu2026;
+
+        tienCanNap = tongDongCoLai - tongHotro;
+      }
+
+      return tienCanNap;
+    },
+
     async doituongChange(e, index) {
       const madoituong = e.target.value;
       const tendoituong = e.target.options[e.target.selectedIndex].text;

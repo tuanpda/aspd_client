@@ -108,11 +108,11 @@
               </td>
               <td style="text-align: center">
                 <input
-                    v-model="item.ngaysinh"
-                    class="input is-small"
-                    type="text"
-                    :ref="'ngaysinhInput' + item._id"
-                  />
+                  v-model="item.ngaysinh"
+                  class="input is-small"
+                  type="text"
+                  :ref="'ngaysinhInput' + item._id"
+                />
               </td>
               <td style="text-align: center">
                 <div class="select is-fullwidth is-small">
@@ -2277,7 +2277,6 @@ export default {
               const y = today.getFullYear();
               this.items[index].tuthang = `${m}/${y}`;
               this.items[index].hanthecu = "Không tìm thấy hạn thẻ";
-
             }
           }
           this.isLoading = false;
@@ -3013,29 +3012,6 @@ export default {
       const [startMonth, startYear] = tuthang.split("/").map(Number);
       const [endMonth, endYear] = denthang.split("/").map(Number);
 
-      let thangTrong2025 = 0;
-      let thangNgoai2025 = 0;
-
-      let month = startMonth;
-      let year = startYear;
-
-      while (year < endYear || (year === endYear && month <= endMonth)) {
-        if (year === 2025) {
-          thangTrong2025++;
-        } else {
-          thangNgoai2025++;
-        }
-
-        month++;
-        if (month > 12) {
-          month = 1;
-          year++;
-        }
-      }
-
-      // console.log(`Số tháng trong năm 2025: ${thangTrong2025}`);
-      // console.log(`Số tháng ngoài năm 2025: ${thangNgoai2025}`);
-
       // Tính tiền
       const tyleDong = this.tyledongbhyt / 100;
       const castMucdong = muctiendong * tyleDong;
@@ -3051,54 +3027,124 @@ export default {
 
       let tienCanNap = 0;
 
-      // if (thangNgoai2025 === 0) {
-      //   // ✅ Trường hợp chỉ trong năm 2025
-      //   const castDiaphuonght =
-      //     this.chuanngheo * tyleDong * (this.tylediaphuonghotroIs / 100);
-      //   const castDiaphuonghtKhac =
-      //     this.chuanngheo * tyleDong * (this.tylehotrokhacIs / 100);
-
-      //   tienCanNap =
-      //     (castMucdong - hotroTW - castDiaphuonght - castDiaphuonghtKhac) *
-      //     parseFloat(maphuongthucdong);
-      // } else {
-      //   // ✅ Trường hợp có tháng ngoài 2025
-      //   // Trong năm 2025: hỗ trợ địa phương = 20%
-      //   const castDiaphuonght_2025 =
-      //     this.chuanngheo * tyleDong * (this.tylediaphuonghotroIs / 100);
-      //   const castDiaphuonghtKhac =
-      //     this.chuanngheo * tyleDong * (this.tylehotrokhacIs / 100);
-
-      //   const tienTrong2025 =
-      //     (castMucdong - hotroTW - castDiaphuonght_2025 - castDiaphuonghtKhac) *
-      //     thangTrong2025;
-
-      //   const tienNgoai2025 =
-      //     (castMucdong - hotroTW - 0 - castDiaphuonghtKhac) * thangNgoai2025;
-      //   // tức là đoạn này cho phép là this.tylediaphuonghotroIs = 0 (không còn được hỗ trợ)
-      //   // khi nào cần điều chỉnh thì chỉnh
-
-      //   // console.log(this.tylediaphuonghotroIs);
-
-      //   // console.log(tienTrong2025);
-      //   // console.log(tienNgoai2025);
-
-      //   tienCanNap = tienTrong2025 + tienNgoai2025;
-      // }
-      // ĐỐI VỚI NGHỆ AN THÌ BỎ TOÀN BỘ ĐỊA PHƯƠNG
-      // CỘNG THẲNG TRỰC TIẾP VÀO BẢNG DM_DOITUONG ĐÓNG CHO NHANH
-      // TỪ 1.7 THÌ IS NGHỆ AN ĐƯỢC HỖ TRỢ 15 50 60
-      // const castDiaphuonght =
-      //   this.chuanngheo * tyleDong * (this.tylediaphuonghotroIs / 100);
-      // const castDiaphuonghtKhac =
-      //   this.chuanngheo * tyleDong * (this.tylehotrokhacIs / 100);
-
-      // console.log(hotroTW);
-
       tienCanNap = (castMucdong - hotroTW) * parseFloat(maphuongthucdong);
       // tức là đoạn này cho phép là this.tylediaphuonghotroIs = 0 (không còn được hỗ trợ)
 
       // console.log("Tiền cần nạp:", tienCanNap);
+      return tienCanNap;
+    },
+
+    // tinhTienPhaiDong(madoituong, muctiendong, maphuongthucdong, tuthang, dadongdenthang)
+    tinhTienPhaiDongXXX(
+      madoituong,
+      muctiendong,
+      maphuongthucdong,
+      tuthang,
+      dadongdenthang
+    ) {
+      console.log(
+        "\u0110\u00e3 \u0111\u00f3ng \u0111\u1ebfn th\u00e1ng n\u0103m: ",
+        dadongdenthang
+      );
+      // console.log("H\u1ea1n t\u1eeb th\u00e1ng m\u1edbi:", tuthang);
+
+      const denthang = this.tinhDenThang(tuthang, maphuongthucdong);
+      // console.log("H\u1ea1n \u0111\u1ebfn th\u00e1ng m\u1edbi:", denthang);
+
+      const [dongDenMonth, dongDenYear] = dadongdenthang.split("/").map(Number);
+      const today = new Date();
+      const monthHienTai = today.getMonth() + 1;
+      const yearHienTai = today.getFullYear();
+
+      // Tính chênh lệch tháng kèm theo yêu cầu nghiệp vụ (tính cả tháng đã đóng)
+      const checkDongLaiChamDong =
+        (yearHienTai - dongDenYear) * 12 + (monthHienTai - dongDenMonth) + 1;
+
+      // console.log(
+      //   "Hiệu chính xác giữa hạn cũ và hiện tại là:",
+      //   checkDongLaiChamDong
+      // );
+
+      const [startMonth, startYear] = tuthang.split("/").map(Number);
+      const [endMonth, endYear] = denthang.split("/").map(Number);
+
+      let tongThang = 0;
+      let thangTu2026 = 0;
+      let thangHotroTW = 0;
+
+      let month = startMonth;
+      let year = startYear;
+
+      while (year < endYear || (year === endYear && month <= endMonth)) {
+        tongThang++;
+        if (year >= 2026) {
+          thangTu2026++;
+        }
+        if (
+          (year > 2025 || (year === 2025 && month >= 7)) &&
+          (year < 2030 || (year === 2030 && month <= 12))
+        ) {
+          thangHotroTW++;
+        }
+        month++;
+        if (month > 12) {
+          month = 1;
+          year++;
+        }
+      }
+
+      const tyleDong = this.tyledongbhyt / 100;
+      const castMucdong = muctiendong * tyleDong;
+      const castSubTwhotro = this.chuanngheo * tyleDong;
+
+      const doituong = this.doituongdong.find(
+        (d) => d.madoituong === madoituong
+      );
+      let tyleHotroTW = doituong ? doituong.tylehotro : 0;
+
+      // Cộng thêm hỗ trợ địa phương nếu trong khoảng từ 07/2025 đến 12/2030
+      let congThem = 0;
+      if (madoituong === "BT") congThem = 5;
+      else if (madoituong === "CN") congThem = 25;
+      else if (madoituong === "N") congThem = 30;
+
+      const tyleHotroTW_TONG = tyleHotroTW + congThem;
+      const hotroTW = castSubTwhotro * (tyleHotroTW_TONG / 100);
+
+      let tienCanNap = 0;
+
+      if (checkDongLaiChamDong <= 1) {
+        // console.log(
+        //   "không phải đóng lãi. hạn thẻ mới sẽ được tính tháng liên kề tháng đang đóng đến hiện tại"
+        // );
+        const tienHotro = (castMucdong - hotroTW) * thangHotroTW;
+        const tienKhongHotro =
+          (castMucdong - castSubTwhotro * (tyleHotroTW / 100)) * thangTu2026;
+        tienCanNap = tienHotro + tienKhongHotro;
+      } else {
+        let thangQuenDong = 0;
+        const phuongthuc = Number(maphuongthucdong);
+        if (phuongthuc === 1 && checkDongLaiChamDong > 1)
+          thangQuenDong = checkDongLaiChamDong - 1;
+        if (phuongthuc === 3 && checkDongLaiChamDong > 3)
+          thangQuenDong = checkDongLaiChamDong - 3;
+        if (phuongthuc === 6 && checkDongLaiChamDong > 4)
+          thangQuenDong = checkDongLaiChamDong - 4;
+        if (phuongthuc === 12 && checkDongLaiChamDong > 7)
+          thangQuenDong = checkDongLaiChamDong - 7;
+
+        // console.log("phải tính lãi chậm đóng. tháng quên đóng:", thangQuenDong);
+
+        const laiSuat = 0.00322;
+        const tongDongCoLai =
+          castMucdong * phuongthuc * Math.pow(1 + laiSuat, thangQuenDong);
+        const tongHotro =
+          hotroTW * thangHotroTW +
+          castSubTwhotro * (tyleHotroTW / 100) * thangTu2026;
+
+        tienCanNap = tongDongCoLai - tongHotro;
+      }
+
       return tienCanNap;
     },
 
@@ -4440,17 +4486,17 @@ export default {
       });
 
       var noidungText = "";
-      
+
       if (data.maloaihinh == "AR" || data.maloaihinh == "BI") {
         noidungText = `Tiền đóng BHYT, phương thức đóng ${data.soThang} tháng, từ ngày ${data.tuNgay} đến ngày ${data.denNgay}`;
       } else {
-        if (data.maphuongan !== "DB"){
+        if (data.maphuongan !== "DB") {
           noidungText = `Tiền đóng BHXH Tự nguyện, phương thức đóng ${data.soThang} tháng, từ tháng ${data.tuThang} đến tháng ${data.denThang}`;
         } else {
           noidungText = `Tiền đóng BHXH Tự nguyện, phương thức đóng bù`;
-        } 
+        }
       }
-      
+
       doc.text(`Nội dung: `, toadoXInfo, toadoYInfo + 16, {
         fontWeight: "bold",
       });

@@ -295,7 +295,7 @@ export default {
       hoten: "",
       tendaily: "",
       loaihinh: "",
-
+      cccd: "",
       madaily: "",
       isDiemthu: false,
 
@@ -350,6 +350,7 @@ export default {
     if (user.nvcongty == 0) {
       this.madaily = user.madaily;
       this.diemthu = user.tendaily;
+      this.cccd = user.cccd
       this.isDiemthu = true;
     }
 
@@ -551,7 +552,7 @@ export default {
       } else {
         try {
           const res = await this.$axios.get(
-            `/api/kekhai/bienlai-search-diemthu?madaily=${this.madaily}&active=${this.trangthai}&ngaykekhai=${this.ngaykekhaitu}&ngaykekhaiden=${this.ngaykekhaiden}&masobhxh=${this.masobhxh}&hoten=${this.hoten}&loaihinh=${this.loaihinh}&page=${page}`
+            `/api/kekhai/bienlai-search-diemthu?cccd=$${this.cccd}&madaily=${this.madaily}&active=${this.trangthai}&ngaykekhai=${this.ngaykekhaitu}&ngaykekhaiden=${this.ngaykekhaiden}&masobhxh=${this.masobhxh}&hoten=${this.hoten}&loaihinh=${this.loaihinh}&page=${page}`
           );
           if (res.data.results.length > 0) {
             this.data_kekhai = res.data.results;
@@ -642,7 +643,7 @@ export default {
           const fileName = `${hs.sobienlai}_${encodeURIComponent(
             hs.hoten
           )}.pdf`;
-          const pdfUrl = `http://14.224.148.17:4042/bienlaidientu/${hs.urlNameInvoice}.pdf`;
+          const pdfUrl = `http://14.224.148.17:4042/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
           // const pdfUrl = `http://localhost:1970/bienlaidientu/${hs.urlNameInvoice}.pdf`;
           // console.log(pdfUrl);
 

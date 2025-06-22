@@ -119,11 +119,11 @@
               </td>
               <td style="text-align: center">
                 <input
-                    v-model="item.ngaysinh"
-                    class="input is-small"
-                    type="text"
-                    :ref="'ngaysinhInput' + item._id"
-                  />
+                  v-model="item.ngaysinh"
+                  class="input is-small"
+                  type="text"
+                  :ref="'ngaysinhInput' + item._id"
+                />
               </td>
               <td style="text-align: center">
                 <div class="select is-fullwidth is-small">
@@ -2012,7 +2012,20 @@ export default {
                   const denNgay = parseDate(this.items[index].hanthecu);
                   const bienLai = today;
 
-                  // console.log(denNgay);
+                  const millisecondsPerDay = 1000 * 60 * 60 * 24;
+                  const diffDays = Math.floor(
+                    (denNgay - today) / millisecondsPerDay
+                  );
+
+                  // console.log(diffDays);
+
+                  if (diffDays > 30) {
+                    Swal.fire({
+                      icon: "info",
+                      title: "Thẻ vẫn còn hạn",
+                      text: `Thẻ hiện còn hiệu lực thêm ${diffDays} ngày. Cân nhắc trước khi gia hạn!`,
+                    });
+                  }
 
                   let tuNgay;
 
@@ -2117,17 +2130,16 @@ export default {
               });
 
               const today = new Date();
-            const next30 = new Date();
-            next30.setDate(today.getDate() + 30);
-            const d = String(next30.getDate()).padStart(2, "0");
-            const m = String(next30.getMonth() + 1).padStart(2, "0");
-            const y = next30.getFullYear();
-            this.items[index].tungay = `${d}/${m}/${y}`;
-            this.items[index].hanthecu = "Không tìm thấy hạn thẻ";
+              const next30 = new Date();
+              next30.setDate(today.getDate() + 30);
+              const d = String(next30.getDate()).padStart(2, "0");
+              const m = String(next30.getMonth() + 1).padStart(2, "0");
+              const y = next30.getFullYear();
+              this.items[index].tungay = `${d}/${m}/${y}`;
+              this.items[index].hanthecu = "Không tìm thấy hạn thẻ";
             }
-          }  
+          }
           this.isLoading = false;
-          
         } catch (error) {
           console.log(error);
           this.isLoading = false;

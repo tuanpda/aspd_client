@@ -19,7 +19,7 @@ import Chart from "chart.js";
 
 export default {
   props: {
-    madaily: {
+    cccd: {
       type: String,
       required: true,
     },
@@ -50,7 +50,7 @@ export default {
   methods: {
     async report() {
       try {
-        const url = `/api/kekhai/baocao-tongtien-daily-theo-thang-nam?madaily=${this.madaily}&nam=${this.currentYear}`;
+        const url = `/api/kekhai/baocao-tongtien-daily-theo-thang-nam?cccd=${this.cccd}&nam=${this.currentYear}`;
         const res = await this.$axios.get(url);
 
         if (res.status === 200) {

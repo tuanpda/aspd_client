@@ -308,11 +308,11 @@
       <div class="columns" style="padding-left: 50px; padding-right: 50px">
         <div class="column is-4">
           <CharLoaiHinh v-if="madailyChart == 1" />
-          <CharLoaiHinhDaiLy v-else :key="madaily" :madaily="madaily" />
+          <CharLoaiHinhDaiLy v-else :key="cccd" :cccd="cccd" />
         </div>
         <div class="column is-4">
           <CharTongTienThuTheoThang v-if="madailyChart == 1" />
-          <CharTienTheoDaiLyThu v-else :key="madaily" :madaily="madaily" />
+          <CharTienTheoDaiLyThu v-else :key="cccd" :cccd="cccd" />
         </div>
         <div class="column is-4">
           <CharOther />
@@ -345,6 +345,7 @@ export default {
       reportHoso: {},
 
       madaily: "",
+      cccd: "",
       madailyChart: 0,
     };
   },
@@ -376,6 +377,7 @@ export default {
       } else {
         this.madailyChart = 2;
         this.madaily = user.madaily;
+        this.cccd = user.cccd
       }
 
       this.report();
@@ -399,11 +401,10 @@ export default {
     },
 
     async report() {
-      let madaily = "";
+      let cccd = ""
 
-      if (this.user.madaily !== "") {
-        // console.log(this.user.madaily);
-        madaily = { madaily: this.user.madaily };
+      if (this.user.cccd !== "") {
+        cccd = { cccd: this.user.cccd };
       }
 
       try {
@@ -416,7 +417,7 @@ export default {
         } else {
           const res = await this.$axios.post(
             `/api/kekhai/thongke-hosokekhai`,
-            madaily
+            cccd
           );
           this.reportHoso = res.data.data;
         }

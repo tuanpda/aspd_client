@@ -578,6 +578,7 @@ export default {
       hoten: "",
       maloaihinh: "",
       trangthaihs: "",
+      cccd: "",
       sortBy: null, // ví dụ: 'trangthai'
       sortDesc: false, // true = giảm dần, false = tăng dần
 
@@ -644,6 +645,7 @@ export default {
     if (user.nvcongty == 0) {
       this.madaily = user.madaily;
       this.diemthu = user.tendaily;
+      this.cccd = user.cccd
       this.isDiemthu = true;
     }
 
@@ -960,7 +962,7 @@ export default {
       } else {
         try {
           const res = await this.$axios.get(
-            `/api/kekhai/kykekhai-search-hoso-diemthu?trangthaihs=${this.trangthaihs}&dotkekhai=${this.dotkekhai}&ngaykekhai=${this.ngaykekhaitu}&ngaykekhaiden=${this.ngaykekhaiden}&sohoso=${this.sohoso}&masobhxh=${this.masobhxh}&hoten=${this.hoten}&madaily=${this.madaily}&maloaihinh=${this.maloaihinh}&page=${page}`
+            `/api/kekhai/kykekhai-search-hoso-diemthu?cccd=${this.cccd}&trangthaihs=${this.trangthaihs}&dotkekhai=${this.dotkekhai}&ngaykekhai=${this.ngaykekhaitu}&ngaykekhaiden=${this.ngaykekhaiden}&sohoso=${this.sohoso}&masobhxh=${this.masobhxh}&hoten=${this.hoten}&madaily=${this.madaily}&maloaihinh=${this.maloaihinh}&page=${page}`
           );
           if (res.data.results.length > 0) {
             this.data_kekhai = res.data.results;
@@ -1328,7 +1330,7 @@ export default {
           const fileName = `${hs.sobienlai}_${encodeURIComponent(
             hs.hoten
           )}.pdf`;
-          const pdfUrl = `http://14.224.129.177:1970/bienlaidientu/${hs.urlNameInvoice}.pdf`;
+          const pdfUrl = `http://14.224.129.177:1970/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
           // const pdfUrl = `http://localhost:1970/bienlaidientu/${hs.urlNameInvoice}.pdf`;
           // console.log(pdfUrl);
 

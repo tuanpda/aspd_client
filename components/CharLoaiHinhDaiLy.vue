@@ -20,6 +20,7 @@ import Chart from "chart.js";
 export default {
   props: {
     madaily: String,
+    cccd: String
   },
 
   data() {
@@ -32,7 +33,7 @@ export default {
   },
 
   mounted() {
-    if (this.madaily) {
+    if (this.cccd) {
       this.report();
     }
   },
@@ -51,7 +52,7 @@ export default {
 
       try {
         const res = await this.$axios.get(
-          `/api/kekhai/baocao-loaihinh-kekhai-theo-thang-nam-daily?nam=${this.currentYear}&thang=${this.month}&madaily=${this.madaily}`
+          `/api/kekhai/baocao-loaihinh-kekhai-theo-thang-nam-daily?nam=${this.currentYear}&thang=${this.month}&cccd=${this.cccd}`
         );
         // console.log(res);
 

@@ -452,7 +452,7 @@ export default {
         row.getCell(13).value = tienNSDP * item.maphuongthucdong;
 
         // cột P
-        row.getCell(16).value = item.sotien;
+        row.getCell(16).value = Number(item.sotien);
 
         // // row.getCell(7).value = item.tylengansachdiaphuong; // Cột G ngân sách địa phương\
         // row.getCell(7).value = "20"; // để 0 theo quỳnh nói
