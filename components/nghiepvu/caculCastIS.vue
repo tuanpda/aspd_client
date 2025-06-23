@@ -3058,7 +3058,7 @@ export default {
 
       // Tính chênh lệch tháng kèm theo yêu cầu nghiệp vụ (tính cả tháng đã đóng)
       const checkDongLaiChamDong =
-        (yearHienTai - dongDenYear) * 12 + (monthHienTai - dongDenMonth) + 1;
+        (yearHienTai - dongDenYear) * 12 + (monthHienTai - dongDenMonth);
 
       // console.log(
       //   "Hiệu chính xác giữa hạn cũ và hiện tại là:",
