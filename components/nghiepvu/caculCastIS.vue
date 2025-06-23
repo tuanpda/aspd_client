@@ -3118,9 +3118,12 @@ export default {
         //   "không phải đóng lãi. hạn thẻ mới sẽ được tính tháng liên kề tháng đang đóng đến hiện tại"
         // );
         const tienHotro = (castMucdong - hotroTW) * thangHotroTW;
+        console.log(tienHotro);
+
         const tienKhongHotro =
           (castMucdong - castSubTwhotro * (tyleHotroTW / 100)) * thangTu2026;
         tienCanNap = tienHotro + tienKhongHotro;
+        console.log(tienKhongHotro);
       } else {
         let thangQuenDong = 0;
         const phuongthuc = Number(maphuongthucdong);
