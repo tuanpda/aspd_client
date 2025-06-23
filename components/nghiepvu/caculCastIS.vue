@@ -3156,6 +3156,7 @@ export default {
 
       const maphuongthucdong = this.items[index].maphuongthucdong;
       const tuthang = this.items[index].tuthang;
+      const dadongdenthang = this.items[index].hanthecu;
 
       const muctiendong = parseFloat(
         this.items[index].muctiendong.replace(/,/g, "")
@@ -3165,7 +3166,8 @@ export default {
         madoituong,
         muctiendong,
         maphuongthucdong,
-        tuthang
+        tuthang,
+        dadongdenthang
       );
     },
 
@@ -3366,12 +3368,14 @@ export default {
       );
 
       const tuthang = this.items[index].tuthang;
+      const dadongdenthang = this.items[index].hanthecu;
 
       this.items[index].sotien = this.tinhTienPhaiDong(
         madoituong,
         muctiendong,
         maphuongthucdong,
-        tuthang
+        tuthang,
+        dadongdenthang
       );
     },
 
