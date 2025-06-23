@@ -2085,7 +2085,7 @@ export default {
                 this.items[index].matinh = maTinh;
                 // đi tìm tên tỉnh
                 const res_tinh = await this.$axios.get(
-                  `/api/nguoihuong/find-tentinh?matinh=42`
+                  `/api/nguoihuong/find-tentinh?matinh=${maTinh}`
                 );
                 if (res_tinh.data.length > 0) {
                   this.items[index].tentinh = res_tinh.data[0].tentinh;

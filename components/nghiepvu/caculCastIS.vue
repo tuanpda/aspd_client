@@ -2151,14 +2151,14 @@ export default {
               const maHuyen = parts[5].replace("HH", "");
               const maXa = parts[6];
 
-              console.log("Mã tỉnh:", maTinh); // "42"
-              console.log("Mã huyện:", maHuyen); // "449"
-              console.log("Mã xã:", maXa); // "18754"
+              // console.log("Mã tỉnh:", maTinh); // "42"
+              // console.log("Mã huyện:", maHuyen); // "449"
+              // console.log("Mã xã:", maXa); // "18754"
 
               this.items[index].matinh = maTinh;
               // đi tìm tên tỉnh
               const res_tinh = await this.$axios.get(
-                `/api/nguoihuong/find-tentinh?matinh=42`
+                `/api/nguoihuong/find-tentinh?matinh=${maTinh}`
               );
               if (res_tinh.data.length > 0) {
                 this.items[index].tentinh = res_tinh.data[0].tentinh;
@@ -2228,7 +2228,7 @@ export default {
                 this.items[index].matinh = maTinh;
                 // đi tìm tên tỉnh
                 const res_tinh = await this.$axios.get(
-                  `/api/nguoihuong/find-tentinh?matinh=42`
+                  `/api/nguoihuong/find-tentinh?matinh=${maTinh}`
                 );
                 if (res_tinh.data.length > 0) {
                   this.items[index].tentinh = res_tinh.data[0].tentinh;
