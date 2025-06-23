@@ -350,7 +350,7 @@ export default {
     if (user.nvcongty == 0) {
       this.madaily = user.madaily;
       this.diemthu = user.tendaily;
-      this.cccd = user.cccd
+      this.cccd = user.cccd;
       this.isDiemthu = true;
     }
 

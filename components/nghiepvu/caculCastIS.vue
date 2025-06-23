@@ -3003,7 +3003,7 @@ export default {
       }
     },
 
-    tinhTienPhaiDong(madoituong, muctiendong, maphuongthucdong, tuthang) {
+    tinhTienPhaiDongXXX(madoituong, muctiendong, maphuongthucdong, tuthang) {
       // console.log("Từ tháng đã nhập vào:", tuthang);
       const denthang = this.tinhDenThang(tuthang, maphuongthucdong);
       // console.log("Đến tháng:", denthang);
@@ -3035,7 +3035,7 @@ export default {
     },
 
     // tinhTienPhaiDong(madoituong, muctiendong, maphuongthucdong, tuthang, dadongdenthang)
-    tinhTienPhaiDongXXX(
+    tinhTienPhaiDong(
       madoituong,
       muctiendong,
       maphuongthucdong,

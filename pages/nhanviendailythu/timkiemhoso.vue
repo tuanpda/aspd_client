@@ -645,7 +645,7 @@ export default {
     if (user.nvcongty == 0) {
       this.madaily = user.madaily;
       this.diemthu = user.tendaily;
-      this.cccd = user.cccd
+      this.cccd = user.cccd;
       this.isDiemthu = true;
     }
 
@@ -1330,7 +1330,7 @@ export default {
           const fileName = `${hs.sobienlai}_${encodeURIComponent(
             hs.hoten
           )}.pdf`;
-          const pdfUrl = `http://14.224.129.177:1970/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
+          const pdfUrl = `http://14.224.148.17:4042/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
           // const pdfUrl = `http://localhost:1970/bienlaidientu/${hs.urlNameInvoice}.pdf`;
           // console.log(pdfUrl);
 
