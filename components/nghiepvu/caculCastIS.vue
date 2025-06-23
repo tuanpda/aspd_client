@@ -3060,10 +3060,10 @@ export default {
       const checkDongLaiChamDong =
         (yearHienTai - dongDenYear) * 12 + (monthHienTai - dongDenMonth);
 
-      // console.log(
-      //   "Hiệu chính xác giữa hạn cũ và hiện tại là:",
-      //   checkDongLaiChamDong
-      // );
+      console.log(
+        "Hiệu chính xác giữa hạn cũ và hiện tại là:",
+        checkDongLaiChamDong
+      );
 
       const [startMonth, startYear] = tuthang.split("/").map(Number);
       const [endMonth, endYear] = denthang.split("/").map(Number);
