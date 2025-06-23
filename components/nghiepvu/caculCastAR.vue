@@ -1914,6 +1914,19 @@ export default {
               const denNgay = parseDate(denNgayStr);
               const bienLai = today;
 
+              const millisecondsPerDay = 1000 * 60 * 60 * 24;
+              const diffDays = Math.floor(
+                (denNgay - today) / millisecondsPerDay
+              );
+
+              if (diffDays > 30) {
+                Swal.fire({
+                  icon: "info",
+                  title: "Thẻ vẫn còn hạn",
+                  text: `Thẻ hiện còn hiệu lực thêm ${diffDays} ngày. Cân nhắc trước khi gia hạn!`,
+                });
+              }
+
               let tuNgay;
 
               if (denNgay >= today) {
@@ -2011,21 +2024,6 @@ export default {
                   const today = new Date();
                   const denNgay = parseDate(this.items[index].hanthecu);
                   const bienLai = today;
-
-                  const millisecondsPerDay = 1000 * 60 * 60 * 24;
-                  const diffDays = Math.floor(
-                    (denNgay - today) / millisecondsPerDay
-                  );
-
-                  // console.log(diffDays);
-
-                  if (diffDays > 30) {
-                    Swal.fire({
-                      icon: "info",
-                      title: "Thẻ vẫn còn hạn",
-                      text: `Thẻ hiện còn hiệu lực thêm ${diffDays} ngày. Cân nhắc trước khi gia hạn!`,
-                    });
-                  }
 
                   let tuNgay;
 
