@@ -2098,10 +2098,10 @@ export default {
             );
             let soCmnd_hgd = "";
             let dataHgd;
-            console.log(resHGD);
+            // console.log(resHGD);
             if (resHGD.data.canhan !== null) {
               soCmnd_hgd = resHGD.data.canhan.SO_DDCN_CCCD_BCA;
-              console.log(soCmnd_hgd);
+              // console.log(soCmnd_hgd);
               dataHgd = resHGD.data.canhan;
             }
 
@@ -2151,9 +2151,9 @@ export default {
               const maHuyen = parts[5].replace("HH", "");
               const maXa = parts[6];
 
-              // console.log("Mã tỉnh:", maTinh); // "42"
-              // console.log("Mã huyện:", maHuyen); // "449"
-              // console.log("Mã xã:", maXa); // "18754"
+              console.log("Mã tỉnh:", maTinh); // "42"
+              console.log("Mã huyện:", maHuyen); // "449"
+              console.log("Mã xã:", maXa); // "18754"
 
               this.items[index].matinh = maTinh;
               // đi tìm tên tỉnh
