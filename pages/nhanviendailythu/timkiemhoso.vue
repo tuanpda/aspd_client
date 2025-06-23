@@ -1332,7 +1332,7 @@ export default {
           )}.pdf`;
           const pdfUrl = `http://14.224.148.17:4042/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
           // const pdfUrl = `http://localhost:1970/bienlaidientu/${hs.urlNameInvoice}.pdf`;
-          // console.log(pdfUrl);
+          console.log(pdfUrl);
 
           window.open(pdfUrl, "_blank");
         } else {
