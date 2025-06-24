@@ -41,7 +41,7 @@
               <td style="text-align: center">Điện thoại</td>
               <td style="text-align: center">Phương án</td>
               <td style="text-align: center">Mức tiền đóng</td>
-              <td style="text-align: center">Hạn thẻ cũ</td>
+              <td style="text-align: center">Từ tháng</td>
               <td style="text-align: center">Đối tượng đóng</td>
               <td style="text-align: center">Số tháng</td>
               <td style="text-align: center">Số tháng đóng bù</td>
