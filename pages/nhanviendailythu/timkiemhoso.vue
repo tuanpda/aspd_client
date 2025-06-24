@@ -206,7 +206,7 @@
                 <td rowspan="2" style="text-align: center">Mức tiền đóng</td>
                 <td rowspan="2" style="text-align: center">Từ tháng</td>
                 <td rowspan="2" style="text-align: center">Đối tượng</td>
-                <td rowspan="2" style="text-align: center">Mô tả lỗi</td>
+                <td rowspan="2" style="text-align: center">Ghi chú</td>
               </tr>
             </thead>
             <tbody>
@@ -296,7 +296,7 @@
                 </td>
                 <td style="text-align: center">{{ item.tuthang }}</td>
                 <td style="text-align: center">{{ item.tendoituong }}</td>
-                <td style="text-align: center">{{ item.motaloi }}</td>
+                <td style="text-align: center">{{ item.ghichu }}</td>
               </tr>
             </tbody>
           </table>

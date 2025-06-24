@@ -552,22 +552,23 @@ export default {
     xuatC17() {
       // Bước 1: Chuẩn bị dữ liệu
       const data = this.data_kekhai.map((item) => {
-        const sotienFormatted = (val) =>
-          val && !isNaN(val) ? Number(val).toLocaleString("vi-VN") : "";
+        const sotien = item.sotien || 0;
+        const isBHXH = ["IS", "IL"].includes(item.maloaihinh);
+        const isBHYT = ["AR", "BI"].includes(item.maloaihinh);
+
+        const ngaybienlai = item.ngaybienlai
+        ? item.ngaybienlai.split(" ")[0] // Lấy phần "23-06-2025"
+        : "";
 
         return {
           matochuc: item.matochuc,
           madaily: item.madaily,
           manhanvienthu: "NV" + item.sohoso.slice(-12),
-          ngaybienlai: item.ngaybienlai,
+          ngaybienlai: ngaybienlai,
           sobienlai: item.sobienlai,
           masobhxh: item.masobhxh,
-          sotien_bhxh: ["IS", "IL"].includes(item.maloaihinh)
-            ? sotienFormatted(item.sotien)
-            : "",
-          sotien_bhyt: ["AR", "BI"].includes(item.maloaihinh)
-            ? sotienFormatted(item.sotien)
-            : "",
+          sotien_bhxh: isBHXH ? sotien.toLocaleString("vi-VN") : "",
+          sotien_bhyt: isBHYT ? sotien.toLocaleString("vi-VN") : "",
           ghichu: "",
         };
       });
