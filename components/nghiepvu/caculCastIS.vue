@@ -2388,22 +2388,6 @@ export default {
                   ""
                 );
 
-                const dadongdenthang = this.items[i].hanthecu;
-
-                // LẤY GIÁ TRỊ HẠN THẺ TỪ MỚI
-                const [thangStr, namStr] = dadongdenthang.split("/");
-                let thang = Number(thangStr);
-                let nam = Number(namStr);
-
-                thang += 1;
-                if (thang > 12) {
-                  thang = 1;
-                  nam += 1;
-                }
-
-                const newTuthang = `${String(thang).padStart(2, "0")}/${nam}`;
-                this.items[i].tuthang = newTuthang;
-
                 this.items[i].denthang = this.tinhDenThang(
                   this.items[i].tuthang,
                   this.items[i].maphuongthucdong
@@ -2968,15 +2952,20 @@ export default {
       dadongdenthang
     ) {
       const denthang = this.tinhDenThang(tuthang, maphuongthucdong);
-      const [dongDenMonth, dongDenYear] = dadongdenthang.split("/").map(Number);
 
       const today = new Date();
       const monthHienTai = today.getMonth() + 1;
       const yearHienTai = today.getFullYear();
 
-      const checkDongLaiChamDong =
-        (yearHienTai - dongDenYear) * 12 + (monthHienTai - dongDenMonth);
+      let checkDongLaiChamDong = 0;
 
+      if (dadongdenthang && dadongdenthang.includes("/")) {
+        const [dongDenMonth, dongDenYear] = dadongdenthang.split("/").map(Number);
+        checkDongLaiChamDong =
+          (yearHienTai - dongDenYear) * 12 + (monthHienTai - dongDenMonth);
+      }
+
+      
       const [startMonth, startYear] = tuthang.split("/").map(Number);
       const [endMonth, endYear] = denthang.split("/").map(Number);
 
@@ -3010,9 +2999,12 @@ export default {
 
       if (checkDongLaiChamDong <= 1) {
         // Trường hợp đóng đúng hạn
+        // console.log('không tính lãi');
+        
         tienCanNap = (castMucdong - hotroTW) * tongThang;
       } else {
         // Trường hợp đóng lại (có lãi)
+        // console.log('có tính lãi');
         let thangQuenDong = 0;
         const phuongthuc = Number(maphuongthucdong);
 
@@ -3358,6 +3350,8 @@ export default {
 
       const tuthang = this.items[index].tuthang;
       const dadongdenthang = this.items[index].hanthecu;
+      // console.log(dadongdenthang);
+      
 
       this.items[index].sotien = this.tinhTienPhaiDong(
         madoituong,
