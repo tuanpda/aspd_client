@@ -198,6 +198,12 @@
                 </span>
                 &ensp; Quản lý Biên lai điện tử
               </nuxt-link>
+              <nuxt-link to="/nhanviendailythu/inC17" class="navbar-item">
+                <span style="color: #0a58ca" class="icon is-small is-left">
+                  <i class="fas fa-money-bill-alt"></i>
+                </span>
+                &ensp; In C17
+              </nuxt-link>
             </div>
           </div>
         </div>
