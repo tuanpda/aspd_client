@@ -13,10 +13,10 @@
           <div class="column is-4 is-offset-4">
             <div class="centered-image">
               <img
-                src="@/assets/logos/ansinhphudien-login-logo.png"
+                src="@/assets/logos/logo-login.png"
                 alt="Your Image"
-                width="150"
-                height="150"
+                width="500"
+                height="500"
               />
             </div>
             <div class="box" style="margin-top: 10px">
@@ -81,14 +81,6 @@
                   </button>
                 </div>
               </div>
-            </div>
-            <div class="centered-image">
-              <img
-                src="@/assets/images/logobhxh.png"
-                alt="Your Image"
-                width="100"
-                height="40"
-              />
             </div>
           </div>
         </div>

@@ -49,12 +49,6 @@
                 <option value="IL">
                   Người tham gia lực lượng An ninh cơ sở (IL)
                 </option>
-                <option value="IT">
-                  Bảo hiểm xã hội tự nguyện - ngoại tỉnh (IT)
-                </option>
-                <option value="WI">
-                  BHYT Người tham gia lực lượng An ninh cơ sở (WI)
-                </option>
               </select>
             </div>
           </div>

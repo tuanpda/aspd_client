@@ -2664,6 +2664,14 @@ export default {
 
     addRow() {
       this.lockButtonXacnhaninbldt = false;
+      const phuongAnMacDinh = this.phuongan.find(
+        (p) => p.maphuongan === "ON"
+      ) || { maphuongan: "", tenphuongan: "" };
+
+      const nguoiThuMacDinh = this.nguoithu.find((n) => n.manguoithu === 1) || { manguoithu: 0, nguoithu: "" };
+      const phuongThucMacDinh = this.phuongthucdong.find(
+        (p) => p.maphuongthuc === "12"
+      ) || { maphuongthuc: "", tenphuongthuc: "" };
       try {
         this.items.push({
           matochuc: this.user.matochuc,
@@ -2682,19 +2690,19 @@ export default {
           dienthoai: "",
           // ke khai tham gia
           info_phuongan: this.phuongan,
-          maphuongan: "",
-          tenphuongan: "",
+          maphuongan: phuongAnMacDinh.maphuongan,
+          tenphuongan: phuongAnMacDinh.tenphuongan,
           info_nguoithu: this.nguoithu,
-          nguoithu: "",
-          manguoithu: 0,
+          manguoithu: nguoiThuMacDinh.manguoithu,
+          nguoithu: nguoiThuMacDinh.nguoithu,
           tienluongcs: this.luongcoso,
           tylensnnht: 0,
           tylensdp: 0,
           hotrokhac: 0,
           tungay: "",
           phuongthucdong: this.phuongthucdong,
-          maphuongthucdong: "",
-          tenphuongthucdong: "",
+          maphuongthucdong: phuongThucMacDinh.maphuongthuc,
+          tenphuongthucdong: phuongThucMacDinh.tenphuongthuc,
           sotien: 0, // tiền phải đóng
           info_tinh: { matinh: this.matinh, tentinh: this.tentinh }, // tỉnh mặc định sẽ load theo tên người dùng login
           matinh: this.matinh,
@@ -4092,6 +4100,36 @@ export default {
       doc.text(`${this.user.name}`, centerX + 11, toadoYInfo + 75, {
         align: "center",
       });
+
+      doc.addFont(
+        "OpenSans_SemiCondensed-Italic-normal.ttf",
+        "OpenSans_SemiCondensed-Italic-normal",
+        "italic"
+      );
+      doc.setFont("OpenSans_SemiCondensed-Italic-normal", "italic");
+      doc.setFontSize(10);
+      doc.setTextColor("#04368c");
+      doc.text(
+        `Vui lòng tra cứu biên lai điện tử tại: `,
+        toadoXInfo + 2,
+        toadoYInfo + 53,
+        {
+          fontWeight: "bold",
+        }
+      );
+
+      // console.log(data.maXacNhan);
+
+      doc.setFontSize(11);
+      doc.setTextColor("#dc143c");
+      doc.text(
+        `http://14.224.148.17:4042/tracuubienlaidientu-ansinhphudien`,
+        toadoXInfo + 2,
+        toadoYInfo + 58,
+        {
+          fontWeight: "bold",
+        }
+      );
 
       const tenbienlai = data.urlNameInvoice;
       // console.log(tenbienlai);

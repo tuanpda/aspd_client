@@ -431,28 +431,37 @@ export default {
         }
 
         // Cột K
+        let tienNSNNHT
         if (item.madoituong !== null || item.madoituong !== "") {
           if (item.madoituong == "BT") {
-            const tienNSNNHT = (((1500000 * 22) / 100) * 10) / 100;
+            tienNSNNHT = (((1500000 * 22) / 100) * 10) / 100;
             row.getCell(11).value = tienNSNNHT * item.maphuongthucdong;
           } else if (item.madoituong == "CN") {
-            const tienNSNNHT = (((1500000 * 22) / 100) * 25) / 100;
+            tienNSNNHT = (((1500000 * 22) / 100) * 25) / 100;
             row.getCell(11).value = tienNSNNHT * item.maphuongthucdong;
           } else {
-            const tienNSNNHT = (((1500000 * 22) / 100) * 30) / 100;
+            tienNSNNHT = (((1500000 * 22) / 100) * 30) / 100;
             row.getCell(11).value = tienNSNNHT * item.maphuongthucdong;
           }
         }
 
         // cột L
-        row.getCell(12).value = "20";
+        row.getCell(12).value = "0";
 
         // cột M
         const tienNSDP = (((1500000 * 22) / 100) * 20) / 100;
-        row.getCell(13).value = tienNSDP * item.maphuongthucdong;
+        // cột L // tiền htdp tạm thời bằng 0
+        // row.getCell(13).value = tienNSDP * item.maphuongthucdong;
+        row.getCell(13).value = 0
 
         // cột P
         row.getCell(16).value = Number(item.sotien);
+
+        // cột Q
+        row.getCell(17).value =
+          Number(item.sotien) +
+          Number(tienNSDP * item.maphuongthucdong) +
+          Number(tienNSNNHT);
 
         // // row.getCell(7).value = item.tylengansachdiaphuong; // Cột G ngân sách địa phương\
         // row.getCell(7).value = "20"; // để 0 theo quỳnh nói

@@ -25,6 +25,7 @@
           </div> -->
         </div>
       </div>
+
       <div class="table_wrapper">
         <table
           class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
@@ -172,83 +173,179 @@
 
               <td style="text-align: center">
                 <input
-                  v-model="item.tuthang"
+                  v-model="item.hanthecu"
                   type="text"
                   placeholder="MM/YYYY"
                   class="input is-small"
                 />
               </td>
 
-              <td style="text-align: center">
-                <div class="select is-fullwidth is-small">
-                  <select
-                    v-model="item.madoituong"
-                    @change="doituongChange($event, index)"
-                    ref="doituongSelect"
-                  >
-                    <option selected disabled>- Chọn đối tượng đóng -</option>
-                    <option
-                      v-for="(dt, index) in item.doituong"
-                      :key="index"
-                      :value="dt.madoituong"
+              <template v-if="item.maphuongan == 'DB'">
+                <td style="text-align: center">
+                  <div class="select is-fullwidth is-small">
+                    <select
+                      v-model="item.madoituong"
+                      @change="doituongChangeDongbu($event, index)"
+                      ref="doituongSelect"
                     >
-                      {{ dt.tendoituong }}
-                    </option>
-                  </select>
-                </div>
-              </td>
-
-              <td style="text-align: center">
-                <div class="select is-fullwidth is-small">
-                  <select
-                    @change="phuongthucdChange($event, index)"
-                    ref="phuongthucdongSelect"
-                  >
-                    <option selected disabled>- Chọn phương thức đóng -</option>
-                    <option
-                      v-for="(item, index) in phuongthucdong_All"
-                      :key="index"
-                      :value="item.maphuongthuc"
+                      <option selected disabled>- Chọn đối tượng đóng -</option>
+                      <option
+                        v-for="(dt, index) in item.doituong"
+                        :key="index"
+                        :value="dt.madoituong"
+                      >
+                        {{ dt.tendoituong }}
+                      </option>
+                    </select>
+                  </div>
+                </td>
+              </template>
+              <template v-else>
+                <td style="text-align: center">
+                  <div class="select is-fullwidth is-small">
+                    <select
+                      v-model="item.madoituong"
+                      @change="doituongChange($event, index)"
+                      ref="doituongSelect"
                     >
-                      {{ item.tenphuongthuc }}
-                    </option>
-                  </select>
-                </div>
-              </td>
+                      <option selected disabled>- Chọn đối tượng đóng -</option>
+                      <option
+                        v-for="(dt, index) in item.doituong"
+                        :key="index"
+                        :value="dt.madoituong"
+                      >
+                        {{ dt.tendoituong }}
+                      </option>
+                    </select>
+                  </div>
+                </td>
+              </template>
 
-              <td>
-                <input
-                  v-if="NCT"
-                  :disabled="!NCT"
-                  v-model="item.sothang"
-                  class="input is-small"
-                  style="font-weight: 800; color: red"
-                  type="number"
-                  min="0"
-                  max="120"
-                  @blur="maxNCTItem(item, index)"
-                />
-                <input
-                  v-else
-                  :disabled="!NVS"
-                  v-model="item.sothang"
-                  class="input is-small"
-                  style="font-weight: 800; color: red"
-                  type="number"
-                  min="0"
-                  max="80"
-                  @blur="maxNVSItem(item, index)"
-                />
-              </td>
+              <!-- nếu đóng bù -->
+              <template v-if="item.maphuongan == 'DB'">
+                <td style="text-align: center">
+                  <div class="select is-fullwidth is-small">
+                    <select
+                      @change="phuongthucdChangeDongbu($event, index)"
+                      ref="phuongthucdongSelect"
+                    >
+                      <option selected disabled>
+                        - Chọn phương thức đóng -
+                      </option>
+                      <option
+                        v-for="(item, index) in phuongthucdongDongbu"
+                        :key="index"
+                        :value="item.maphuongthuc"
+                      >
+                        {{ item.tenphuongthuc }}
+                      </option>
+                    </select>
+                  </div>
+                </td>
 
-              <td style="text-align: center">
-                <input
-                  v-model="item.sotien"
-                  v-mask="mask"
-                  class="input is-small"
-                  style="font-weight: 800; color: red"
-                />
-              </td>
+                <!-- nếu như đóng 1 lần còn thiếu và về sau thì thêm 1 ô nhập số tháng -->
+                <template>
+                  <td>
+                    <input
+                      v-if="NCT == true"
+                      v-model="item.sothang"
+                      class="input is-small"
+                      style="font-weight: 800; color: red"
+                      type="number"
+                      min="0"
+                      max="120"
+                      @blur="maxNCTItem(item, index)"
+                    />
+                    <input
+                      v-else="NVS == true"
+                      v-model="item.sothang"
+                      class="input is-small"
+                      style="font-weight: 800; color: red"
+                      type="number"
+                      min="0"
+                      max="80"
+                      @blur="maxNVSItem(item, index)"
+                    />
+                  </td>
+                </template>
+
+                <td style="text-align: center">
+                  <input
+                    v-model="item.sotien"
+                    v-mask="mask"
+                    class="input is-small"
+                    style="font-weight: 800; color: red"
+                  />
+                </td>
+              </template>
+              <template v-else>
+                <td style="text-align: center">
+                  <div class="select is-fullwidth is-small">
+                    <select
+                      v-model="item.maphuongthucdong"
+                      @change="phuongthucdChange($event, index)"
+                      ref="phuongthucdongSelect"
+                    >
+                      <option selected disabled>
+                        - Chọn phương thức đóng -
+                      </option>
+                      <option
+                        v-for="(ptd, index) in item.phuongthucdong"
+                        :key="index"
+                        :value="ptd.maphuongthuc"
+                      >
+                        {{ ptd.tenphuongthuc }}
+                      </option>
+                    </select>
+                  </div>
+                </td>
+
+                <!-- nếu như đóng 1 lần còn thiếu và về sau thì thêm 1 ô nhập số tháng -->
+                <template>
+                  <td>
+                    <input
+                      v-if="NCT == true"
+                      v-model="item.sothang"
+                      class="input is-small"
+                      style="font-weight: 800; color: red"
+                      type="number"
+                      min="0"
+                      max="120"
+                      @blur="maxNCTItem(item, index)"
+                    />
+                    <input
+                      v-else="NVS == true"
+                      v-model="item.sothang"
+                      class="input is-small"
+                      style="font-weight: 800; color: red"
+                      type="number"
+                      min="0"
+                      max="80"
+                      @blur="maxNVSItem(item, index)"
+                    />
+                  </td>
+
+                  <td>
+                    <input
+                      v-mask="mask"
+                      v-model="item.sotien"
+                      class="input is-small"
+                      style="font-weight: 800; color: red"
+                    />
+                  </td>
+                </template>
+                <!-- <template v-else>
+                  <td style="text-align: center">
+                    <input
+                      v-mask="mask"
+                      v-model="item.sotien"
+                      class="input is-small"
+                      style="font-weight: 800; color: red"
+                      disabled
+                    />
+                  </td>
+                </template> -->
+              </template>
 
               <!-- tỉnh-->
               <td style="text-align: center">
@@ -943,7 +1040,10 @@
                   </div>
                 </template>
                 <template v-else>
-                  <div class="column">
+                  <div
+                    class="column"
+                    v-if="checkDong1lanchocacnamvesauVaConthieu == false"
+                  >
                     <div style="margin-bottom: 5px">
                       <label class="labelFix">Đối tượng đóng</label>
                     </div>
@@ -968,7 +1068,7 @@
                       </div>
                     </div>
                   </div>
-                  <!-- <div class="column" v-else>
+                  <div class="column" v-else>
                     <div style="margin-bottom: 5px">
                       <label class="labelFix">Đối tượng đóng</label>
                     </div>
@@ -992,7 +1092,7 @@
                         </select>
                       </div>
                     </div>
-                  </div> -->
+                  </div>
                 </template>
               </div>
 
@@ -1529,7 +1629,7 @@ export default {
           tenphuongan: "Đóng bù",
         },
       ],
-      phuongthucdong_All: [
+      phuongthucdongDongbu: [
         { maphuongthuc: "1", tenphuongthuc: "1 tháng" },
         { maphuongthuc: "2", tenphuongthuc: "2 tháng" },
         { maphuongthuc: "3", tenphuongthuc: "3 tháng" },
@@ -1584,7 +1684,7 @@ export default {
       NVS: false,
       NCT: false,
 
-      hanthecu: "", // hạn thẻ cũ
+      hanthecu: "",
       dulieuInbienlai: [],
       dulieuTravedeinbienlai: [],
       lockButtonXacnhaninbldt: false, // khóa nút xác nhận biên lai khi đã gửi
@@ -1986,7 +2086,7 @@ export default {
           const res = await this.$axios.get(
             `/api/nguoihuong/find-nguoihuong-masobhxh-theodulieutunguyen?soBhxh=${masobhxh}`
           );
-          // console.log(res);
+          // console.log(res.data.data[0]);
 
           this.isLoading = true;
           // console.log(res.data);
@@ -1994,7 +2094,6 @@ export default {
             this.isLoading = false;
 
             const data = res.data.data[0];
-            // console.log(data);
 
             // Tìm căn cước công dân trong dữ liệu HGD
             const resHGD = await this.$axios.get(
@@ -2002,11 +2101,10 @@ export default {
             );
             let soCmnd_hgd = "";
             let dataHgd;
-            // console.log(resHGD);
+            // console.log(resHGD.data.canhan.SO_DDCN_CCCD_BCA);
             if (resHGD.data.canhan !== null) {
               soCmnd_hgd = resHGD.data.canhan.SO_DDCN_CCCD_BCA;
-              // console.log(soCmnd_hgd);
-              dataHgd = resHGD.data.canhan;
+              // console.log(resHGD);
             }
 
             try {
@@ -2177,11 +2275,10 @@ export default {
               });
 
               const today = new Date();
-                const thang = String(today.getMonth() + 1).padStart(2, "0"); // tháng bắt đầu từ 0
-                const nam = today.getFullYear();
-
-                const thangNam = `${thang}/${nam}`;
-                this.items[index].tuthang = thangNam;
+              const m = String(today.getMonth() + 1).padStart(2, "0");
+              const y = today.getFullYear();
+              this.items[index].tuthang = `${m}/${y}`;
+              this.items[index].hanthecu = "Không tìm thấy hạn thẻ";
             }
           }
           this.isLoading = false;
@@ -2309,14 +2406,6 @@ export default {
       }
     },
 
-    hoanTatDongHs() {
-      // console.log("hoantatdong");
-      this.items = [];
-      this.dulieuTravedeinbienlai = [];
-      this.dulieuInbienlai = [];
-      this.isActive_xacnhan = false;
-    },
-
     async cancelNhaphoso() {
       const result = await Swal.fire({
         title: `Xác nhận hủy kê khai hồ sơ ?`,
@@ -2327,6 +2416,105 @@ export default {
       if (result.isConfirmed) {
         this.items.splice(this.addedIndex, 1);
         this.isActive_nhaphoso = false;
+      }
+    },
+
+    async onSave() {
+      // đoạn này theo code mới là sẽ bấm để lưu dữ liệu biên lai
+      // Kiểm tra dữ liệu trước khi ghi
+      // console.log(this.dulieuTravedeinbienlai);
+      const isDataValid = await this.checkFormData();
+      if (!isDataValid) {
+        // Dừng quá trình lưu dữ liệu nếu dữ liệu không hợp lệ
+        return;
+      }
+
+      const result = await Swal.fire({
+        title: `Xác nhận biên lai điện tử?`,
+        showDenyButton: true,
+        confirmButtonText: "Xác nhận",
+        denyButtonText: `Hủy gửi`,
+      });
+      if (result.isConfirmed) {
+        // console.log(this.items);
+
+        // const current = new Date();
+        const nowInVietnam = DateTime.now().setZone("Asia/Ho_Chi_Minh");
+        const formattedDate = nowInVietnam.toFormat("dd-MM-yyyy HH:mm:ss");
+        try {
+          // Bắt đầu hiển thị biểu tượng loading
+          this.isLoading = true;
+          // thông tin biên lai
+          const currentYear = new Date().getFullYear();
+
+          // lấy tên biên lai để lưu
+          for (let i = 0; i < this.dulieuTravedeinbienlai.length; i++) {
+            const item = this.dulieuTravedeinbienlai[i];
+
+            const formattedForFilename = formattedDate.replace(/[-: ]/g, "_");
+            const urlNameInvoice = `${item.hosoIdentity}_${formattedForFilename}_${item.sobienlai}_${item.hoten}`;
+
+            const dataPost = {
+              hosoIdentity: item.hosoIdentity,
+              maSoBhxh: item.masobhxh,
+              hoTen: item.hoten,
+              soCccd: item.cccd,
+              ngaySinh: item.ngaysinh,
+              gioiTinh: item.gioitinh,
+              soDienThoai: item.dienthoai,
+              nguoithutien: item.tennguoitao,
+              loaiDt: item.tenloaihinh,
+              soTien: item.sotien,
+              soThang: item.maphuongthucdong,
+              tuNgay: item.tungay,
+              denNgay: item.denngay,
+              tuThang: item.tuthang,
+              denThang: item.denthang,
+              maDaiLy: item.madaily,
+              tenDaiLy: item.tendaily,
+              createdBy: this.user.username,
+              sobienlai: item.sobienlai,
+              ngaybienlai: formattedDate,
+              maloaihinh: item.maloaihinh,
+              tothon: item.tothon,
+              tenquanhuyen: item.tenquanhuyen,
+              tentinh: item.tentinh,
+              currentYear: currentYear,
+              urlNameInvoice: urlNameInvoice,
+              maphuongan: item.maphuongan,
+            };
+
+            const ghibienlai = await this.$axios.post(
+              `/api/kekhai/ghidulieubienlai`,
+              dataPost
+            );
+
+            // lưu biên lai vào máy chủ
+            await this.inBienLaiDientu(dataPost);
+            // console.log("xongbienlai");
+          }
+
+          const hosoIds = this.dulieuTravedeinbienlai.map(
+            (item) => item.hosoIdentity
+          );
+
+          const rsIdtity = await this.$axios.post(
+            `/api/kekhai/getdskekhaiwithhsidentity`,
+            hosoIds
+          );
+          this.dulieuTravedeinbienlai = rsIdtity.data;
+          this.isLoading = false;
+          this.lockButtonXacnhaninbldt = true; // khoá nút xác nhận biên lai điện tử
+
+          Swal.fire({
+            title: "Hoàn tất xác nhận toàn bộ hồ sơ!",
+            icon: "success",
+          });
+          // console.log("check hàm xem biên lai:", this.xemBienLai);
+        } catch (error) {
+          // console.log(error);
+          this.isLoading = false;
+        }
       }
     },
 
@@ -2387,22 +2575,6 @@ export default {
                   /,/g,
                   ""
                 );
-
-                const dadongdenthang = this.items[i].hanthecu;
-
-                // LẤY GIÁ TRỊ HẠN THẺ TỪ MỚI
-                const [thangStr, namStr] = dadongdenthang.split("/");
-                let thang = Number(thangStr);
-                let nam = Number(namStr);
-
-                thang += 1;
-                if (thang > 12) {
-                  thang = 1;
-                  nam += 1;
-                }
-
-                const newTuthang = `${String(thang).padStart(2, "0")}/${nam}`;
-                this.items[i].tuthang = newTuthang;
 
                 this.items[i].denthang = this.tinhDenThang(
                   this.items[i].tuthang,
@@ -2636,10 +2808,6 @@ export default {
         "0"
       )}/${now.getFullYear()}`;
 
-            const phuongAnMacDinh = this.phuongan.find(
-        (p) => p.maphuongan === "ON"
-      ) || { maphuongan: "", tenphuongan: "" };
-
       try {
         this.items.push({
           matochuc: this.user.matochuc,
@@ -2658,8 +2826,8 @@ export default {
           dienthoai: "",
           // ke khai tham gia
           info_phuongan: this.phuongan,
-          maphuongan: phuongAnMacDinh.maphuongan,
-          tenphuongan: phuongAnMacDinh.tenphuongan,
+          maphuongan: "",
+          tenphuongan: "",
           tienluongcs: this.luongcoso,
           tylengansachtw: this.tylengansachtw,
           tylenngansachdp: this.tylenngansachdp,
@@ -2690,7 +2858,7 @@ export default {
           doituong: this.doituongdong,
           madoituong: "",
           tendoituong: "",
-          tuthang: "", // kiểu string
+          tuthang: currentMonthYear, // kiểu string
           nguoithu: "",
           manguoithu: 0,
           tylengansachdiaphuong: 0,
@@ -2770,6 +2938,14 @@ export default {
       } else {
         return isoDateString;
       }
+    },
+
+    hoanTatDongHs() {
+      // console.log("hoantatdong");
+      this.items = [];
+      this.dulieuTravedeinbienlai = [];
+      this.dulieuInbienlai = [];
+      this.isActive_xacnhan = false;
     },
 
     limitTiendong(cast, index) {
@@ -2928,64 +3104,28 @@ export default {
       }
     },
 
-    // tinhTienPhaiDong(madoituong, muctiendong, maphuongthucdong, tuthang) {
-    //   // console.log("Từ tháng đã nhập vào:", tuthang);
-    //   const denthang = this.tinhDenThang(tuthang, maphuongthucdong);
-    //   // console.log("Đến tháng:", denthang);
-
-    //   // Parse tháng/năm bắt đầu và kết thúc
-    //   const [startMonth, startYear] = tuthang.split("/").map(Number);
-    //   const [endMonth, endYear] = denthang.split("/").map(Number);
-
-    //   // Tính tiền
-    //   const tyleDong = this.tyledongbhyt / 100;
-    //   const castMucdong = muctiendong * tyleDong;
-    //   const castSubTwhotro = this.chuanngheo * tyleDong;
-    //   // console.log("đối tượng đóng trong db:", this.doituongdong);
-
-    //   // Tìm tỷ lệ hỗ trợ trung ương theo mã đối tượng
-    //   const doituong = this.doituongdong.find(
-    //     (d) => d.madoituong === madoituong
-    //   );
-    //   const tyleHotroTW = doituong ? doituong.tylehotro : 0;
-    //   const hotroTW = castSubTwhotro * (tyleHotroTW / 100);
-
-    //   let tienCanNap = 0;
-
-    //   tienCanNap = (castMucdong - hotroTW) * parseFloat(maphuongthucdong);
-    //   // tức là đoạn này cho phép là this.tylediaphuonghotroIs = 0 (không còn được hỗ trợ)
-
-    //   // console.log("Tiền cần nạp:", tienCanNap);
-    //   return tienCanNap;
-    // },
-
-    // tạm thời dùng cách tính này xem // code ngày 24 tháng 6 năm 2025
-    tinhTienPhaiDong(
-      madoituong,
-      muctiendong,
-      maphuongthucdong,
-      tuthang,
-      dadongdenthang
-    ) {
+    tinhTienPhaiDong(madoituong, muctiendong, maphuongthucdong, tuthang) {
+      // console.log("Từ tháng đã nhập vào:", tuthang);
       const denthang = this.tinhDenThang(tuthang, maphuongthucdong);
-      const [dongDenMonth, dongDenYear] = dadongdenthang.split("/").map(Number);
+      // console.log("Đến tháng:", denthang);
 
-      const today = new Date();
-      const monthHienTai = today.getMonth() + 1;
-      const yearHienTai = today.getFullYear();
-
-      const checkDongLaiChamDong =
-        (yearHienTai - dongDenYear) * 12 + (monthHienTai - dongDenMonth);
-
+      // Parse tháng/năm bắt đầu và kết thúc
       const [startMonth, startYear] = tuthang.split("/").map(Number);
       const [endMonth, endYear] = denthang.split("/").map(Number);
 
-      let tongThang = 0;
+      let thangTrong2025 = 0;
+      let thangNgoai2025 = 0;
+
       let month = startMonth;
       let year = startYear;
 
       while (year < endYear || (year === endYear && month <= endMonth)) {
-        tongThang++;
+        if (year === 2025) {
+          thangTrong2025++;
+        } else {
+          thangNgoai2025++;
+        }
+
         month++;
         if (month > 12) {
           month = 1;
@@ -2993,49 +3133,35 @@ export default {
         }
       }
 
+      // console.log(`Số tháng trong năm 2025: ${thangTrong2025}`);
+      // console.log(`Số tháng ngoài năm 2025: ${thangNgoai2025}`);
+
+      // Tính tiền
       const tyleDong = this.tyledongbhyt / 100;
       const castMucdong = muctiendong * tyleDong;
       const castSubTwhotro = this.chuanngheo * tyleDong;
 
-      const doituong = this.doituongdong.find(
+      // Tìm tỷ lệ hỗ trợ trung ương theo mã đối tượng
+      // cho vào danh mục tỷ lệ đóng của IL là 30 45 50
+      const doituong = this.doituongdongil.find(
         (d) => d.madoituong === madoituong
       );
-      let tyleHotroTW = doituong ? doituong.tylehotro : 0;
-
-      // ✅ IL Nghệ an hỗ trợ 50% cho tất cả các đối tượng
-      const hotroTW = castSubTwhotro * ((tyleHotroTW + 50) / 100);
+      const tyleHotroTW = doituong ? doituong.tylehotro : 0;
+      const hotroTW = castSubTwhotro * (tyleHotroTW / 100);
 
       let tienCanNap = 0;
 
-      if (checkDongLaiChamDong <= 1) {
-        // Trường hợp đóng đúng hạn
-        tienCanNap = (castMucdong - hotroTW) * tongThang;
-      } else {
-        // Trường hợp đóng lại (có lãi)
-        let thangQuenDong = 0;
-        const phuongthuc = Number(maphuongthucdong);
+      // const castDiaphuonght =
+      //   this.chuanngheo * tyleDong * (this.tylediaphuonghotroIs / 100);
+      // const castDiaphuonghtKhac =
+      //   this.chuanngheo * tyleDong * (this.tylehotrokhacIs / 100);
 
-        if (phuongthuc === 1 && checkDongLaiChamDong > 1)
-          thangQuenDong = checkDongLaiChamDong - 1;
-        if (phuongthuc === 3 && checkDongLaiChamDong > 3)
-          thangQuenDong = checkDongLaiChamDong - 3;
-        if (phuongthuc === 6 && checkDongLaiChamDong > 4)
-          thangQuenDong = checkDongLaiChamDong - 4;
-        if (phuongthuc === 12 && checkDongLaiChamDong > 7)
-          thangQuenDong = checkDongLaiChamDong - 7;
+      tienCanNap = (castMucdong - hotroTW) * parseFloat(maphuongthucdong);
 
-        const laiSuat = 0.00322;
-        const tongDongCoLai =
-          castMucdong * phuongthuc * Math.pow(1 + laiSuat, thangQuenDong);
-
-        const tongHotro = hotroTW * tongThang;
-        tienCanNap = tongDongCoLai - tongHotro;
-      }
-
-      return Math.round(tienCanNap);
+      // console.log("Tiền cần nạp:", tienCanNap);
+      return tienCanNap;
     },
 
-    // tinhTienPhaiDong(madoituong, muctiendong, maphuongthucdong, tuthang, dadongdenthang)
     tinhTienPhaiDongXXX(
       madoituong,
       muctiendong,
@@ -3061,10 +3187,10 @@ export default {
       const checkDongLaiChamDong =
         (yearHienTai - dongDenYear) * 12 + (monthHienTai - dongDenMonth);
 
-      console.log(
-        "Hiệu chính xác giữa hạn cũ và hiện tại là:",
-        checkDongLaiChamDong
-      );
+      // console.log(
+      //   "Hiệu chính xác giữa hạn cũ và hiện tại là:",
+      //   checkDongLaiChamDong
+      // );
 
       const [startMonth, startYear] = tuthang.split("/").map(Number);
       const [endMonth, endYear] = denthang.split("/").map(Number);
@@ -3119,12 +3245,9 @@ export default {
         //   "không phải đóng lãi. hạn thẻ mới sẽ được tính tháng liên kề tháng đang đóng đến hiện tại"
         // );
         const tienHotro = (castMucdong - hotroTW) * thangHotroTW;
-        console.log(tienHotro);
-
         const tienKhongHotro =
           (castMucdong - castSubTwhotro * (tyleHotroTW / 100)) * thangTu2026;
         tienCanNap = tienHotro + tienKhongHotro;
-        console.log(tienKhongHotro);
       } else {
         let thangQuenDong = 0;
         const phuongthuc = Number(maphuongthucdong);
@@ -3160,7 +3283,6 @@ export default {
 
       const maphuongthucdong = this.items[index].maphuongthucdong;
       const tuthang = this.items[index].tuthang;
-      const dadongdenthang = this.items[index].hanthecu;
 
       const muctiendong = parseFloat(
         this.items[index].muctiendong.replace(/,/g, "")
@@ -3170,8 +3292,7 @@ export default {
         madoituong,
         muctiendong,
         maphuongthucdong,
-        tuthang,
-        dadongdenthang
+        tuthang
       );
     },
 
@@ -3338,11 +3459,102 @@ export default {
       const tendoituong = e.target.options[e.target.selectedIndex].text;
       this.items[index].madoituong = madoituong;
       this.items[index].tendoituong = tendoituong;
-      // console.log(madoituong);
-      // console.log(tendoituong);
+
+      // const mucDong = parseFloat(
+      //   this.items[index].muctiendong.replace(/,/g, "")
+      // );
+
+      // let castMucdong = mucDong * (this.tyledongbhyt / 100);
+      // let castSubTwhotro = this.chuanngheo * (this.tyledongbhyt / 100);
+      // let castDiaphuonght =
+      //   this.chuanngheo *
+      //   (this.tyledongbhyt / 100) *
+      //   (this.tylediaphuonghotroIs / 100);
+      // let castDiaphuonghtKhac =
+      //   this.chuanngheo *
+      //   (this.tyledongbhyt / 100) *
+      //   (this.tylehotrokhacIs / 100);
+
+      // if (this.items[index].madoituong === "BT") {
+      //   let madoituong = "";
+      //   for (let i = 0; i < this.doituongdong.length; i++) {
+      //     const doituong = this.doituongdong[i];
+      //     // CHÚNG TA TÌM TỶ LỆ HỖ TRỢ TƯƠNG ỨNG TẠI ĐÂY
+      //     if (doituong.madoituong === "BT") {
+      //       madoituong = doituong.tylehotro;
+      //     }
+      //   }
+
+      //   // Bắt đầu tính tiền
+      //   castSubTwhotro = castSubTwhotro * (madoituong / 100);
+      //   let tienPhaidong =
+      //     (castMucdong -
+      //       castSubTwhotro -
+      //       castDiaphuonght -
+      //       castDiaphuonghtKhac) *
+      //     parseFloat(this.items[index].maphuongthucdong);
+      //   this.items[index].sotien = tienPhaidong;
+      //   // console.log(this.items[index].sotien);
+      // } else if (this.items[index].madoituong === "CN") {
+      //   let madoituong = "";
+      //   for (let i = 0; i < this.doituongdong.length; i++) {
+      //     const doituong = this.doituongdong[i];
+      //     // CHÚNG TA TÌM TỶ LỆ HỖ TRỢ TƯƠNG ỨNG TẠI ĐÂY
+      //     if (doituong.madoituong === "CN") {
+      //       madoituong = doituong.tylehotro;
+      //     }
+      //   }
+
+      //   // Bắt đầu tính tiền
+      //   castSubTwhotro = castSubTwhotro * (madoituong / 100);
+      //   let tienPhaidong =
+      //     (castMucdong -
+      //       castSubTwhotro -
+      //       castDiaphuonght -
+      //       castDiaphuonghtKhac) *
+      //     parseFloat(this.items[index].maphuongthucdong);
+      //   this.items[index].sotien = tienPhaidong;
+      // } else if (this.items[index].madoituong === "N") {
+      //   let madoituong = "";
+      //   for (let i = 0; i < this.doituongdong.length; i++) {
+      //     const doituong = this.doituongdong[i];
+      //     // CHÚNG TA TÌM TỶ LỆ HỖ TRỢ TƯƠNG ỨNG TẠI ĐÂY
+      //     if (doituong.madoituong === "N") {
+      //       madoituong = doituong.tylehotro;
+      //     }
+      //   }
+
+      //   // Bắt đầu tính tiền
+      //   castSubTwhotro = castSubTwhotro * (madoituong / 100);
+      //   let tienPhaidong =
+      //     (castMucdong -
+      //       castSubTwhotro -
+      //       castDiaphuonght -
+      //       castDiaphuonghtKhac) *
+      //     parseFloat(this.items[index].maphuongthucdong);
+      //   this.items[index].sotien = tienPhaidong;
+      // } else if (this.items[index].madoituong === "NT") {
+      //   let madoituong = "";
+      //   for (let i = 0; i < this.doituongdong.length; i++) {
+      //     const doituong = this.doituongdong[i];
+      //     // CHÚNG TA TÌM TỶ LỆ HỖ TRỢ TƯƠNG ỨNG TẠI ĐÂY
+      //     if (doituong.madoituong === "NT") {
+      //       madoituong = doituong.tylehotro;
+      //     }
+      //   }
+
+      //   // Bắt đầu tính tiền
+      //   castSubTwhotro = castSubTwhotro * (madoituong / 100);
+      //   let tienPhaidong =
+      //     (castMucdong - castSubTwhotro - castDiaphuonghtKhac) *
+      //     parseFloat(this.items[index].maphuongthucdong);
+      //   this.items[index].sotien = tienPhaidong;
+      // }
     },
 
     async phuongthucdChange(e, index) {
+      // console.log(this.items[index].madoituong);
+
       const maphuongthucdong = e.target.value;
       const tenphuongthucdong = e.target.options[e.target.selectedIndex].text;
       this.items[index].maphuongthucdong = maphuongthucdong;
@@ -3356,26 +3568,13 @@ export default {
       );
 
       const tuthang = this.items[index].tuthang;
-      const dadongdenthang = this.items[index].hanthecu;
 
       this.items[index].sotien = this.tinhTienPhaiDong(
         madoituong,
         muctiendong,
         maphuongthucdong,
-        tuthang,
-        dadongdenthang
+        tuthang
       );
-
-      if (maphuongthucdong == "D1LNCT") {
-        this.NCT = true;
-        this.NVS = false;
-      } else if (maphuongthucdong == "D1LNVS") {
-        this.NCT = false;
-        this.NVS = true;
-      } else {
-        this.NCT = false;
-        this.NVS = false;
-      }
     },
 
     // phương thức đóng
@@ -4208,105 +4407,6 @@ export default {
       }
     },
 
-    async onSave() {
-      // đoạn này theo code mới là sẽ bấm để lưu dữ liệu biên lai
-      // Kiểm tra dữ liệu trước khi ghi
-      // console.log(this.dulieuTravedeinbienlai);
-      const isDataValid = await this.checkFormData();
-      if (!isDataValid) {
-        // Dừng quá trình lưu dữ liệu nếu dữ liệu không hợp lệ
-        return;
-      }
-
-      const result = await Swal.fire({
-        title: `Xác nhận biên lai điện tử?`,
-        showDenyButton: true,
-        confirmButtonText: "Xác nhận",
-        denyButtonText: `Hủy gửi`,
-      });
-      if (result.isConfirmed) {
-        // console.log(this.items);
-
-        // const current = new Date();
-        const nowInVietnam = DateTime.now().setZone("Asia/Ho_Chi_Minh");
-        const formattedDate = nowInVietnam.toFormat("dd-MM-yyyy HH:mm:ss");
-        try {
-          // Bắt đầu hiển thị biểu tượng loading
-          this.isLoading = true;
-          // thông tin biên lai
-          const currentYear = new Date().getFullYear();
-
-          // lấy tên biên lai để lưu
-          for (let i = 0; i < this.dulieuTravedeinbienlai.length; i++) {
-            const item = this.dulieuTravedeinbienlai[i];
-
-            const formattedForFilename = formattedDate.replace(/[-: ]/g, "_");
-            const urlNameInvoice = `${item.hosoIdentity}_${formattedForFilename}_${item.sobienlai}_${item.hoten}`;
-
-            const dataPost = {
-              hosoIdentity: item.hosoIdentity,
-              maSoBhxh: item.masobhxh,
-              hoTen: item.hoten,
-              soCccd: item.cccd,
-              ngaySinh: item.ngaysinh,
-              gioiTinh: item.gioitinh,
-              soDienThoai: item.dienthoai,
-              nguoithutien: item.tennguoitao,
-              loaiDt: item.tenloaihinh,
-              soTien: item.sotien,
-              soThang: item.maphuongthucdong,
-              tuNgay: item.tungay,
-              denNgay: item.denngay,
-              tuThang: item.tuthang,
-              denThang: item.denthang,
-              maDaiLy: item.madaily,
-              tenDaiLy: item.tendaily,
-              createdBy: this.user.username,
-              sobienlai: item.sobienlai,
-              ngaybienlai: formattedDate,
-              maloaihinh: item.maloaihinh,
-              tothon: item.tothon,
-              tenquanhuyen: item.tenquanhuyen,
-              tentinh: item.tentinh,
-              currentYear: currentYear,
-              urlNameInvoice: urlNameInvoice,
-              maphuongan: item.maphuongan,
-            };
-
-            const ghibienlai = await this.$axios.post(
-              `/api/kekhai/ghidulieubienlai`,
-              dataPost
-            );
-
-            // lưu biên lai vào máy chủ
-            await this.inBienLaiDientu(dataPost);
-            // console.log("xongbienlai");
-          }
-
-          const hosoIds = this.dulieuTravedeinbienlai.map(
-            (item) => item.hosoIdentity
-          );
-
-          const rsIdtity = await this.$axios.post(
-            `/api/kekhai/getdskekhaiwithhsidentity`,
-            hosoIds
-          );
-          this.dulieuTravedeinbienlai = rsIdtity.data;
-          this.isLoading = false;
-          this.lockButtonXacnhaninbldt = true; // khoá nút xác nhận biên lai điện tử
-
-          Swal.fire({
-            title: "Hoàn tất xác nhận toàn bộ hồ sơ!",
-            icon: "success",
-          });
-          // console.log("check hàm xem biên lai:", this.xemBienLai);
-        } catch (error) {
-          // console.log(error);
-          this.isLoading = false;
-        }
-      }
-    },
-
     async inBienLaiDientu(data) {
       // console.log(data);
 
@@ -4493,7 +4593,11 @@ export default {
       if (data.maloaihinh == "AR" || data.maloaihinh == "BI") {
         noidungText = `Tiền đóng BHYT, phương thức đóng ${data.soThang} tháng, từ ngày ${data.tuNgay} đến ngày ${data.denNgay}`;
       } else {
-        noidungText = `Tiền đóng BHXH Tự nguyện, phương thức đóng ${data.soThang} tháng, từ tháng ${data.tuThang} đến tháng ${data.denThang}`;
+        if (data.maphuongan !== "DB") {
+          noidungText = `Tiền đóng BHXH Tự nguyện, phương thức đóng ${data.soThang} tháng, từ tháng ${data.tuThang} đến tháng ${data.denThang}`;
+        } else {
+          noidungText = `Tiền đóng BHXH Tự nguyện, phương thức đóng bù`;
+        }
       }
 
       doc.text(`Nội dung: `, toadoXInfo, toadoYInfo + 16, {
@@ -4603,36 +4707,6 @@ export default {
       doc.text(`${this.user.name}`, centerX + 11, toadoYInfo + 75, {
         align: "center",
       });
-
-      doc.addFont(
-        "OpenSans_SemiCondensed-Italic-normal.ttf",
-        "OpenSans_SemiCondensed-Italic-normal",
-        "italic"
-      );
-      doc.setFont("OpenSans_SemiCondensed-Italic-normal", "italic");
-      doc.setFontSize(10);
-      doc.setTextColor("#04368c");
-      doc.text(
-        `Vui lòng tra cứu biên lai điện tử tại: `,
-        toadoXInfo + 2,
-        toadoYInfo + 53,
-        {
-          fontWeight: "bold",
-        }
-      );
-
-      // console.log(data.maXacNhan);
-
-      doc.setFontSize(11);
-      doc.setTextColor("#dc143c");
-      doc.text(
-        `http://14.224.148.17:4042/tracuubienlaidientu-ansinhphudien`,
-        toadoXInfo + 2,
-        toadoYInfo + 58,
-        {
-          fontWeight: "bold",
-        }
-      );
 
       const tenbienlai = data.urlNameInvoice;
       // console.log(tenbienlai);
