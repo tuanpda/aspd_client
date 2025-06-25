@@ -4361,6 +4361,18 @@ export default {
         fontWeight: "bold",
       });
 
+                  // Đặt màu cho đường line (gạch chân)
+      doc.setDrawColor(248, 215, 218);
+      doc.setLineWidth(0.4); // Độ dày đường gạch
+
+      const y_line = 19;      // Vị trí theo chiều dọc
+
+      // Di chuyển sang trái nhiều hơn và rút ngắn chiều dài
+      const x1 = 40;          // điểm bắt đầu (trái)
+      const lineLength = 42;  // chiều dài line
+      const x2 = x1 + lineLength;
+      doc.line(x1, y_line, x2, y_line);
+
       doc.addFont("OpenSans-Bold-normal.ttf", "OpenSans-Bold", "bold");
       doc.setFont("OpenSans-Bold", "bold");
       doc.setFontSize(10);
