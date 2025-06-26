@@ -4210,34 +4210,48 @@ async checkFormData() {
       });
     },
 
-    async onFileChange(e) {
-      this.fileName = e.target.files[0].name;
-      this.selectedFile = e.target.files[0];
-      const files = e.target.files;
+    async onFileChange(event) {
+      const file = event.target.files[0];
+      if (!file) {
+        Swal.fire("Lỗi", "Chưa chọn file", "error");
+        return;
+      }
 
-      const fileReader = new FileReader(); // construction function that can read the file content
-      fileReader.onload = (ev) => {
-        const data = ev.target.result;
-        const workbook = XLSX.read(data, {
-          type: "binary", // binary
-        });
-        const wsname = workbook.SheetNames[0]; //take the first sheet
-        const ws = XLSX.utils.sheet_to_json(workbook.Sheets[wsname]); //Get the data in this table
-        this.items = ws;
-        // ws.forEach((template) => {
-        //   this.items.forEach((item) => {
-        //     // Duyệt qua các trường của template
-        //     for (const key in template) {
-        //       if (item.hasOwnProperty(key)) {
-        //         // Nếu item có trường giống với template, ghi đè giá trị
-        //         item[key] = template[key];
-        //       }
-        //     }
-        //   });
-        // });
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const binaryString = e.target.result;
+        const workbook = XLSX.read(binaryString, { type: "binary" });
+
+        // Giả sử file của bạn có dữ liệu ở sheet đầu tiên
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const jsonData = XLSX.utils.sheet_to_json(sheet);
+        
+        // Kiểm tra và xử lý dữ liệu sau khi đọc từ file Excel
+        if (jsonData.length > 0) {
+          jsonData.forEach((row) => {
+            this.addRowFromImportedData(row);
+          });
+        }
       };
+      
+      reader.readAsBinaryString(file);
+    },
 
-      fileReader.readAsBinaryString(files[0]); // read file, trigger onload
+    // Phương thức này sẽ thêm dữ liệu vào danh sách `items` từ file Excel
+    addRowFromImportedData(rowData) {
+      try {
+        this.items.push({
+          ...rowData,
+          // Thêm các trường dữ liệu mặc định nếu cần
+          trangthai: 0,
+          hinhthucnap: 1,
+        });
+      } catch (error) {
+        console.error("Lỗi khi thêm dữ liệu từ file:", error);
+      }
+
+      console.log(this.items);
+      
     },
 
     capitalizeFirstLetter(str) {
@@ -4246,9 +4260,6 @@ async checkFormData() {
     },
 
     async importKekhai() {
-      // thêm các thứ sau. 1. import XLSX from "xlsx"
-      // 2. thêm isActive_import (vào data); 3. thêm fileName: "", và selectedFile: null, vào data
-      // thêm @click="importKekhai" cho button trên cùng
       this.isActive_import = true;
     },
 

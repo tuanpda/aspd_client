@@ -1,173 +1,161 @@
 <template>
-  <div class="columns is-mobile">
-    <div class="column container">
-      <br />
-      <div class="box">
-        <div class="columns">
-          <div class="column">
-            <div class="control">
-              <span style="color: #ff0000" class="icon is-small is-left">
-                <i class="far fa-bookmark"></i>
-              </span>
-              <span style="font-weight: bold; color: #ff8c00"
-                >Danh mục Xã phường</span
-              >
-            </div>
-            <div style="margin-top: 20px">
-              <div class="columns">
-                <div class="column">
-                  <div class="table_wrapper">
-                    <table
-                      class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
+  <div class="column">
+    <div class="box">
+      <div class="column">
+        <div class="control">
+          <span style="color: #ff0000" class="icon is-small is-left">
+            <i class="far fa-bookmark"></i>
+          </span>
+          <span style="font-weight: bold; color: #ff8c00"
+            >Danh mục Xã phường</span
+          >
+        </div>
+        <div style="margin-top: 20px">
+          <div class="columns">
+            <div class="column">
+              <div class="table_wrapper">
+                <table
+                  class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
+                >
+                  <thead style="font-weight: bold">
+                    <tr style="font-size: small; background-color: #4169e1">
+                      <td style="color: azure; text-align: center; width: 3%">
+                        STT
+                      </td>
+                      <td style="color: azure; text-align: center">
+                        Mã xã phường
+                      </td>
+                      <td style="color: azure; text-align: center">
+                        Tên xã phường
+                      </td>
+                      <td style="color: azure; text-align: center">Cấp</td>
+                      <td style="color: azure; text-align: center">
+                        Mã quận huyện
+                      </td>
+                      <td style="color: azure; text-align: center">
+                        Tên quận huyện
+                      </td>
+                      <td style="color: azure; text-align: center">Mã tỉnh</td>
+                      <td style="color: azure; text-align: center">Tên tỉnh</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      style="font-size: small"
+                      v-for="(item, index) in data_xp"
+                      :key="index"
                     >
-                      <thead style="font-weight: bold">
-                        <tr style="font-size: small; background-color: #4169e1">
-                          <td
-                            style="color: azure; text-align: center; width: 3%"
-                          >
-                            STT
-                          </td>
-                          <td style="color: azure; text-align: center">
-                            Mã xã phường
-                          </td>
-                          <td style="color: azure; text-align: center">
-                            Tên xã phường
-                          </td>
-                          <td style="color: azure; text-align: center">Cấp</td>
-                          <td style="color: azure; text-align: center">
-                            Mã quận huyện
-                          </td>
-                          <td style="color: azure; text-align: center">
-                            Tên quận huyện
-                          </td>
-                          <td style="color: azure; text-align: center">
-                            Mã tỉnh
-                          </td>
-                          <td style="color: azure; text-align: center">
-                            Tên tỉnh
-                          </td>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr
-                          style="font-size: small"
-                          v-for="(item, index) in data_xp"
-                          :key="index"
-                        >
-                          <td style="text-align: center">
-                            {{ index + 1 }}
-                          </td>
-                          <td style="text-align: center">
-                            {{ item.maxaphuong }}
-                          </td>
-                          <td>
-                            {{ item.tenxaphuong }}
-                          </td>
-                          <td style="text-align: center">
-                            {{ item.cap }}
-                          </td>
-                          <td style="text-align: center">
-                            {{ item.maquanhuyen }}
-                          </td>
-                          <td>
-                            {{ item.tenquanhuyen }}
-                          </td>
-                          <td style="text-align: center">
-                            {{ item.matinh }}
-                          </td>
-                          <td>
-                            {{ item.tentinh }}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <!-- Phân trang -->
-                  <div style="margin-top: 10px">
-                    <nav
-                      class="pagination is-centered is-rounded"
-                      role="navigation"
-                      aria-label="pagination"
-                    >
-                      <!-- Nút trang đầu tiên -->
-                      <button
-                        :disabled="currentPage === 1"
-                        @click="goToPage(1)"
-                        class="pagination-previous button is-info is-light is-small"
-                      >
-                        Đầu tiên
-                      </button>
+                      <td style="text-align: center">
+                        {{ index + 1 }}
+                      </td>
+                      <td style="text-align: center">
+                        {{ item.maxaphuong }}
+                      </td>
+                      <td>
+                        {{ item.tenxaphuong }}
+                      </td>
+                      <td style="text-align: center">
+                        {{ item.cap }}
+                      </td>
+                      <td style="text-align: center">
+                        {{ item.maquanhuyen }}
+                      </td>
+                      <td>
+                        {{ item.tenquanhuyen }}
+                      </td>
+                      <td style="text-align: center">
+                        {{ item.matinh }}
+                      </td>
+                      <td>
+                        {{ item.tentinh }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Phân trang -->
+              <div style="margin-top: 10px">
+                <nav
+                  class="pagination is-centered is-rounded"
+                  role="navigation"
+                  aria-label="pagination"
+                >
+                  <!-- Nút trang đầu tiên -->
+                  <button
+                    :disabled="currentPage === 1"
+                    @click="goToPage(1)"
+                    class="pagination-previous button is-info is-light is-small"
+                  >
+                    Đầu tiên
+                  </button>
 
-                      <!-- Nút Previous -->
-                      <button
-                        :disabled="currentPage === 1"
-                        @click="goToPreviousPage"
-                        class="pagination-previous button is-info is-light is-small"
-                      >
-                        Trang trước
-                      </button>
+                  <!-- Nút Previous -->
+                  <button
+                    :disabled="currentPage === 1"
+                    @click="goToPreviousPage"
+                    class="pagination-previous button is-info is-light is-small"
+                  >
+                    Trang trước
+                  </button>
 
-                      <!-- Nút Next -->
-                      <button
-                        :disabled="currentPage === totalPages"
-                        @click="goToNextPage"
-                        class="pagination-next button is-danger is-light is-small"
-                      >
-                        Trang tiếp
-                      </button>
+                  <!-- Nút Next -->
+                  <button
+                    :disabled="currentPage === totalPages"
+                    @click="goToNextPage"
+                    class="pagination-next button is-danger is-light is-small"
+                  >
+                    Trang tiếp
+                  </button>
 
-                      <!-- Nút trang cuối cùng -->
-                      <button
-                        :disabled="currentPage === totalPages"
-                        @click="goToPage(totalPages)"
-                        class="pagination-next button is-danger is-light is-small"
-                      >
-                        Cuối cùng
-                      </button>
+                  <!-- Nút trang cuối cùng -->
+                  <button
+                    :disabled="currentPage === totalPages"
+                    @click="goToPage(totalPages)"
+                    class="pagination-next button is-danger is-light is-small"
+                  >
+                    Cuối cùng
+                  </button>
 
-                      <ul class="pagination-list">
-                        <!-- Hiển thị các nút phân trang -->
-                        <li v-for="page in visiblePages" :key="page">
-                          <button
-                            :class="[
-                              'pagination-link',
-                              { 'is-current': page === currentPage },
-                              'is-small',
-                            ]"
-                            @click="goToPage(page)"
-                          >
-                            {{ page }}
-                          </button>
-                        </li>
-                      </ul>
-                    </nav>
-                  </div>
-                </div>
+                  <ul class="pagination-list">
+                    <!-- Hiển thị các nút phân trang -->
+                    <li v-for="page in visiblePages" :key="page">
+                      <button
+                        :class="[
+                          'pagination-link',
+                          { 'is-current': page === currentPage },
+                          'is-small',
+                        ]"
+                        @click="goToPage(page)"
+                      >
+                        {{ page }}
+                      </button>
+                    </li>
+                  </ul>
+                </nav>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Modal Loading Data -->
-      <div class="">
-        <div :class="{ 'is-active': isActiveLoading }" class="modal">
-          <div class="modal-background"></div>
-          <div class="modal-content modal-card-predata">
-            <section class="modal-card-body">
-              <div>
-                <span
-                  style="font-size: small; font-weight: bold; color: #00947e"
-                  >Đang load dữ liệu - Xin chờ đợi ....</span
-                >
-              </div>
-              <div>
-                <progress class="progress is-small is-danger" max="100">
-                  15%
-                </progress>
-              </div>
-            </section>
-          </div>
+    <!-- Modal Loading Data -->
+    <div class="">
+      <div :class="{ 'is-active': isActiveLoading }" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-content modal-card-predata">
+          <section class="modal-card-body">
+            <div>
+              <span style="font-size: small; font-weight: bold; color: #00947e"
+                >Đang load dữ liệu - Xin chờ đợi ....</span
+              >
+            </div>
+            <div>
+              <progress class="progress is-small is-danger" max="100">
+                15%
+              </progress>
+            </div>
+          </section>
         </div>
       </div>
     </div>

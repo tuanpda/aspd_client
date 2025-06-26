@@ -36,23 +36,13 @@
         <div class="navbar-start">
           <!-- Danh mục -->
           <div class="navbar-item has-dropdown is-hoverable">
-            <a
-              class="navbar-link"
-              @click="toggleDropdown_danhmuc"
-              style="
-                color: hsl(0deg, 0%, 100%);
-                font-weight: bold;
-                font-size: large;
-              "
-            >
+            <a class="navbar-link" @click="toggleDropdown_danhmuc">
               <span class="icon is-small is-left">
                 <i class="fas fa-layer-group"></i>
               </span>
               &ensp; Danh mục
             </a>
-
             <div
-              @click="toggleDropdown_danhmuc"
               class="navbar-dropdown is-boxed"
               v-show="isDropdownOpen_danhmuc"
             >
@@ -86,49 +76,16 @@
 
           <!-- Kê khai -->
           <div class="navbar-item has-dropdown is-hoverable">
-            <a
-              class="navbar-link"
-              @click="toggleDropdown_danhmuc"
-              style="
-                color: hsl(0deg, 0%, 100%);
-                font-weight: bold;
-                font-size: large;
-              "
-            >
+            <a class="navbar-link" @click="toggleDropdown_kekhai">
               <span class="icon is-small is-left">
                 <i class="fas fa-broom"></i>
               </span>
               &ensp; Kê khai
             </a>
             <div
-              @click="toggleDropdown_danhmuc"
               class="navbar-dropdown is-boxed"
-              v-show="isDropdownOpen_danhmuc"
+              v-show="isDropdownOpen_kekhai"
             >
-              <!-- <nuxt-link
-                to="/nhanviendailythu/danhsachkekhai"
-                class="navbar-item"
-              >
-                <span style="color: #3850b7" class="icon is-small is-left">
-                  <i class="far fa-file-pdf"></i>
-                </span>
-                &ensp; Lịch sử kê khai
-              </nuxt-link> -->
-              <!-- <nuxt-link
-                to="/nhanviendailythu/tracuuhosokekhai"
-                class="navbar-item"
-              >
-                <span style="color: #3850b7" class="icon is-small is-left">
-                  <i class="far fa-calendar-alt"></i>
-                </span>
-                &ensp; Tra cứu Hồ sơ kê khai
-              </nuxt-link> -->
-              <!-- <nuxt-link to="/nhanviendailythu/timkiemhoso" class="navbar-item">
-                <span style="color: #3850b7" class="icon is-small is-left">
-                  <i class="far fa-calendar-alt"></i>
-                </span>
-                &ensp; Tra cứu Hồ sơ kê khai (tìm kiếm)
-              </nuxt-link> -->
               <nuxt-link to="/nhanviendailythu/taokekhai" class="navbar-item">
                 <span style="color: #0d6efd" class="icon is-small is-left">
                   <i class="fas fa-file-signature"></i>
@@ -153,26 +110,17 @@
             </div>
           </div>
 
-          <!-- xử lý hồ sơ -->
+          <!-- Báo cáo -->
           <div class="navbar-item has-dropdown is-hoverable">
-            <a
-              class="navbar-link"
-              @click="toggleDropdown_danhmuc"
-              style="
-                color: hsl(0deg, 0%, 100%);
-                font-weight: bold;
-                font-size: large;
-              "
-            >
+            <a class="navbar-link" @click="toggleDropdown_baocao">
               <span class="icon is-small is-left">
                 <i class="fas fa-paperclip"></i>
               </span>
               &ensp; Báo cáo
             </a>
             <div
-              @click="toggleDropdown_danhmuc"
               class="navbar-dropdown is-boxed"
-              v-show="isDropdownOpen_danhmuc"
+              v-show="isDropdownOpen_baocao"
             >
               <nuxt-link to="/nhanviendailythu/timkiemhoso" class="navbar-item">
                 <span style="color: #198754" class="icon is-small is-left">
@@ -180,15 +128,6 @@
                 </span>
                 &ensp; Phê duyệt hồ sơ
               </nuxt-link>
-              <!-- <nuxt-link
-                to="/nhanviendailythu/xuatfiledayivan"
-                class="navbar-item"
-              >
-                <span style="color: #fd7e14" class="icon is-small is-left">
-                  <i class="fas fa-cloud-download-alt"></i>
-                </span>
-                &ensp; Xuất File đẩy Ivan
-              </nuxt-link> -->
               <nuxt-link
                 to="/nhanviendailythu/quanlybienlai"
                 class="navbar-item"
@@ -198,7 +137,11 @@
                 </span>
                 &ensp; Quản lý Biên lai điện tử
               </nuxt-link>
-              <nuxt-link v-if="user && user.role === 2" to="/nhanviendailythu/inC17" class="navbar-item">
+              <nuxt-link
+                v-if="user && user.role === 2"
+                to="/nhanviendailythu/inC17"
+                class="navbar-item"
+              >
                 <span style="color: #0a58ca" class="icon is-small is-left">
                   <i class="fas fa-money-bill-alt"></i>
                 </span>
@@ -209,22 +152,19 @@
         </div>
 
         <div class="navbar-end">
-          <div v-if="user" class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link" @click="toggleDropdown_user"
-              ><img
+          <!-- User Profile -->
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link" @click="toggleDropdown_user">
+              <img
                 :src="user.avatar"
                 alt=""
                 width="40"
                 height="80"
                 style="border-radius: 50%; border: 2px solid #ffd863"
               />
-              &ensp; Xin chào, {{ user.username }}!</a
-            >
-            <div
-              @click="toggleDropdown_user"
-              class="navbar-dropdown is-boxed"
-              v-show="isDropdownOpen_user"
-            >
+              &ensp; Xin chào, {{ user.username }}!
+            </a>
+            <div class="navbar-dropdown is-boxed" v-show="isDropdownOpen_user">
               <a @click="isActive = true" class="navbar-item">
                 <span class="icon is-small is-left" style="color: #f96854">
                   <i class="fas fa-address-card"></i>
@@ -430,6 +370,8 @@ export default {
     return {
       isMenuOpen: false,
       isDropdownOpen_danhmuc: false,
+      isDropdownOpen_kekhai: false,
+      isDropdownOpen_baocao: false,
       isDropdownOpen_user: false,
       activeMenu: "", // Thêm thuộc tính activeMenu để lưu trạng thái menu đang được sử dụng
 
@@ -464,10 +406,30 @@ export default {
 
     toggleDropdown_danhmuc() {
       this.isDropdownOpen_danhmuc = !this.isDropdownOpen_danhmuc;
+      this.isDropdownOpen_kekhai = false;
+      this.isDropdownOpen_baocao = false;
+      this.isDropdownOpen_user = false; // Đảm bảo đóng menu user profile khi bấm vào menu khác
+    },
+
+    toggleDropdown_kekhai() {
+      this.isDropdownOpen_kekhai = !this.isDropdownOpen_kekhai;
+      this.isDropdownOpen_danhmuc = false;
+      this.isDropdownOpen_baocao = false;
+      this.isDropdownOpen_user = false;
+    },
+
+    toggleDropdown_baocao() {
+      this.isDropdownOpen_baocao = !this.isDropdownOpen_baocao;
+      this.isDropdownOpen_danhmuc = false;
+      this.isDropdownOpen_kekhai = false;
+      this.isDropdownOpen_user = false;
     },
 
     toggleDropdown_user() {
       this.isDropdownOpen_user = !this.isDropdownOpen_user;
+      this.isDropdownOpen_danhmuc = false;
+      this.isDropdownOpen_kekhai = false;
+      this.isDropdownOpen_baocao = false;
     },
 
     onFileChange(e) {
@@ -731,6 +693,39 @@ export default {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
     text-align: center;
     text-decoration: none; /* bỏ gạch chân link */
+  }
+
+  /* Mobile view - Sửa màu chữ trong menu dropdown */
+  @media screen and (max-width: 768px) {
+    .navbar-item {
+      color: #ffffff !important; /* Đảm bảo màu chữ trong menu không bị trùng */
+    }
+
+    .navbar-dropdown {
+      background-color: #f0f0f0; /* Chỉnh lại màu nền của dropdown */
+    }
+
+    .navbar-item:hover {
+      background-color: #3850b7; /* Chỉnh lại màu hover khi di chuột vào menu */
+    }
+
+    /* Thêm màu sắc cho icon */
+    .navbar-item .icon {
+      color: #ffffff !important; /* Đảm bảo màu icon không bị trùng với nền */
+    }
+  }
+
+  /* Mặc định cho thiết bị di động */
+  .modal-card-predata {
+    max-height: 80vh; /* Chiều cao tối đa là 80% màn hình */
+    overflow-y: auto; /* Cho phép cuộn nếu nội dung quá dài */
+  }
+
+  /* Cho thiết bị máy tính */
+  @media (min-width: 1024px) {
+    .modal-card-predata {
+      max-height: 90vh; /* Tăng chiều cao tối đa cho máy tính */
+    }
   }
 }
 </style>

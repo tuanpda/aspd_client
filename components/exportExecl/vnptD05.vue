@@ -332,7 +332,7 @@ export default {
       // Tạo tiêu đề cho dòng thứ 3
       const headerTitlesTitle = titleVnptD05.map((item) => item.tentruong); // Lấy giá trị "tentruong"
       const row3 = worksheet.addRow(headerTitlesTitle);
-      row3.height = 1;
+      row3.height = 30;
 
       const rowNumber = 2; // Số hàng
       // Tô màu nền cho hàng 2 từ cột `A` đến `BD`
@@ -411,7 +411,7 @@ export default {
         row.getCell(3).value = item.masobhxh; // Cột C
 
         // Cột E
-        row.getCell(6).value = `${item.maphuongan} - ${item.tenphuongan}`;
+        row.getCell(5).value = `${item.maphuongan} - ${item.tenphuongan}`;
 
         row.getCell(6).value = Number(item.muctiendong); // cột F
         row.getCell(7).value = item.tuthang; // cột g

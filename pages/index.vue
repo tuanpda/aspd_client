@@ -1,7 +1,7 @@
 <template>
   <div class="pageIdex">
     <div v-if="user">
-      <div class="columns" style="padding: 50px">
+      <div class="columns">
         <div class="column is-3">
           <div class="box has-text-centered">
             <p>
@@ -77,7 +77,7 @@
         </div>
 
         <div class="column">
-          <div class="box has-text-centered">
+          <div class="has-text-centered">
             <div class="columns">
               <div class="column">
                 <div class="box has-text-centered">
@@ -305,7 +305,7 @@
         </div> -->
       </div>
 
-      <div class="columns" style="padding-left: 50px; padding-right: 50px">
+      <div class="columns">
         <div class="column is-4">
           <CharLoaiHinh v-if="madailyChart == 1" />
           <CharLoaiHinhDaiLy v-else :key="cccd" :cccd="cccd" />

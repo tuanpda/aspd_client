@@ -332,7 +332,7 @@ export default {
       // Tạo tiêu đề cho dòng thứ 3
       const headerTitlesTitle = titleVnpt.map((item) => item.tentruong); // Lấy giá trị "tentruong"
       const row3 = worksheet.addRow(headerTitlesTitle);
-      row3.height = 1;
+      row3.height = 30;
 
       const rowNumber = 2; // Số hàng
       // Tô màu nền cho hàng 2 từ cột `A` đến `BD`
