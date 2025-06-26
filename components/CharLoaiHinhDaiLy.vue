@@ -39,7 +39,7 @@ export default {
   },
 
   watch: {
-    madaily(newVal) {
+    cccd(newVal) {
       if (newVal) {
         this.report();
       }

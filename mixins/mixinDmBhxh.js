@@ -15,6 +15,7 @@ export const mixinDmBhxh = {
       dmtyledongbhtn: [],
       dmchuanngheo: [],
       dmtylehotrodiaphuongis: [],
+      dmtylehotrodiaphuongil: [],
     };
   },
 
@@ -36,6 +37,7 @@ export const mixinDmBhxh = {
         this.loadDanhmuc("/api/danhmucs/tyledongbhtn", "dmtyledongbhtn"),
         this.loadDanhmuc("/api/danhmucs/mucchuanngheo", "dmchuanngheo"),
         this.loadDanhmuc("/api/danhmucs/diaphuonghtis", "dmtylehotrodiaphuongis"),
+        this.loadDanhmuc("/api/danhmucs/diaphuonghtIL", "dmtylehotrodiaphuongil"),
       ];
       // Chờ tất cả các promise hoàn thành
       await Promise.all(promises);

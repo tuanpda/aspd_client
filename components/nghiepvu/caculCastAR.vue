@@ -53,6 +53,7 @@
               <td style="text-align: center">Tỷ lệ NSĐP %</td>
               <td style="text-align: center">Tỷ lệ HT khác</td>
               <td style="text-align: center">Hạn thẻ cũ</td>
+              <td style="text-align: center">Từ ngày</td>
               <td style="text-align: center">Số tháng</td>
               <td style="text-align: center">Số tiền phải đóng</td>
               <td style="text-align: center">Tỉnh / Thành phố</td>
@@ -201,16 +202,16 @@
                   type="number"
                 />
               </td>
-              <!-- <td style="text-align: center">
-                <input
-                  v-model="item.tungay"
-                  type="text"
-                  class="input is-small"
-                />
-              </td> -->
               <td style="text-align: center">
                 <input
                   v-model="item.hanthecu"
+                  type="text"
+                  class="input is-small"
+                />
+              </td>
+              <td style="text-align: center">
+                <input
+                  v-model="item.tungay"
                   type="text"
                   class="input is-small"
                 />
@@ -2931,6 +2932,12 @@ export default {
           hanthecu: "",
         });
 
+        // Tính tiền ngay sau khi add
+        this.$nextTick(() => {
+          const index = this.items.length - 1;
+          this.tinhTienPhaiDong(index);
+        });
+
         // console.log(this.items)
       } catch (error) {
         console.log(error);
@@ -2993,39 +3000,46 @@ export default {
       this.items[index].tenphuongan = tenphuongan;
     },
 
-    // phương thức đóng
+    tinhTienPhaiDong(index) {
+      const item = this.items[index];
+      const thangdong = parseInt(item.maphuongthucdong); // số tháng đóng
+      const luongcs = this.luongcoso;
+      const tyleTW = this.tylengansachtw;
+      const tyleDP = this.tylenngansachdp;
+      const tyleKhac = parseFloat(item.hotrokhac || 0); // nếu chưa nhập mặc định 0
+
+      // Tổng tiền phải đóng (chưa trừ hỗ trợ)
+      const tongTien = luongcs * 0.045 * thangdong;
+
+      // Hỗ trợ trung ương
+      const tienTWHotro = tongTien * (tyleTW / 100);
+
+      // Hỗ trợ địa phương
+      const tienDPHotro = tongTien * (tyleDP / 100);
+
+      // Hỗ trợ khác
+      const tienKhac = tongTien * (tyleKhac / 100);
+
+      // Tổng tiền phải đóng sau hỗ trợ
+      const soTienThucDong = tongTien - (tienTWHotro + tienDPHotro + tienKhac);
+
+      // Gán lại vào item
+      item.tiennsnnht = tienTWHotro;
+      item.tiennsdp = tienDPHotro;
+      item.sotien = soTienThucDong;
+      item.tylensnnht = tyleTW;
+      item.tylensdp = tyleDP;
+    },
+
     async phuongthucdChange(e, index) {
       const maphuongthucdong = e.target.value;
       const tenphuongthucdong = e.target.options[e.target.selectedIndex].text;
+
       this.items[index].maphuongthucdong = maphuongthucdong;
       this.items[index].tenphuongthucdong = tenphuongthucdong;
 
-      // tính số tiền phải nạp
-      // console.log(typeof(this.luongcoso));
-      const cast =
-        this.luongcoso * 0.045 * parseInt(this.items[index].maphuongthucdong);
-
-      const twHotro =
-        this.luongcoso *
-        0.045 *
-        parseInt(this.items[index].maphuongthucdong) *
-        (this.tylengansachtw / 100);
-
-      const dpHotro =
-        this.luongcoso *
-        0.045 *
-        parseInt(this.items[index].maphuongthucdong) *
-        (this.tylenngansachdp / 100);
-
-      const hotroKhac =
-        this.luongcoso *
-        0.045 *
-        parseInt(this.items[index].maphuongthucdong) *
-        parseInt(this.items[index].hotrokhac);
-
-      const sotienPhaidong = cast - (twHotro + dpHotro + hotroKhac);
-      this.items[index].sotien = sotienPhaidong;
-      // console.log(this.items[index]);
+      // Gọi lại hàm tính tiền
+      this.tinhTienPhaiDong(index);
     },
 
     // tỉnh thành phố
@@ -3260,16 +3274,14 @@ export default {
     //   }
     // },
 
-    async checkFormData() {
+async checkFormData() {
       for (let i = 0; i < this.items.length; i++) {
         if (!this.items[i].masobhxh) {
           this.$toasted.show("Thiếu mã số BHXH", {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.masobhxhInput[i]) {
-            this.$refs.masobhxhInput[i].focus();
-          }
+
           return false;
         }
 
@@ -3278,9 +3290,7 @@ export default {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.masobhxhInput[i]) {
-            this.$refs.masobhxhInput[i].focus();
-          }
+
           return false;
         }
 
@@ -3289,9 +3299,7 @@ export default {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.nameInput[i]) {
-            this.$refs.nameInput[i].focus();
-          }
+
           return false;
         }
 
@@ -3300,9 +3308,7 @@ export default {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.ngaysinhInput[i]) {
-            this.$refs.ngaysinhInput[i].focus();
-          }
+
           return false;
         }
 
@@ -3311,9 +3317,7 @@ export default {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.gioitinhSelect[i]) {
-            this.$refs.gioitinhSelect[i].focus();
-          }
+
           return false;
         }
 
@@ -3322,9 +3326,7 @@ export default {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.cccdInput[i]) {
-            this.$refs.cccdInput[i].focus();
-          }
+
           return false;
         }
 
@@ -3333,42 +3335,18 @@ export default {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.cccdInput[i]) {
-            this.$refs.cccdInput[i].focus();
-          }
+
           return false;
         }
 
-        // if (!this.items[i].dienthoai) {
-        //   this.$toasted.show("Thiếu điện thoại", {
-        //     duration: 3000,
-        //     theme: "bubble",
-        //   });
-        //   if (this.$refs.dienthoaiInput[i]) {
-        //     this.$refs.dienthoaiInput[i].focus();
-        //   }
-        //   return false;
-        // }
-
-        // if (!this.isValidPhoneNumber(this.items[i].dienthoai)) {
-        //   this.$toasted.show("Số điện thoại không hợp lệ", {
-        //     duration: 3000,
-        //     theme: "bubble",
-        //   });
-        //   if (this.$refs.dienthoaiInput[i]) {
-        //     this.$refs.dienthoaiInput[i].focus();
-        //   }
-        //   return false;
-        // }
+        
 
         if (!this.items[i].maphuongan || !this.items[i].tenphuongan) {
           this.$toasted.show("Chọn một phương án", {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.phuonganSelect[i]) {
-            this.$refs.phuonganSelect[i].focus();
-          }
+
           return false;
         }
 
@@ -3377,9 +3355,7 @@ export default {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.tungayInput[i]) {
-            this.$refs.tungayInput[i].focus();
-          }
+
           return false;
         }
 
@@ -3391,9 +3367,7 @@ export default {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.phuongthucdongSelect[i]) {
-            this.$refs.phuongthucdongSelect[i].focus();
-          }
+
           return false;
         }
 
@@ -3402,9 +3376,7 @@ export default {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.quanhuyenSelect[i]) {
-            this.$refs.quanhuyenSelect[i].focus();
-          }
+
           return false;
         }
 
@@ -3413,31 +3385,17 @@ export default {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.xaphuongSelect[i]) {
-            this.$refs.xaphuongSelect[i].focus();
-          }
+
           return false;
         }
 
-        // if (!this.items[i].tothon) {
-        //   this.$toasted.show("Thiếu tổ thôn", {
-        //     duration: 3000,
-        //     theme: "bubble",
-        //   });
-        //   if (this.$refs.tothonInput[i]) {
-        //     this.$refs.tothonInput[i].focus();
-        //   }
-        //   return false;
-        // }
 
         if (!this.items[i].mabenhvien || !this.items[i].tenbenhvien) {
           this.$toasted.show("Chọn bệnh viện", {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.hopInput[i]) {
-            this.$refs.hopInput[i].focus();
-          }
+
           return false;
         }
 
@@ -3446,45 +3404,9 @@ export default {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.hinhthucnapInput[i]) {
-            this.$refs.hinhthucnapInput[i].focus();
-          }
+
           return false;
         }
-
-        // biên lai
-        // if (!this.isValidSobienlai(this.items[i].sobienlai)) {
-        //   this.$toasted.show("Số biên lai phải 7 số", {
-        //     duration: 3000,
-        //     theme: "bubble",
-        //   });
-        //   if (this.$refs.sobienlaiInput[i]) {
-        //     this.$refs.sobienlaiInput[i].focus();
-        //   }
-        //   return false;
-        // }
-
-        // if (!this.items[i].sobienlai) {
-        //   this.$toasted.show("Chưa nhập số biên lai", {
-        //     duration: 3000,
-        //     theme: "bubble",
-        //   });
-        //   if (this.$refs.sobienlaiInput[i]) {
-        //     this.$refs.sobienlaiInput[i].focus();
-        //   }
-        //   return false;
-        // }
-
-        // if (!this.items[i].ngaybienlai) {
-        //   this.$toasted.show("Chưa nhập ngày biên lai", {
-        //     duration: 3000,
-        //     theme: "bubble",
-        //   });
-        //   if (this.$refs.ngaybienlaiInput[i]) {
-        //     this.$refs.ngaybienlaiInput[i].focus();
-        //   }
-        //   return false;
-        // }
       }
       // Nếu tất cả thông tin đều hợp lệ, trả về true để cho phép quá trình lưu dữ liệu
       return true;

@@ -51,6 +51,7 @@
               <td style="text-align: center">Người thứ ?</td>
               <td style="text-align: center">Lương cơ sở</td>
               <td style="text-align: center">Hạn thẻ cũ</td>
+              <td style="text-align: center">Từ ngày</td>
               <td style="text-align: center">Số tháng</td>
               <td style="text-align: center">Số tiền phải đóng</td>
               <td style="text-align: center">Tỉnh / Thành phố</td>
@@ -195,15 +196,6 @@
                   disabled
                 />
               </td>
-
-              <!-- <td style="text-align: center">
-                <input
-                  v-model="item.tungay"
-                  class="input is-small"
-                  type="date"
-                  ref="tungayInput"
-                />
-              </td> -->
               <td style="text-align: center">
                 <input
                   v-model="item.hanthecu"
@@ -211,7 +203,14 @@
                   class="input is-small"
                 />
               </td>
-
+              <td style="text-align: center">
+                <input
+                  v-model="item.tungay"
+                  class="input is-small"
+                  type="date"
+                  ref="tungayInput"
+                />
+              </td>
               <td style="text-align: center">
                 <div class="select is-fullwidth is-small">
                   <select
@@ -2668,7 +2667,10 @@ export default {
         (p) => p.maphuongan === "ON"
       ) || { maphuongan: "", tenphuongan: "" };
 
-      const nguoiThuMacDinh = this.nguoithu.find((n) => n.manguoithu === 1) || { manguoithu: 0, nguoithu: "" };
+      const nguoiThuMacDinh = this.nguoithu.find((n) => n.manguoithu === 1) || {
+        manguoithu: 0,
+        nguoithu: "",
+      };
       const phuongThucMacDinh = this.phuongthucdong.find(
         (p) => p.maphuongthuc === "12"
       ) || { maphuongthuc: "", tenphuongthuc: "" };
@@ -2749,6 +2751,12 @@ export default {
           hanthecu: "",
         });
 
+        // Sau khi thêm xong, gọi tính tiền mặc định
+        this.$nextTick(() => {
+          const index = this.items.length - 1;
+          this.tinhSoTien(index);
+        });
+
         // console.log(this.items);
       } catch (error) {
         console.log(error);
@@ -2811,7 +2819,7 @@ export default {
       this.items[index].tenphuongan = tenphuongan;
     },
 
-    // Tính số tiền phải nạp cho một dòng (index)
+// Tính số tiền phải nạp cho một dòng (index)
     tinhSoTien(index) {
       const item = this.items[index];
       const heSo = {
@@ -2824,11 +2832,10 @@ export default {
 
       const soThang = parseInt(item.maphuongthucdong) || 0;
       const nguoiThu = parseInt(item.manguoithu) || 0;
-
       const cast = this.luongcoso * 0.045 * soThang;
       const tyLe = heSo[nguoiThu] ?? heSo.default;
 
-      item.sotien = Math.round(cast * tyLe); // làm tròn nếu muốn
+      item.sotien = Math.round(cast * tyLe);
     },
 
     // Khi thay đổi người thứ
@@ -2843,7 +2850,6 @@ export default {
       this.tinhSoTien(index);
     },
 
-    // Khi thay đổi phương thức đóng
     async phuongthucdChange(e, index) {
       const maphuongthucdong = e.target.value;
       const tenphuongthucdong = e.target.options[e.target.selectedIndex].text;
@@ -3153,9 +3159,7 @@ export default {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.masobhxhInput[i]) {
-            this.$refs.masobhxhInput[i].focus();
-          }
+
           return false;
         }
 
@@ -3164,9 +3168,7 @@ export default {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.masobhxhInput[i]) {
-            this.$refs.masobhxhInput[i].focus();
-          }
+
           return false;
         }
 
@@ -3175,9 +3177,7 @@ export default {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.nameInput[i]) {
-            this.$refs.nameInput[i].focus();
-          }
+
           return false;
         }
 
@@ -3186,9 +3186,7 @@ export default {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.ngaysinhInput[i]) {
-            this.$refs.ngaysinhInput[i].focus();
-          }
+
           return false;
         }
 
@@ -3197,9 +3195,7 @@ export default {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.gioitinhSelect[i]) {
-            this.$refs.gioitinhSelect[i].focus();
-          }
+
           return false;
         }
 
@@ -3208,9 +3204,7 @@ export default {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.cccdInput[i]) {
-            this.$refs.cccdInput[i].focus();
-          }
+
           return false;
         }
 
@@ -3219,53 +3213,16 @@ export default {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.cccdInput[i]) {
-            this.$refs.cccdInput[i].focus();
-          }
+
           return false;
         }
-
-        // if (!this.items[i].dienthoai) {
-        //   this.$toasted.show("Thiếu điện thoại", {
-        //     duration: 3000,
-        //     theme: "bubble",
-        //   });
-        //   if (this.$refs.dienthoaiInput[i]) {
-        //     this.$refs.dienthoaiInput[i].focus();
-        //   }
-        //   return false;
-        // }
-
-        // if (!this.isValidPhoneNumber(this.items[i].dienthoai)) {
-        //   this.$toasted.show("Số điện thoại không hợp lệ", {
-        //     duration: 3000,
-        //     theme: "bubble",
-        //   });
-        //   if (this.$refs.dienthoaiInput[i]) {
-        //     this.$refs.dienthoaiInput[i].focus();
-        //   }
-        //   return false;
-        // }
 
         if (!this.items[i].maphuongan || !this.items[i].tenphuongan) {
           this.$toasted.show("Chọn một phương án", {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.phuonganSelect[i]) {
-            this.$refs.phuonganSelect[i].focus();
-          }
-          return false;
-        }
 
-        if (!this.items[i].nguoithu) {
-          this.$toasted.show("Chọn người thứ ?", {
-            duration: 3000,
-            theme: "bubble",
-          });
-          if (this.$refs.nguoithuSelect[i]) {
-            this.$refs.nguoithuSelect[i].focus();
-          }
           return false;
         }
 
@@ -3274,20 +3231,19 @@ export default {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.tungayInput[i]) {
-            this.$refs.tungayInput[i].focus();
-          }
+
           return false;
         }
 
-        if (!this.items[i].maphuongthucdong || !this.items[i].phuongthucdong) {
+        if (
+          !this.items[i].maphuongthucdong ||
+          !this.items[i].tenphuongthucdong
+        ) {
           this.$toasted.show("Thiếu phương thức đóng", {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.phuongthucdongSelect[i]) {
-            this.$refs.phuongthucdongSelect[i].focus();
-          }
+
           return false;
         }
 
@@ -3296,9 +3252,7 @@ export default {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.quanhuyenSelect[i]) {
-            this.$refs.quanhuyenSelect[i].focus();
-          }
+
           return false;
         }
 
@@ -3307,78 +3261,27 @@ export default {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.xaphuongSelect[i]) {
-            this.$refs.xaphuongSelect[i].focus();
-          }
+
           return false;
         }
 
-        // if (!this.items[i].tothon) {
-        //   this.$toasted.show("Thiếu tổ thôn", {
-        //     duration: 3000,
-        //     theme: "bubble",
-        //   });
-        //   if (this.$refs.tothonInput[i]) {
-        //     this.$refs.tothonInput[i].focus();
-        //   }
-        //   return false;
-        // }
+        if (!this.items[i].mabenhvien || !this.items[i].tenbenhvien) {
+          this.$toasted.show("Chọn bệnh viện", {
+            duration: 3000,
+            theme: "bubble",
+          });
 
-        // if (!this.items[i].mabenhvien || !this.items[i].tenbenhvien) {
-        //   this.$toasted.show("Chọn bệnh viện", {
-        //     duration: 3000,
-        //     theme: "bubble",
-        //   });
-        //   if (this.$refs.hopInput[i]) {
-        //     this.$refs.hopInput[i].focus();
-        //   }
-        //   return false;
-        // }
+          return false;
+        }
 
         if (!this.items[i].hinhthucnap) {
           this.$toasted.show("Chọn hình thức nạp tiền", {
             duration: 3000,
             theme: "bubble",
           });
-          if (this.$refs.hinhthucnapInput[i]) {
-            this.$refs.hinhthucnapInput[i].focus();
-          }
+
           return false;
         }
-
-        // biên lai
-        // if (!this.isValidSobienlai(this.items[i].sobienlai)) {
-        //   this.$toasted.show("Số biên lai phải 7 số", {
-        //     duration: 3000,
-        //     theme: "bubble",
-        //   });
-        //   if (this.$refs.sobienlaiInput[i]) {
-        //     this.$refs.sobienlaiInput[i].focus();
-        //   }
-        //   return false;
-        // }
-
-        // if (!this.items[i].sobienlai) {
-        //   this.$toasted.show("Chưa nhập số biên lai", {
-        //     duration: 3000,
-        //     theme: "bubble",
-        //   });
-        //   if (this.$refs.sobienlaiInput[i]) {
-        //     this.$refs.sobienlaiInput[i].focus();
-        //   }
-        //   return false;
-        // }
-
-        // if (!this.items[i].ngaybienlai) {
-        //   this.$toasted.show("Chưa nhập ngày biên lai", {
-        //     duration: 3000,
-        //     theme: "bubble",
-        //   });
-        //   if (this.$refs.ngaybienlaiInput[i]) {
-        //     this.$refs.ngaybienlaiInput[i].focus();
-        //   }
-        //   return false;
-        // }
       }
       // Nếu tất cả thông tin đều hợp lệ, trả về true để cho phép quá trình lưu dữ liệu
       return true;
@@ -3863,15 +3766,15 @@ export default {
         fontWeight: "bold",
       });
 
-                  // Đặt màu cho đường line (gạch chân)
+      // Đặt màu cho đường line (gạch chân)
       doc.setDrawColor(248, 215, 218);
       doc.setLineWidth(0.4); // Độ dày đường gạch
 
-      const y_line = 19;      // Vị trí theo chiều dọc
+      const y_line = 19; // Vị trí theo chiều dọc
 
       // Di chuyển sang trái nhiều hơn và rút ngắn chiều dài
-      const x1 = 40;          // điểm bắt đầu (trái)
-      const lineLength = 42;  // chiều dài line
+      const x1 = 40; // điểm bắt đầu (trái)
+      const lineLength = 42; // chiều dài line
       const x2 = x1 + lineLength;
       doc.line(x1, y_line, x2, y_line);
 

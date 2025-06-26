@@ -34,13 +34,13 @@ export default {
   },
 
   mounted() {
-    if (this.madaily) {
+    if (this.cccd) {
       this.report();
     }
   },
 
   watch: {
-    madaily(newVal) {
+    cccd(newVal) {
       if (newVal) {
         this.report();
       }

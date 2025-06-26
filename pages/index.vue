@@ -310,12 +310,9 @@
           <CharLoaiHinh v-if="madailyChart == 1" />
           <CharLoaiHinhDaiLy v-else :key="cccd" :cccd="cccd" />
         </div>
-        <div class="column is-4">
+        <div class="column">
           <CharTongTienThuTheoThang v-if="madailyChart == 1" />
           <CharTienTheoDaiLyThu v-else :key="cccd" :cccd="cccd" />
-        </div>
-        <div class="column is-4">
-          <CharOther />
         </div>
       </div>
     </div>
@@ -334,6 +331,9 @@ export default {
   components: {
     CharLoaiHinh,
     CharLoaiHinhDaiLy,
+    CharTongTienThuTheoThang,
+    CharTienTheoDaiLyThu,
+    CharOther
   },
   data() {
     return {
