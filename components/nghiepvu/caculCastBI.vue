@@ -207,8 +207,7 @@
                 <input
                   v-model="item.tungay"
                   class="input is-small"
-                  type="date"
-                  ref="tungayInput"
+                  type="text"
                 />
               </td>
               <td style="text-align: center">
