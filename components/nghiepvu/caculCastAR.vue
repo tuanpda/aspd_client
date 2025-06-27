@@ -3597,8 +3597,8 @@ async checkFormData() {
           const fileName = `${hs.sobienlai}_${encodeURIComponent(
             hs.hoten
           )}.pdf`;
-          // const pdfUrl = `http://14.224.148.17:4042/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
-          const pdfUrl = `http://localhost:4042/bienlaidientu/bienlai/${hs.urlNameInvoice}.pdf`;
+          const pdfUrl = `http://14.224.148.17:4042/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
+          // const pdfUrl = `http://localhost:4042/bienlaidientu/bienlai/${hs.urlNameInvoice}.pdf`;
 
           window.open(pdfUrl, "_blank");
         } else {
