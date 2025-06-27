@@ -3379,6 +3379,7 @@ export default {
 
             const formattedForFilename = formattedDate.replace(/[-: ]/g, "_");
             const urlNameInvoice = `${item.hosoIdentity}_${formattedForFilename}_${item.sobienlai}_${item.hoten}`;
+            const cccd_nguoithutien = item.sohoso.slice(-12);
 
             const dataPost = {
               hosoIdentity: item.hosoIdentity,
@@ -3407,6 +3408,8 @@ export default {
               tentinh: item.tentinh,
               currentYear: currentYear,
               urlNameInvoice: urlNameInvoice,
+              maphuongan: item.maphuongan,
+              cccd_nguoithutien: cccd_nguoithutien,
             };
 
             const ghibienlai = await this.$axios.post(
