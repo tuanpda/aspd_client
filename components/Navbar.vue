@@ -171,11 +171,11 @@
                 </span>
                 &ensp; Hồ sơ cá nhân
               </a>
-              <nuxt-link to="#" class="navbar-item">
-                <span class="icon is-small is-left" style="color: #f96854">
-                  <i class="fas fa-book"></i>
+              <nuxt-link to="/help" class="navbar-item">
+                <span class="icon is-small is-left" style="color: #198754">
+                  <i class="	fab fa-youtube-square"></i>
                 </span>
-                &ensp; Trợ giúp
+                &ensp; Hướng dẫn sử dụng
               </nuxt-link>
               <hr class="navbar-divider" />
               <template v-if="user && user.role === 1">
@@ -187,7 +187,7 @@
                 </nuxt-link>
               </template>
               <a @click="logout()" class="navbar-item">
-                <span class="icon is-small is-left" style="color: #f96854">
+                <span class="icon is-small is-left" style="color: #dc3545">
                   <i class="fas fa-sign-out-alt"></i>
                 </span>
                 &ensp; Đăng xuất
