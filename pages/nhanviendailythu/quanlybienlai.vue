@@ -240,6 +240,7 @@
 </template>
 
 <script>
+import company from "@/config.company";
 import ExportExcel_Viettel from "@/components/exportExecl/viettel";
 import ExportExcel_Vnpt from "@/components/exportExecl/vnpt";
 import Swal from "sweetalert2";
@@ -247,29 +248,16 @@ import ExcelJS from "exceljs";
 import * as XLSX from "xlsx";
 const { DateTime } = require("luxon");
 import jsPDF from "jspdf";
-import "~/assets/font/OpenSans-Light-normal";
-import "~/assets/font/OpenSans-SemiBold-normal";
 import "~/assets/font/OpenSans-Bold-normal";
 import "~/assets/font/OpenSans_SemiCondensed-Italic-normal";
 import "~/assets/font/OpenSans-ExtraBold-normal";
-import "~/assets/font/OpenSans_Condensed-Bold-normal";
-import "~/assets/font/OpenSans-Regular-normal";
-import "~/assets/font/font-times-new-roman-normal";
-import "~/assets/font/Times New Roman Bold-normal";
 
-import backgroundImage from "~/assets/images/bhxh.png";
-import qrcode from "~/assets/images/QR-BHXH.png";
-
-import num2words from "vn-num2words";
-
-import editAR from "@/components/nghiepvu/editAR";
 
 export default {
   name: "DanhsachKekhaiPage",
   components: {
     ExportExcel_Viettel,
     ExportExcel_Vnpt,
-    editAR,
   },
 
   data() {
@@ -643,7 +631,8 @@ export default {
           const fileName = `${hs.sobienlai}_${encodeURIComponent(
             hs.hoten
           )}.pdf`;
-          const pdfUrl = `http://14.224.148.17:4042/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
+          // const pdfUrl = `${company.clientURL}/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`; 
+          const pdfUrl = `${company.clientURL}/bienlaidientu/bienlai/${hs.urlNameInvoice}.pdf`; // chưa ký
           // const pdfUrl = `http://localhost:1970/bienlaidientu/${hs.urlNameInvoice}.pdf`;
           // console.log(pdfUrl);
 

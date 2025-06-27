@@ -278,22 +278,6 @@
             :loaihinh="loaihinh"
           />
         </div>
-        <div v-if="maloaihinh == 'WI'">
-          <WITable
-            ref="WITable"
-            v-if="maloaihinh === 'WI'"
-            :maloaihinh="maloaihinh"
-            :loaihinh="loaihinh"
-          />
-        </div>
-        <div v-if="maloaihinh == 'IT'">
-          <ITTable
-            ref="ITTable"
-            v-if="maloaihinh === 'IT'"
-            :maloaihinh="maloaihinh"
-            :loaihinh="loaihinh"
-          />
-        </div>
       </div>
     </div>
   </div>
@@ -304,8 +288,6 @@ import ArTable from "@/components/nghiepvu/caculCastAR";
 import BiTable from "@/components/nghiepvu/caculCastBI";
 import ISTable from "@/components/nghiepvu/caculCastIS";
 import ILTable from "@/components/nghiepvu/caculCastIL";
-import WITable from "@/components/nghiepvu/caculCastWI";
-import ITTable from "@/components/nghiepvu/caculCastIT";
 
 import Swal from "sweetalert2";
 import createNumberMask from "text-mask-addons/dist/createNumberMask";
@@ -322,8 +304,6 @@ export default {
     BiTable,
     ISTable,
     ILTable,
-    WITable,
-    ITTable,
   },
 
   data() {
