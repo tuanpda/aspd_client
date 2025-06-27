@@ -4246,8 +4246,12 @@ export default {
       //font-times-new-roman-normal
       const toadoXInfo = 10;
       const toadoYInfo = 60;
-      doc.addFont("OpenSans-Bold-normal.ttf", "OpenSans-Bold-normal", "bold");
-      doc.setFont("OpenSans-Bold-normal", "bold");
+      doc.addFont(
+        "Times New Roman Bold-normal.ttf",
+        "Times New Roman Bold-normal",
+        "bold"
+      );
+      doc.setFont("Times New Roman Bold-normal", "bold");
       doc.setFontSize(12);
       doc.setTextColor("#04368c");
       doc.text(`Họ và tên người nộp:`, toadoXInfo, toadoYInfo, {
