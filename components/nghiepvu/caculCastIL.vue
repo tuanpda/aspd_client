@@ -1483,6 +1483,7 @@ import jsPDF from "jspdf";
 import "~/assets/font/OpenSans-Bold-normal";
 import "~/assets/font/OpenSans_SemiCondensed-Italic-normal";
 import "~/assets/font/OpenSans-ExtraBold-normal";
+import "~/assets/font/Times New Roman Bold-normal";
 
 import backgroundImage from "~/assets/images/bhxh.png";
 import qrcode from "~/assets/images/QR-BHXH.png";
@@ -4276,7 +4277,7 @@ export default {
       if (data.maloaihinh == "AR" || data.maloaihinh == "BI") {
         noidungText = `Tiền đóng BHYT, phương thức đóng ${data.soThang} tháng, từ ngày ${data.tuNgay} đến ngày ${data.denNgay}`;
       } else {
-        noidungText = `Đóng tiền tham gia BHXH Tự nguyện`;
+        noidungText = `Tiền đóng BHXH Tự nguyện, phương thức đóng ${data.soThang} tháng, từ tháng ${data.tuThang} đến tháng ${data.denThang}`;
       }
 
       doc.text(`Nội dung: `, toadoXInfo, toadoYInfo + 16, {

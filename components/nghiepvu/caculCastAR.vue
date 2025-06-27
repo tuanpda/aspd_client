@@ -1634,6 +1634,7 @@ import jsPDF from "jspdf";
 import "~/assets/font/OpenSans-Bold-normal";
 import "~/assets/font/OpenSans_SemiCondensed-Italic-normal";
 import "~/assets/font/OpenSans-ExtraBold-normal";
+import "~/assets/font/Times New Roman Bold-normal";
 
 import backgroundImage from "~/assets/images/bhxh.png";
 import qrcode from "~/assets/images/QR-BHXH.png";
