@@ -285,6 +285,23 @@ export default {
         this.totalPages = res.data.info.pages;
         this.currentPage = page; // Cập nhật trang hiện tại
         this.isLoading = false;
+      }else {
+        this.isLoading = false;
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
+        Toast.fire({
+          icon: "error",
+          title: `Không tìm thấy dữ liệu`,
+        });
       }
     },
   },

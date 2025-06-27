@@ -1462,6 +1462,7 @@
 </template>
 
 <script>
+import company from "@/config.company";
 import { mixinDmBhxh } from "../../mixins/mixinDmBhxh";
 import createNumberMask from "text-mask-addons/dist/createNumberMask";
 const { DateTime } = require("luxon");
@@ -1478,15 +1479,11 @@ import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 
 import jsPDF from "jspdf";
-import "~/assets/font/OpenSans-Light-normal";
-import "~/assets/font/OpenSans-SemiBold-normal";
+
 import "~/assets/font/OpenSans-Bold-normal";
 import "~/assets/font/OpenSans_SemiCondensed-Italic-normal";
 import "~/assets/font/OpenSans-ExtraBold-normal";
-import "~/assets/font/OpenSans_Condensed-Bold-normal";
-import "~/assets/font/OpenSans-Regular-normal";
-import "~/assets/font/font-times-new-roman-normal";
-import "~/assets/font/Times New Roman Bold-normal";
+
 import backgroundImage from "~/assets/images/bhxh.png";
 import qrcode from "~/assets/images/QR-BHXH.png";
 
@@ -2595,7 +2592,8 @@ export default {
           const fileName = `${hs.sobienlai}_${encodeURIComponent(
             hs.hoten
           )}.pdf`;
-          const pdfUrl = `http://14.224.148.17:4042/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
+          // const pdfUrl = `http://14.224.148.17:4042/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
+          const pdfUrl = `${company.clientURL}/bienlaidientu/bienlai/${hs.urlNameInvoice}.pdf`;
           // const pdfUrl = `http://localhost:1970/bienlaidientu/${hs.urlNameInvoice}.pdf`;
           // console.log(pdfUrl);
 
@@ -2918,9 +2916,8 @@ export default {
       }
     },
 
-    
     tinhTienPhaiDong(madoituong, muctiendong, maphuongthucdong, tuthang) {
-        // === BƯỚC 1: TÍNH TỔNG SỐ THÁNG TỪ tuthang đến denthang ===
+      // === BƯỚC 1: TÍNH TỔNG SỐ THÁNG TỪ tuthang đến denthang ===
       const denthang = this.tinhDenThang(tuthang, maphuongthucdong);
       const [startMonth, startYear] = tuthang.split("/").map(Number);
       const [endMonth, endYear] = denthang.split("/").map(Number);
@@ -2942,11 +2939,14 @@ export default {
       const tyleDong = this.tyledongbhyt / 100;
       const castMucdong = muctiendong * tyleDong;
       const castSubTwhotro = this.chuanngheo * tyleDong;
-      const doituong = this.doituongdong.find(d => d.madoituong === madoituong);
+      const doituong = this.doituongdong.find(
+        (d) => d.madoituong === madoituong
+      );
       const tyleHotroTW = doituong ? doituong.tylehotro : 0;
 
       const tienTrungUongHoTro = castSubTwhotro * (tyleHotroTW / 100);
-      const tienDiaPhuongHoTro = castSubTwhotro * (this.tylediaphuonghotroIl / 100); // lấy tỷ lệ phần trăm trong bảng danh mục dm_tylediaphuonghtIL
+      const tienDiaPhuongHoTro =
+        castSubTwhotro * (this.tylediaphuonghotroIl / 100); // lấy tỷ lệ phần trăm trong bảng danh mục dm_tylediaphuonghtIL
       const tongHoTroDong = tienTrungUongHoTro + tienDiaPhuongHoTro;
 
       // === BƯỚC 3: TÍNH SỐ THÁNG TRỄ VÀ LÃI SUẤT ===
@@ -4108,15 +4108,6 @@ export default {
     },
 
     async inBienLaiDientu(data) {
-      // console.log(data);
-
-      // const res = await this.$axios(
-      //   `/api/kekhai/bienlaidientu?_id_hskk=${item._id}&hosoIdentity=${item.hosoIdentity}`
-      // );
-      // // console.log(res.data[0]);
-      // let data = res.data[0];
-      // bỏ đoạn này do in biên lai khi gửi lên cổng code ngày 08/5/2025
-
       const doc = new jsPDF({
         orientation: "l",
         format: "a5",
@@ -4139,29 +4130,19 @@ export default {
       const img = new Image();
       img.src = backgroundImage; // hoặc base64 string
 
-      // img.onload = () => {
-      //   console.log("✅ Ảnh đã load xong");
-      //   doc.addImage(img, "PNG", x, y, imageWidth, imageHeight);
-      //   console.log("➡️ Đã add image");
-      // };
-
-      // img.onerror = (err) => {
-      //   console.error("❌ Lỗi load ảnh:", err);
-      // };
-
       // add the font to jsPDF
       doc.addFont("OpenSans-Bold-normal.ttf", "OpenSans-Bold", "bold");
       doc.setFont("OpenSans-Bold", "bold");
       doc.setFontSize(12);
       doc.setTextColor("#04368c");
-      doc.text(`BẢO HIỂM XÃ HỘI LIÊN HUYỆN DIỄN CHÂU - NGHI LỘC`, 60, 10, {
+      doc.text(`${company.bhxhName}`, 60, 10, {
         align: "center",
         fontWeight: "bold",
       });
 
       doc.setFontSize(12);
       doc.setTextColor("ff0000");
-      doc.text(`CÔNG TY TNHH AN SINH PHỦ DIỄN`, 60, 17, {
+      doc.text(`${company.companyName}`, 60, 17, {
         align: "center",
         fontWeight: "bold",
       });
@@ -4226,7 +4207,7 @@ export default {
       doc.setFontSize(9);
       doc.setTextColor("#00008b");
       doc.text(
-        `Do Công ty TNHH An Sinh Phủ Diễn, tổ chức được Bảo hiểm xã hội uỷ quyền thu phát hành. `,
+        `Do ${company.companyNameThuong}, tổ chức được Bảo hiểm xã hội uỷ quyền thu phát hành. `,
         105,
         41,
         {
@@ -4243,12 +4224,6 @@ export default {
       doc.text(`${data.ngaybienlai}`, 165, 50, {
         fontWeight: "bold",
       });
-
-      // const dateTimeString = data.ngaybienlai;
-      // // Tách chuỗi ngày tháng theo định dạng
-      // const parts = dateTimeString.split(" ")[0].split("-"); // Lấy phần ngày và tách theo dấu "-"
-      // // Lấy giá trị năm
-      // const year = parts[2];
 
       const year = data.ngaybienlai.split("-")[2].split(" ")[0];
 
@@ -4270,12 +4245,8 @@ export default {
       //font-times-new-roman-normal
       const toadoXInfo = 10;
       const toadoYInfo = 60;
-      doc.addFont(
-        "Times New Roman Bold-normal.ttf",
-        "Times New Roman Bold-normal",
-        "bold"
-      );
-      doc.setFont("Times New Roman Bold-normal", "bold");
+      doc.addFont("OpenSans-Bold-normal.ttf", "OpenSans-Bold-normal", "bold");
+      doc.setFont("OpenSans-Bold-normal", "bold");
       doc.setFontSize(12);
       doc.setTextColor("#04368c");
       doc.text(`Họ và tên người nộp:`, toadoXInfo, toadoYInfo, {
@@ -4305,7 +4276,7 @@ export default {
       if (data.maloaihinh == "AR" || data.maloaihinh == "BI") {
         noidungText = `Tiền đóng BHYT, phương thức đóng ${data.soThang} tháng, từ ngày ${data.tuNgay} đến ngày ${data.denNgay}`;
       } else {
-        noidungText = `Tiền đóng BHXH Tự nguyện, phương thức đóng ${data.soThang} tháng, từ tháng ${data.tuThang} đến tháng ${data.denThang}`;
+        noidungText = `Đóng tiền tham gia BHXH Tự nguyện`;
       }
 
       doc.text(`Nội dung: `, toadoXInfo, toadoYInfo + 16, {
@@ -4359,15 +4330,6 @@ export default {
       doc.text(`NGƯỜI THU TIỀN`, toadoXInfo + 120, toadoYInfo + 43, {
         fontWeight: "bold",
       });
-
-      // doc.addFont(
-      //   "OpenSans-Regular-normal.ttf",
-      //   "OpenSans-Regular-normal",
-      //   "bold"
-      // );
-      // doc.setFont("OpenSans-Regular-normal", "bold");
-      // doc.setFontSize(12);
-      // doc.setTextColor("#dc143c");
 
       doc.addFont(
         "OpenSans-ExtraBold-normal.ttf",
@@ -4437,21 +4399,11 @@ export default {
 
       doc.setFontSize(11);
       doc.setTextColor("#dc143c");
-      doc.text(
-        `http://14.224.148.17:4042/tracuubienlaidientu-ansinhphudien`,
-        toadoXInfo + 2,
-        toadoYInfo + 58,
-        {
-          fontWeight: "bold",
-        }
-      );
+      doc.text(`${company.urlBienlaidientu}`, toadoXInfo + 2, toadoYInfo + 58, {
+        fontWeight: "bold",
+      });
 
       const tenbienlai = data.urlNameInvoice;
-      // console.log(tenbienlai);
-
-      // doc.output("dataurlnewwindow");
-      // window.open(pdfURL, tenbienlai);
-      // doc.save("a4.pdf");
 
       const pdfBlob = doc.output("blob");
 

@@ -1612,6 +1612,7 @@
 </template>
 
 <script>
+import company from "@/config.company";
 import { mixinDmBhxh } from "../../mixins/mixinDmBhxh";
 import createNumberMask from "text-mask-addons/dist/createNumberMask";
 const { DateTime } = require("luxon");
@@ -1629,15 +1630,11 @@ import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 
 import jsPDF from "jspdf";
-import "~/assets/font/OpenSans-Light-normal";
-import "~/assets/font/OpenSans-SemiBold-normal";
+
 import "~/assets/font/OpenSans-Bold-normal";
 import "~/assets/font/OpenSans_SemiCondensed-Italic-normal";
 import "~/assets/font/OpenSans-ExtraBold-normal";
-import "~/assets/font/OpenSans_Condensed-Bold-normal";
-import "~/assets/font/OpenSans-Regular-normal";
-import "~/assets/font/font-times-new-roman-normal";
-import "~/assets/font/Times New Roman Bold-normal";
+
 import backgroundImage from "~/assets/images/bhxh.png";
 import qrcode from "~/assets/images/QR-BHXH.png";
 
@@ -3597,7 +3594,8 @@ async checkFormData() {
           const fileName = `${hs.sobienlai}_${encodeURIComponent(
             hs.hoten
           )}.pdf`;
-          const pdfUrl = `http://14.224.148.17:4042/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
+          // const pdfUrl = `http://14.224.148.17:4042/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
+          const pdfUrl = `${company.clientURL}/bienlaidientu/bienlai/${hs.urlNameInvoice}.pdf`;
           // const pdfUrl = `http://localhost:4042/bienlaidientu/bienlai/${hs.urlNameInvoice}.pdf`;
 
           window.open(pdfUrl, "_blank");
@@ -3619,250 +3617,8 @@ async checkFormData() {
       }
     },
 
-    async onSave1() {
-      const matochuc = this.user.matochuc;
-
-      if (this.items.length <= 0) {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.addEventListener("mouseenter", Swal.stopTimer);
-            toast.addEventListener("mouseleave", Swal.resumeTimer);
-          },
-        });
-        Toast.fire({
-          icon: "error",
-          title: "Chưa có bản ghi nào !",
-        });
-        return;
-      } else {
-        // Kiểm tra dữ liệu trước khi ghi
-        const isDataValid = await this.checkFormData();
-        if (!isDataValid) {
-          // Dừng quá trình lưu dữ liệu nếu dữ liệu không hợp lệ
-          return;
-        }
-
-        const result = await Swal.fire({
-          title: `Xác nhận gửi hồ sơ kê khai ?`,
-          showDenyButton: true,
-          confirmButtonText: "Xác nhận",
-          denyButtonText: `Hủy gửi`,
-        });
-        if (result.isConfirmed) {
-          // console.log(this.items);
-
-          // const current = new Date();
-          const nowInVietnam = DateTime.now().setZone("Asia/Ho_Chi_Minh");
-          const formattedDate = nowInVietnam.toFormat("dd-MM-yyyy HH:mm:ss");
-          const kyKeKhaiFrm = nowInVietnam.toFormat("MM/yyyy");
-          // Bắt đầu hiển thị biểu tượng loading
-          this.isLoading = true;
-          let dataKekhai = [];
-          try {
-            for (let i = 0; i < this.items.length; i++) {
-              this.items[i].sotien = this.items[i].sotien.replace(/,/g, "");
-              this.items[i].tienluongcs = this.items[i].tienluongcs.replace(
-                /,/g,
-                ""
-              );
-
-              this.items[i].denngay = this.calculateEndDate(
-                this.items[i].tungay,
-                this.items[i].maphuongthucdong
-              );
-
-              this.items[i].tennguoitao = this.user.name;
-              // ngày biên lai
-              // const ngaybienlaiTranform = this.convertDate(
-              //   this.items[i].ngaybienlai
-              // );
-              // this.items[i].ngaybienlai = ngaybienlaiTranform;
-
-              // info add db
-              this.items[i].createdAt = formattedDate;
-              this.items[i].createdBy = this.user.username;
-              this.items[i].updatedAt = "";
-              this.items[i].updatedBy = "";
-
-              // thông tin bộ hồ sơ nạp
-              this.items[i].nvt_masobhxh = this.user.masobhxh;
-              this.items[i].nvt_cccd = this.user.cccd;
-              this.items[i].kykekhai = kyKeKhaiFrm;
-              this.items[i].ngaykekhai = formattedDate;
-
-              // đánh dấu hồ sơ đã nạp luôn
-              this.items[i].trangthai = 0;
-
-              const uniqueString = this.generateUniqueString();
-              this.items[i].hosoIdentity =
-                uniqueString +
-                this.items[i].masobhxh +
-                this.items[i].cccd +
-                this.user.username;
-
-              // **** thêm các thông tin để gửi dữ liệu lên cổng tiếp nhận BHXH VN
-              // số tiền, số tháng kiểu float và kiểu int cho từng loại
-              // mã tổ chức dịch vụ thu cho công ty an sinh hưng nguyên
-              // IS0104S: BHXH tự nguyện
-              // IL0001S: Lực lượng tham gia bảo vệ ANTT ở cơ sở
-              // BI0099S: BHYT Hộ gia đình
-              // AR0099S: BHYT HGĐ làm nông lâm ngư Nghiệp
-              // Vậy đối với AR thì mã TCDV thu là: AR0099S
-
-              // mã tổ chức dịch vụ thu cho công ty An sinh 159
-              // BI0214M	Tổ chức dịch vụ thu BHYT HGĐ - Công ty TNHH An Sinh 159
-              // AR0212M	Tổ chức dịch vụ thu BHYT HGĐ có MSTB - Công ty TNHH An Sinh 159
-              // IS0212M	Tổ chức dịch vụ thu BHXH TN - Công ty TNHH An Sinh 159
-
-              let maToChucDvt = "AR0212M";
-              let soTien = this.items[i].sotien;
-              let soThang = this.items[i].maphuongthucdong;
-              let maNhanVienThu = "NVT" + this.items[i].nvt_cccd;
-              let tenNhanVienThu = this.user.name;
-              let maCqBhxh = this.user.macqbhxh;
-              let tenCqBhxh = this.user.tencqbhxh;
-              let key = "0123"; // do bhxh vn cung cấp
-              let tuNgay = this.items[i].tungay;
-              let denNgay = this.calculateEndDate(tuNgay, soThang);
-
-              // Loại bỏ dữ liệu không cần thiết bằng destructuring
-              const {
-                info_benhvien,
-                info_huyen,
-                info_phuongan,
-                info_tinh,
-                info_xaphuong,
-                phuongthucdong,
-                ...filteredItem
-              } = this.items[i];
-
-              // Thêm vào mảng mới
-              // Tạo một đối tượng chứa các phần khai báo mới
-              const additionalData = {
-                maToChucDvt,
-                soTien,
-                soThang,
-                maNhanVienThu,
-                tenNhanVienThu,
-                maCqBhxh,
-                tenCqBhxh,
-                key,
-                tuNgay,
-                denNgay,
-              };
-
-              // Thêm cả filteredItem và additionalData vào mảng dataKekhai
-              dataKekhai.push({
-                ...filteredItem,
-                ...additionalData,
-              });
-
-              // tạo biên lai trước khi lưu hồ sơ kê khai
-              // console.log(dataKekhai);
-              // in biên lai
-              const nowInVietnam = DateTime.now().setZone("Asia/Ho_Chi_Minh");
-              // const formattedDate = nowInVietnam.toFormat(
-              //   "dd-MM-yyyy HH:mm:ss"
-              // );
-
-              // thông tin biên lai
-              const currentYear = new Date().getFullYear();
-              // console.log(currentYear);
-
-              // console.log(nextInvoice);
-
-              // console.log(this.items[i].sotien);
-              const tiendong = parseInt(
-                this.items[i].sotien.replace(/,/g, ""),
-                10
-              );
-
-              // lấy tên biên lai để lưu
-              const formattedForFilename = formattedDate.replace(/[-: ]/g, "_");
-              const urlNameInvoice = `${this.items[i].hosoIdentity}_${formattedForFilename}_${this.items[i].hoten}`;
-
-              // console.log(urlNameInvoice);
-
-              const dataPost = {
-                hosoIdentity: this.items[i].hosoIdentity,
-                maSoBhxh: this.items[i].masobhxh,
-                hoTen: this.items[i].hoten,
-                soCccd: this.items[i].cccd,
-                ngaySinh: this.items[i].ngaysinh,
-                gioiTinh: this.items[i].gioitinh,
-                soDienThoai: this.items[i].dienthoai,
-                nguoithutien: this.items[i].tennguoitao,
-                loaiDt: this.items[i].tenloaihinh,
-                soTien: tiendong,
-                soThang: this.items[i].maphuongthucdong,
-                tuNgay: this.items[i].tungay,
-                denNgay: this.items[i].denngay,
-                tuThang: this.items[i].tuthang,
-                denThang: this.items[i].denthang,
-                maDaiLy: this.items[i].madaily,
-                tenDaiLy: this.items[i].tendaily,
-                createdBy: this.user.username,
-                sobienlai: "",
-                ngaybienlai: formattedDate,
-                maloaihinh: this.items[i].maloaihinh,
-                tothon: this.items[i].tothon,
-                tenquanhuyen: this.items[i].tenquanhuyen,
-                tentinh: this.items[i].tentinh,
-                currentYear: currentYear,
-                urlNameInvoice: urlNameInvoice,
-              };
-
-              const ghibienlai = await this.$axios.post(
-                `/api/kekhai/ghidulieubienlai`,
-                dataPost
-              );
-
-              // lưu biên lai vào máy chủ
-              await this.inBienLaiDientu(dataPost);
-              // console.log("xongbienlai");
-            }
-
-            // console.log(dataKekhai);
-
-            const result = await this.$axios.post(
-              `/api/kekhai/add-kekhai-series`,
-              dataKekhai
-            );
-
-            if (result.status === 200) {
-              Swal.fire({
-                title: "Kê khai thành công hồ sơ!",
-                // text: "Đã gửi thông tin hồ sơ lên cổng BHXH VN!",
-                icon: "success",
-              });
-
-              this.isLoading = false;
-              this.isActive_xacnhan = false;
-              this.items = [];
-            }
-          } catch (error) {
-            // console.log(error);
-            this.isLoading = false;
-          }
-        }
-      }
-    },
 
     async inBienLaiDientu(data) {
-      // console.log(data);
-
-      // const res = await this.$axios(
-      //   `/api/kekhai/bienlaidientu?_id_hskk=${item._id}&hosoIdentity=${item.hosoIdentity}`
-      // );
-      // // console.log(res.data[0]);
-      // let data = res.data[0];
-      // bỏ đoạn này do in biên lai khi gửi lên cổng code ngày 08/5/2025
-
       const doc = new jsPDF({
         orientation: "l",
         format: "a5",
@@ -3885,34 +3641,24 @@ async checkFormData() {
       const img = new Image();
       img.src = backgroundImage; // hoặc base64 string
 
-      // img.onload = () => {
-      //   console.log("✅ Ảnh đã load xong");
-      //   doc.addImage(img, "PNG", x, y, imageWidth, imageHeight);
-      //   console.log("➡️ Đã add image");
-      // };
-
-      // img.onerror = (err) => {
-      //   console.error("❌ Lỗi load ảnh:", err);
-      // };
-
       // add the font to jsPDF
       doc.addFont("OpenSans-Bold-normal.ttf", "OpenSans-Bold", "bold");
       doc.setFont("OpenSans-Bold", "bold");
       doc.setFontSize(12);
       doc.setTextColor("#04368c");
-      doc.text(`BẢO HIỂM XÃ HỘI LIÊN HUYỆN DIỄN CHÂU - NGHI LỘC`, 60, 10, {
+      doc.text(`${company.bhxhName}`, 60, 10, {
         align: "center",
         fontWeight: "bold",
       });
 
       doc.setFontSize(12);
       doc.setTextColor("ff0000");
-      doc.text(`CÔNG TY TNHH AN SINH PHỦ DIỄN`, 60, 17, {
+      doc.text(`${company.companyName}`, 60, 17, {
         align: "center",
         fontWeight: "bold",
       });
 
-                  // Đặt màu cho đường line (gạch chân)
+      // Đặt màu cho đường line (gạch chân)
       doc.setDrawColor(248, 215, 218);
       doc.setLineWidth(0.4); // Độ dày đường gạch
 
@@ -3972,7 +3718,7 @@ async checkFormData() {
       doc.setFontSize(9);
       doc.setTextColor("#00008b");
       doc.text(
-        `Do Công ty TNHH An Sinh Phủ Diễn, tổ chức được Bảo hiểm xã hội uỷ quyền thu phát hành. `,
+        `Do ${company.companyNameThuong}, tổ chức được Bảo hiểm xã hội uỷ quyền thu phát hành. `,
         105,
         41,
         {
@@ -3989,12 +3735,6 @@ async checkFormData() {
       doc.text(`${data.ngaybienlai}`, 165, 50, {
         fontWeight: "bold",
       });
-
-      // const dateTimeString = data.ngaybienlai;
-      // // Tách chuỗi ngày tháng theo định dạng
-      // const parts = dateTimeString.split(" ")[0].split("-"); // Lấy phần ngày và tách theo dấu "-"
-      // // Lấy giá trị năm
-      // const year = parts[2];
 
       const year = data.ngaybienlai.split("-")[2].split(" ")[0];
 
@@ -4017,11 +3757,11 @@ async checkFormData() {
       const toadoXInfo = 10;
       const toadoYInfo = 60;
       doc.addFont(
-        "Times New Roman Bold-normal.ttf",
-        "Times New Roman Bold-normal",
+        "OpenSans-Bold-normal.ttf",
+        "OpenSans-Bold-normal",
         "bold"
       );
-      doc.setFont("Times New Roman Bold-normal", "bold");
+      doc.setFont("OpenSans-Bold-normal", "bold");
       doc.setFontSize(12);
       doc.setTextColor("#04368c");
       doc.text(`Họ và tên người nộp:`, toadoXInfo, toadoYInfo, {
@@ -4106,15 +3846,6 @@ async checkFormData() {
         fontWeight: "bold",
       });
 
-      // doc.addFont(
-      //   "OpenSans-Regular-normal.ttf",
-      //   "OpenSans-Regular-normal",
-      //   "bold"
-      // );
-      // doc.setFont("OpenSans-Regular-normal", "bold");
-      // doc.setFontSize(12);
-      // doc.setTextColor("#dc143c");
-
       doc.addFont(
         "OpenSans-ExtraBold-normal.ttf",
         "OpenSans-ExtraBold-normal",
@@ -4184,7 +3915,7 @@ async checkFormData() {
       doc.setFontSize(11);
       doc.setTextColor("#dc143c");
       doc.text(
-        `http://14.224.148.17:4042/tracuubienlaidientu-ansinhphudien`,
+        `${company.urlBienlaidientu}`,
         toadoXInfo + 2,
         toadoYInfo + 58,
         {
@@ -4193,11 +3924,6 @@ async checkFormData() {
       );
 
       const tenbienlai = data.urlNameInvoice;
-      // console.log(tenbienlai);
-
-      // doc.output("dataurlnewwindow");
-      // window.open(pdfURL, tenbienlai);
-      // doc.save("a4.pdf");
 
       const pdfBlob = doc.output("blob");
 
@@ -4210,6 +3936,11 @@ async checkFormData() {
           "Content-Type": "multipart/form-data",
         },
       });
+    },
+
+    capitalizeFirstLetter(str) {
+      if (!str) return "";
+      return str.charAt(0).toUpperCase() + str.slice(1);
     },
 
     async onFileChange(event) {
@@ -4256,10 +3987,6 @@ async checkFormData() {
       
     },
 
-    capitalizeFirstLetter(str) {
-      if (!str) return "";
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    },
 
     async importKekhai() {
       this.isActive_import = true;
