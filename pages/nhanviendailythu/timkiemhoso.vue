@@ -585,24 +585,20 @@ export default {
     },
   },
 
-  mounted() {
+    mounted() {
     const user = this.user;
 
     this.dailyview = user.madaily;
     this.tochuc = user.matochuc;
+    this.cccd = user.cccd
+    this.isRoleSent = user.res_sent;
+    this.madaily = user.madaily;
+    this.diemthu = user.tendaily;
+
     if (user.role == 2) {
       this.diemthu = "Tài khoản tổng hợp";
-      // console.log(this.diemthu);
-      // console.log(user.role);
     } else {
       this.diemthu = user.tendaily;
-    }
-    this.isRoleSent = user.res_sent;
-
-    if (user.nvcongty == 0) {
-      this.madaily = user.madaily;
-      this.diemthu = user.tendaily;
-      this.cccd = user.cccd;
       this.isDiemthu = true;
     }
 
