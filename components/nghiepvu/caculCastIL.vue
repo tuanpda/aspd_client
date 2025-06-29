@@ -2052,12 +2052,9 @@ export default {
               // this.items[index].tungay = formatDate(tuNgay);
               // console.log("🎯 Hạn thẻ từ (tungay):", this.items[index].tungay);
 
-              const filename = dataHgd.tenFile;
-              const parts = filename.split("_");
-
-              const maTinh = parts[4].replace("TTT", "");
-              const maHuyen = parts[5].replace("HH", "");
-              const maXa = parts[6];
+              const maTinh = data.maTinh.replace("TTT", "");
+                const maHuyen = data.maHuyen.replace("HH", "");
+                const maXa = data.maXa
 
               // console.log("Mã tỉnh:", maTinh); // "42"
               // console.log("Mã huyện:", maHuyen); // "449"
@@ -2122,12 +2119,9 @@ export default {
                 // console.log(thangNam); // Ví dụ: "06/2025"
                 this.items[index].tuthang = thangNam;
 
-                const filename = data.tenFile;
-                const parts = filename.split("_");
-
-                const maTinh = parts[4].replace("TTT", "");
-                const maHuyen = parts[5].replace("HH", "");
-                const maXa = parts[6];
+                const maTinh = data.maTinh.replace("TTT", "");
+                const maHuyen = data.maHuyen.replace("HH", "");
+                const maXa = data.maXa
 
                 // console.log("Mã tỉnh:", maTinh); // "42"
                 // console.log("Mã huyện:", maHuyen); // "449"
