@@ -206,7 +206,7 @@
                   >
                     <option selected disabled>- Chọn phương thức đóng -</option>
                     <option
-                      v-for="(item, index) in phuongthucdong_All"
+                      v-for="(item, index) in item.phuongthucdong"
                       :key="index"
                       :value="item.maphuongthuc"
                     >
@@ -218,8 +218,8 @@
 
               <td>
                 <input
-                  v-if="NCT"
-                  :disabled="!NCT"
+                  v-if="item.NCT"
+                  :disabled="!item.NCT"
                   v-model="item.sothang"
                   class="input is-small"
                   style="font-weight: 800; color: red"
@@ -230,7 +230,7 @@
                 />
                 <input
                   v-else
-                  :disabled="!NVS"
+                  :disabled="!item.NVS"
                   v-model="item.sothang"
                   class="input is-small"
                   style="font-weight: 800; color: red"
@@ -2619,11 +2619,17 @@ export default {
         "0"
       )}/${now.getFullYear()}`;
 
-            const phuongAnMacDinh = this.phuongan.find(
+      const phuongAnMacDinh = this.phuongan.find(
         (p) => p.maphuongan === "ON"
       ) || { maphuongan: "", tenphuongan: "" };
 
       try {
+        // Lọc bỏ D1LNCT và D1LNVS khỏi mảng phuongthucdong khi thêm hàng mới
+        const phuongthucdongFilter = this.phuongthucdong_All.filter(
+          (item) =>
+            item.maphuongthuc !== "D1LNCT" && item.maphuongthuc !== "D1LNVS"
+        );
+
         this.items.push({
           matochuc: this.user.matochuc,
           tentochuc: this.user.tentochuc,
@@ -2649,7 +2655,7 @@ export default {
           hotrokhac: this.hotrokhac,
           tungay: "",
           denngay: "",
-          phuongthucdong: this.phuongthucdong,
+          phuongthucdong: phuongthucdongFilter,
           maphuongthucdong: "",
           tenphuongthucdong: "",
           sotien: 0, // tiền phải đóng
@@ -2699,6 +2705,9 @@ export default {
           status_naptien: 0,
           hinhthucnap: 1,
           hanthecu: "",
+          NVS: false,
+          NCT: false,
+          checkDong1lanchocacnamvesauVaConthieu: false,
         });
 
         // console.log(this.items);
@@ -3508,38 +3517,108 @@ export default {
       }
     },
 
-    // áp dụng cho đóng bù
-    async phuongthucdChangeDongbu(e, index) {
-      // console.log(e.target.options[e.target.selectedIndex].text);
-
+    async phuongthucdChange(e, index) {
       const maphuongthucdong = e.target.value;
       const tenphuongthucdong = e.target.options[e.target.selectedIndex].text;
-      // console.log(maphuongthucdong);
-      // console.log(tenphuongthucdong);
-
       this.items[index].maphuongthucdong = maphuongthucdong;
       this.items[index].tenphuongthucdong = tenphuongthucdong;
       this.items[index].sothang = 0;
 
+      const madoituong = this.items[index].madoituong;
+
+      const muctiendong = parseFloat(
+        this.items[index].muctiendong.replace(/,/g, "")
+      );
+
+      const tuthang = this.items[index].tuthang;
+      const dadongdenthang = this.items[index].hanthecu;
+
+      this.items[index].sotien = this.tinhTienPhaiDong(
+        madoituong,
+        muctiendong,
+        maphuongthucdong,
+        tuthang
+      );
+
       if (maphuongthucdong == "D1LNCT") {
-        this.NCT = true;
-        this.NVS = false;
-      }
-      if (maphuongthucdong == "D1LNVS") {
-        this.NVS = true;
-        this.NCT = false;
+        this.items[index].NCT = true;
+        this.items[index].NVS = false;
+      } else if (maphuongthucdong == "D1LNVS") {
+        this.items[index].NCT = false;
+        this.items[index].NVS = true;
+      } else {
+        this.items[index].NCT = false;
+        this.items[index].NVS = false;
       }
     },
 
     // phương án
     async phuonganChange(e, index) {
-      // console.log(e.target.options[e.target.selectedIndex]);
       const maphuongan = e.target.value;
       const tenphuongan = e.target.options[e.target.selectedIndex].text;
-      // console.log(maphuongan);
-      // console.log(tenphuongan);
+
       this.items[index].maphuongan = maphuongan;
       this.items[index].tenphuongan = tenphuongan;
+
+      // Chỉ thay đổi mảng phuongthucdong của dòng hiện tại (item)
+      const itemPhuongthucdong = this.items[index].phuongthucdong;
+
+      // Khi chọn phương án "ON" hoặc "TM"
+      if (maphuongan === "ON" || maphuongan === "TM") {
+        // Loại bỏ các phần tử D1LNCT và D1LNVS trong item.phuongthucdong của dòng hiện tại
+        this.items[index].phuongthucdong = itemPhuongthucdong.filter(
+          (item) =>
+            item.maphuongthuc !== "D1LNCT" && item.maphuongthuc !== "D1LNVS"
+        );
+        // console.log(this.items[index].phuongthucdong); // Kiểm tra mảng phuongthucdong sau khi loại bỏ
+      }
+
+      // Khi chọn phương án "DB" (Đóng bù)
+      else if (maphuongan === "DB") {
+        // Loại bỏ các mã từ 1 đến 12 trong item.phuongthucdong của dòng hiện tại
+        this.items[index].phuongthucdong = itemPhuongthucdong.filter(
+          (item) =>
+            ![
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+            ].includes(item.maphuongthuc)
+        );
+
+        // Thêm lại các phương án "D1LNCT" và "D1LNVS" nếu chưa có trong item.phuongthucdong
+        if (
+          !this.items[index].phuongthucdong.some(
+            (item) => item.maphuongthuc === "D1LNCT"
+          )
+        ) {
+          this.items[index].phuongthucdong.push({
+            maphuongthuc: "D1LNCT",
+            tenphuongthuc: "Đóng 1 lần cho những năm còn thiếu (Nghỉ hưu)",
+          });
+        }
+
+        if (
+          !this.items[index].phuongthucdong.some(
+            (item) => item.maphuongthuc === "D1LNVS"
+          )
+        ) {
+          this.items[index].phuongthucdong.push({
+            maphuongthuc: "D1LNVS",
+            tenphuongthuc: "Đóng 1 lần cho những năm về sau",
+          });
+        }
+
+        // console.log(this.items[index].phuongthucdong); // Kiểm tra mảng phuongthucdong sau khi thêm lại
+      }
     },
 
     // tỉnh thành phố
@@ -4186,6 +4265,8 @@ async checkFormData() {
               urlNameInvoice: urlNameInvoice,
               maphuongan: item.maphuongan,
               cccd_nguoithutien: cccd_nguoithutien,
+              tenphuongthucdong: item.tenphuongthucdong,
+              sothang: item.sothang,
             };
 
             const ghibienlai = await this.$axios.post(
@@ -4223,6 +4304,15 @@ async checkFormData() {
     },
 
     async inBienLaiDientu(data) {
+      // console.log("dữ liệu tạo pdf: ", data);
+
+      // const res = await this.$axios(
+      //   `/api/kekhai/bienlaidientu?_id_hskk=${item._id}&hosoIdentity=${item.hosoIdentity}`
+      // );
+      // // console.log(res.data[0]);
+      // let data = res.data[0];
+      // bỏ đoạn này do in biên lai khi gửi lên cổng code ngày 08/5/2025
+
       const doc = new jsPDF({
         orientation: "l",
         format: "a5",
@@ -4245,6 +4335,16 @@ async checkFormData() {
       const img = new Image();
       img.src = backgroundImage; // hoặc base64 string
 
+      // img.onload = () => {
+      //   console.log("✅ Ảnh đã load xong");
+      //   doc.addImage(img, "PNG", x, y, imageWidth, imageHeight);
+      //   console.log("➡️ Đã add image");
+      // };
+
+      // img.onerror = (err) => {
+      //   console.error("❌ Lỗi load ảnh:", err);
+      // };
+
       // add the font to jsPDF
       doc.addFont("OpenSans-Bold-normal.ttf", "OpenSans-Bold", "bold");
       doc.setFont("OpenSans-Bold", "bold");
@@ -4266,11 +4366,11 @@ async checkFormData() {
       doc.setDrawColor(248, 215, 218);
       doc.setLineWidth(0.4); // Độ dày đường gạch
 
-      const y_line = 19;      // Vị trí theo chiều dọc
+      const y_line = 19; // Vị trí theo chiều dọc
 
       // Di chuyển sang trái nhiều hơn và rút ngắn chiều dài
-      const x1 = 40;          // điểm bắt đầu (trái)
-      const lineLength = 42;  // chiều dài line
+      const x1 = 40; // điểm bắt đầu (trái)
+      const lineLength = 42; // chiều dài line
       const x2 = x1 + lineLength;
       doc.line(x1, y_line, x2, y_line);
 
@@ -4340,6 +4440,12 @@ async checkFormData() {
         fontWeight: "bold",
       });
 
+      // const dateTimeString = data.ngaybienlai;
+      // // Tách chuỗi ngày tháng theo định dạng
+      // const parts = dateTimeString.split(" ")[0].split("-"); // Lấy phần ngày và tách theo dấu "-"
+      // // Lấy giá trị năm
+      // const year = parts[2];
+
       const year = data.ngaybienlai.split("-")[2].split(" ")[0];
 
       doc.text(`Ký hiệu: `, 155, 55, {
@@ -4395,9 +4501,12 @@ async checkFormData() {
       if (data.maloaihinh == "AR" || data.maloaihinh == "BI") {
         noidungText = `Tiền đóng BHYT, phương thức đóng ${data.soThang} tháng, từ ngày ${data.tuNgay} đến ngày ${data.denNgay}`;
       } else {
-        noidungText = `Tiền đóng BHXH Tự nguyện, phương thức đóng ${data.soThang} tháng, từ tháng ${data.tuThang} đến tháng ${data.denThang}`;
+        if (data.maphuongan !== "DB") {
+          noidungText = `Tiền đóng BHXH Tự nguyện, phương thức đóng ${data.soThang} tháng, từ ngày ${data.tuThang} đến ngày ${data.denThang}`;
+        } else {
+          noidungText = `BHXH Tự nguyện, ${data.tenphuongthucdong}, ${data.sothang} tháng, từ tháng ${data.tuThang}`;
+        }
       }
-
       doc.text(`Nội dung: `, toadoXInfo, toadoYInfo + 16, {
         fontWeight: "bold",
       });
@@ -4450,6 +4559,15 @@ async checkFormData() {
         fontWeight: "bold",
       });
 
+      // doc.addFont(
+      //   "OpenSans-Regular-normal.ttf",
+      //   "OpenSans-Regular-normal",
+      //   "bold"
+      // );
+      // doc.setFont("OpenSans-Regular-normal", "bold");
+      // doc.setFontSize(12);
+      // doc.setTextColor("#dc143c");
+
       doc.addFont(
         "OpenSans-ExtraBold-normal.ttf",
         "OpenSans-ExtraBold-normal",
@@ -4465,22 +4583,22 @@ async checkFormData() {
 
       doc.setFontSize(10);
       doc.setTextColor("#dc3545");
-      // doc.text(
-      //   `Đã được ký bởi: CÔNG TY TNHH AN SINH PHỦ DIỄN`,
-      //   toadoXInfo + 100,
-      //   toadoYInfo + 53,
-      //   {
-      //     fontWeight: "bold",
-      //   }
-      // );
-      // doc.text(
-      //   `Ngày ký: ${data.ngaybienlai}`,
-      //   toadoXInfo + 110,
-      //   toadoYInfo + 58,
-      //   {
-      //     fontWeight: "bold",
-      //   }
-      // );
+      doc.text(
+        `Đã được ký bởi: CÔNG TY TNHH AN SINH 159`,
+        toadoXInfo + 100,
+        toadoYInfo + 53,
+        {
+          fontWeight: "bold",
+        }
+      );
+      doc.text(
+        `Ngày ký: ${data.ngaybienlai}`,
+        toadoXInfo + 110,
+        toadoYInfo + 58,
+        {
+          fontWeight: "bold",
+        }
+      );
 
       doc.addFont(
         "OpenSans-ExtraBold-normal.ttf",
@@ -4519,7 +4637,7 @@ async checkFormData() {
       doc.setFontSize(11);
       doc.setTextColor("#dc143c");
       doc.text(
-        `${company.urlBienlaidientu}`,
+        `http://14.224.129.177:1970/tracuubienlaidientu-ansinh159 `,
         toadoXInfo + 2,
         toadoYInfo + 58,
         {
@@ -4527,7 +4645,50 @@ async checkFormData() {
         }
       );
 
+      // doc.setFontSize(10);
+      // doc.setTextColor("#04368c");
+      // doc.text(
+      //   `Sử dụng để tra cứu thông tin ghi nhận đóng trên Cổng thông tin điện tử`,
+      //   toadoXInfo - 8,
+      //   toadoYInfo + 62,
+      //   {
+      //     fontWeight: "bold",
+      //   }
+      // );
+
+      // doc.text(
+      //   `Người tham gia có thể sử dụng ứng dụng VSSID của Bảo hiểm Xã hội`,
+      //   toadoXInfo - 8,
+      //   toadoYInfo + 70,
+      //   {
+      //     fontWeight: "bold",
+      //   }
+      // );
+      // doc.text(
+      //   `Việt Nam để theo dõi quá trính đóng BHXH, sử dụng thay thế thẻ BHYT`,
+      //   toadoXInfo - 8,
+      //   toadoYInfo + 75,
+      //   {
+      //     fontWeight: "bold",
+      //   }
+      // );
+      // doc.text(
+      //   `https://baohiemxahoi.gov.vn/gioithieu/pages/tai-ung-dung-vssid.aspx`,
+      //   toadoXInfo - 8,
+      //   toadoYInfo + 80,
+      //   {
+      //     fontWeight: "bold",
+      //   }
+      // );
+
+      // Lưu file PDF trên một tab mới
+
       const tenbienlai = data.urlNameInvoice;
+      // console.log(tenbienlai);
+
+      // doc.output("dataurlnewwindow");
+      // window.open(pdfURL, tenbienlai);
+      // doc.save("a4.pdf");
 
       const pdfBlob = doc.output("blob");
 

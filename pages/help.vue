@@ -54,17 +54,29 @@ export default {
           title: "Cách đăng nhập vào hệ thống EVSS"
         },
         {
-          url: "https://youtu.be/R7XkOe0rwxs",
-          title: "Cách kê khai bảo hiểm"
+          url: "https://youtu.be/U2wFOLzaLp8",
+          title: "Hướng dẫn kê khai BHYT AR - BI"
         },
         {
-          url: "https://www.youtube.com/watch?v=LoRWZk-jzIE",
-          title: "Tạo biên lai điện tử"
+          url: "https://youtu.be/sMzB9bbyVA8",
+          title: "Hướng dẫn kê khai BHXH tự nguyện IS-IL"
         },
         {
-          url: "https://www.youtube.com/watch?v=1xjRNm4tU7g",
-          title: "Tổng hợp báo cáo định kỳ"
-        }
+          url: "https://youtu.be/4aOuNEp9R1s",
+          title: "Xuất D05 D03 đẩy IVAN (Nhân viên công ty)"
+        },
+        {
+          url: "https://youtu.be/exIlFzzpnZQ",
+          title: "Quản lý biên lai điện từ và C17"
+        },
+        {
+          url: "https://youtu.be/axpMfRzI34c",
+          title: "Chức năng phê duyệt hồ sơ"
+        },
+        {
+          url: "https://youtu.be/3C0TuoKKDm4",
+          title: "Chức năng tra cứu thông tin HGĐ, hạn thẻ"
+        },
       ]
     };
   },
