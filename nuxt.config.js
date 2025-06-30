@@ -60,7 +60,7 @@ export default {
     // baseURL: "/",
     // baseURL: "http://14.224.148.17:1552", // MÁY CHỦ PHỦ DIỄN
     // baseURL: "http://14.224.148.17:4019", // MÁY CHỦ HƯNG NGUYÊN
-    // baseURL: "http://localhost:4019",
+    // baseURL: "http://localhost:1552",
     baseURL: companyConfig.apiBaseURL,
     credentials: true,
   },

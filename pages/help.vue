@@ -70,7 +70,7 @@ export default {
           title: "Quản lý biên lai điện từ và C17"
         },
         {
-          url: "https://youtu.be/axpMfRzI34c",
+          url: "https://www.dailymotion.com/video/k2hzAxTWlqe3LgDl7Fe",
           title: "Chức năng phê duyệt hồ sơ"
         },
         {
