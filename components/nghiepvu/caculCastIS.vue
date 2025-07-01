@@ -2047,8 +2047,8 @@ export default {
               // console.log("🎯 Hạn thẻ từ (tungay):", this.items[index].tungay);
 
               const maTinh = data.maTinh.replace("TTT", "");
-                const maHuyen = data.maHuyen.replace("HH", "");
-                const maXa = data.maXa
+              const maHuyen = data.maHuyen.replace("HH", "");
+              const maXa = data.maXa;
 
               // console.log("Mã tỉnh:", maTinh); // "42"
               // console.log("Mã huyện:", maHuyen); // "449"
@@ -2115,7 +2115,7 @@ export default {
 
                 const maTinh = data.maTinh.replace("TTT", "");
                 const maHuyen = data.maHuyen.replace("HH", "");
-                const maXa = data.maXa
+                const maXa = data.maXa;
 
                 // console.log("Mã tỉnh:", maTinh); // "42"
                 // console.log("Mã huyện:", maHuyen); // "449"
@@ -2169,11 +2169,11 @@ export default {
               });
 
               const today = new Date();
-                const thang = String(today.getMonth() + 1).padStart(2, "0"); // tháng bắt đầu từ 0
-                const nam = today.getFullYear();
+              const thang = String(today.getMonth() + 1).padStart(2, "0"); // tháng bắt đầu từ 0
+              const nam = today.getFullYear();
 
-                const thangNam = `${thang}/${nam}`;
-                this.items[index].tuthang = thangNam;
+              const thangNam = `${thang}/${nam}`;
+              this.items[index].tuthang = thangNam;
             }
           }
           this.isLoading = false;
@@ -2914,7 +2914,6 @@ export default {
       }
     },
 
-
     // tinhTienPhaiDong(madoituong, muctiendong, maphuongthucdong, tuthang) {
     //   // === BƯỚC 1: TÍNH TỔNG SỐ THÁNG TỪ tuthang đến denthang ===
     //   const denthang = this.tinhDenThang(tuthang, maphuongthucdong);
@@ -2971,17 +2970,17 @@ export default {
     //   let tienCanNap = 0;
     //   let tienLai = 0;
 
-    //   if (thangQuenDong === 0) {        
+    //   if (thangQuenDong === 0) {
     //     const tienPhaiDong = (castMucdong - tongHoTroDong) * tongThang;
     //     tienCanNap = tienPhaiDong;
     //     // console.log(tienCanNap);
-        
+
     //   } else {
     //     const laiSuat = 0.00322;
     //     const tongDongCoLai =
     //       castMucdong * phuongthuc * Math.pow(1 + laiSuat, thangQuenDong);
     //     console.log('tổng đóng có lãi:', tongDongCoLai);
-        
+
     //     const tongHotro = tongHoTroDong * tongThang;
     //     tienLai = tongDongCoLai - castMucdong * phuongthuc;
     //     tienCanNap = tongDongCoLai - tongHotro;
@@ -3013,8 +3012,8 @@ export default {
       const [endMonth, endYear] = denthang.split("/").map(Number);
 
       let tongThang = 0;
-      let thangTruocMoc = 0;  // <= 30/06/2025
-      let thangTuMoc = 0;     // 01/07/2025 đến 31/12/2030
+      let thangTruocMoc = 0; // <= 30/06/2025
+      let thangTuMoc = 0; // 01/07/2025 đến 31/12/2030
 
       let month = startMonth;
       let year = startYear;
@@ -3023,8 +3022,8 @@ export default {
         tongThang++;
 
         const current = new Date(year, month - 1, 1); // JS: tháng tính từ 0
-        const moc = new Date(2025, 6, 1);             // 01/07/2025
-        const cuoi2030 = new Date(2030, 11, 31);      // 31/12/2030
+        const moc = new Date(2025, 6, 1); // 01/07/2025
+        const cuoi2030 = new Date(2030, 11, 31); // 31/12/2030
 
         if (current < moc) {
           thangTruocMoc++;
@@ -3047,12 +3046,19 @@ export default {
       const tyleDong = this.tyledongbhyt / 100;
       const castMucdong = muctiendong * tyleDong;
       const castSubTwhotro = this.chuanngheo * tyleDong;
-      const doituong = this.doituongdong.find(d => d.madoituong === madoituong);
+      const doituong = this.doituongdong.find(
+        (d) => d.madoituong === madoituong
+      );
       const tyleHotroTW = doituong ? doituong.tylehotro : 0;
 
       // NGÂN SÁCH NHÀ NƯỚC HỖ TRỢ
-      console.log('Ngân sách nhà nước hỗ trợ cho', madoituong, 'là :', tyleHotroTW);
-      
+      console.log(
+        "Ngân sách nhà nước hỗ trợ cho",
+        madoituong,
+        "là :",
+        tyleHotroTW
+      );
+
       // NGHỆ AN HỖ TRỢ 1 MỨC KHÁC NHAU CHO TỪNG ĐỐI TƯỢNG. NÊN GIẢI PHÁP CÓ THỂ LÀ PHẢI
       // CHO HỖ TRỢ VÀO TRONG CODE THAY CHO DANH MỤC
       // === Xác định tỷ lệ ngân sách địa phương theo mã đối tượng ===
@@ -3068,9 +3074,18 @@ export default {
           ngansachdiaphuongIs = 30;
           break;
       }
-      console.log('Ngân sách địa phương hỗ trợ cho', madoituong, 'là :', ngansachdiaphuongIs);
-      console.log('Tổng hỗ trợ cho', madoituong, 'là :', tyleHotroTW + ngansachdiaphuongIs);
-      
+      console.log(
+        "Ngân sách địa phương hỗ trợ cho",
+        madoituong,
+        "là :",
+        ngansachdiaphuongIs
+      );
+      console.log(
+        "Tổng hỗ trợ cho",
+        madoituong,
+        "là :",
+        tyleHotroTW + ngansachdiaphuongIs
+      );
 
       // Tiền trung ương hỗ trợ (danh mục hỗ trợ)
       const tienTrungUongHoTro = castSubTwhotro * (tyleHotroTW / 100);
@@ -3084,9 +3099,8 @@ export default {
       const hotro_Truoc072025 = tienTrungUongHoTro; // trước mốc này nghệ an không được hỗ trợ (địa phương = 0)
       const hotro_Tu072025DEN122030 = tongHoTroDong; // mốc này thì được hỗ trợ (địa phương = )
 
-      console.log('Hỗ trợ trước 07/2025: ', hotro_Truoc072025 );
-      console.log('Hỗ trợ sau 07/2025: ', hotro_Tu072025DEN122030 );
-      
+      console.log("Hỗ trợ trước 07/2025: ", hotro_Truoc072025);
+      console.log("Hỗ trợ sau 07/2025: ", hotro_Tu072025DEN122030);
 
       // === BƯỚC 3: TÍNH SỐ THÁNG TRỄ VÀ LÃI SUẤT ===
       const today = new Date();
@@ -3114,33 +3128,34 @@ export default {
       let tienCanNap = 0;
       let tienLai = 0;
 
-      if (thangQuenDong === 0) {        
+      if (thangQuenDong === 0) {
         // const tienPhaiDong = (castMucdong - tongHoTroDong) * tongThang;
         // tienCanNap = tienPhaiDong;
         // // console.log(tienCanNap);
 
-        const tienCoHoTro = (castMucdong - hotro_Tu072025DEN122030) * thangTuMoc;
-        console.log(castMucdong, hotro_Tu072025DEN122030, thangTuMoc)
-        console.log('Tổng tiền có hỗ trợ: ', tienCoHoTro)
+        const tienCoHoTro =
+          (castMucdong - hotro_Tu072025DEN122030) * thangTuMoc;
+        console.log(castMucdong, hotro_Tu072025DEN122030, thangTuMoc);
+        console.log("Tổng tiền có hỗ trợ: ", tienCoHoTro);
         const tienKoHoTro = (castMucdong - hotro_Truoc072025) * thangTruocMoc;
-        console.log(castMucdong, hotro_Truoc072025, thangTruocMoc)
-        console.log('Tổng tiền không hỗ trợ: ', tienKoHoTro)
+        console.log(castMucdong, hotro_Truoc072025, thangTruocMoc);
+        console.log("Tổng tiền không hỗ trợ: ", tienKoHoTro);
 
         tienCanNap = tienCoHoTro + tienKoHoTro;
-        console.log('Tổng tiền cần nạp: ', tienCanNap)
-        
+        console.log("Tổng tiền cần nạp: ", tienCanNap);
       } else {
         const laiSuat = 0.00322;
         const tongDongCoLai =
           castMucdong * phuongthuc * Math.pow(1 + laiSuat, thangQuenDong);
-        console.log('tổng đóng có lãi:', tongDongCoLai);
-        
+        console.log("tổng đóng có lãi:", tongDongCoLai);
+
         // const tongHotro = tongHoTroDong * tongThang;
         // tienLai = tongDongCoLai - castMucdong * phuongthuc;
         // tienCanNap = tongDongCoLai - tongHotro;
 
         const tongHotro =
-          hotro_Truoc072025 * thangTruocMoc + hotro_Tu072025DEN122030 * thangTuMoc;
+          hotro_Truoc072025 * thangTruocMoc +
+          hotro_Tu072025DEN122030 * thangTuMoc;
         // console.log("Tổng hỗ trợ: ", tongHotro);
 
         tienLai = tongDongCoLai - castMucdong * phuongthuc;
@@ -3166,7 +3181,6 @@ export default {
 
       return Math.round(tienCanNap);
     },
-
 
     async doituongChange(e, index) {
       const madoituong = e.target.value;
@@ -3374,7 +3388,6 @@ export default {
       const tuthang = this.items[index].tuthang;
       const dadongdenthang = this.items[index].hanthecu;
       // console.log(dadongdenthang);
-      
 
       this.items[index].sotien = this.tinhTienPhaiDong(
         madoituong,
@@ -3911,7 +3924,7 @@ export default {
     //   }
     // },
 
-async checkFormData() {
+    async checkFormData() {
       for (let i = 0; i < this.items.length; i++) {
         if (!this.items[i].masobhxh) {
           this.$toasted.show("Thiếu mã số BHXH", {
@@ -4271,7 +4284,7 @@ async checkFormData() {
           for (let i = 0; i < this.dulieuTravedeinbienlai.length; i++) {
             const item = this.dulieuTravedeinbienlai[i];
 
-           const cccd_nguoithutien = item.sohoso.slice(-12);
+            const cccd_nguoithutien = item.sohoso.slice(-12);
 
             const formattedForFilename = formattedDate.replace(/[-: ]/g, "_");
             const urlNameInvoice = `${item.hosoIdentity}_${formattedForFilename}_${item.sobienlai}_${item.hoten}`;
@@ -4620,25 +4633,6 @@ async checkFormData() {
         fontWeight: "bold",
         align: "center",
       });
-
-      doc.setFontSize(10);
-      doc.setTextColor("#dc3545");
-      doc.text(
-        `Đã được ký bởi: CÔNG TY TNHH AN SINH 159`,
-        toadoXInfo + 100,
-        toadoYInfo + 53,
-        {
-          fontWeight: "bold",
-        }
-      );
-      doc.text(
-        `Ngày ký: ${data.ngaybienlai}`,
-        toadoXInfo + 110,
-        toadoYInfo + 58,
-        {
-          fontWeight: "bold",
-        }
-      );
 
       doc.addFont(
         "OpenSans-ExtraBold-normal.ttf",
