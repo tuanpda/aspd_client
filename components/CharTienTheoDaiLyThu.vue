@@ -30,6 +30,7 @@ export default {
       chartInstance: null,
       chartData: [],
       currentYear: new Date().getFullYear(),
+      month: new Date().getMonth() + 1,
     };
   },
 
@@ -50,7 +51,7 @@ export default {
   methods: {
     async report() {
       try {
-        const url = `/api/kekhai/baocao-tongtien-daily-theo-thang-nam?cccd=${this.cccd}&nam=${this.currentYear}`;
+        const url = `/api/kekhai/baocao-tongtien-daily-theo-thang-nam?cccd=${this.cccd}&nam=${this.currentYear}&thang=${this.month}`;
         const res = await this.$axios.get(url);
 
         if (res.status === 200) {
