@@ -1525,7 +1525,7 @@ export default {
       );
       this.dmquanhuyen = res_quanhuyen.data;
       const res_benhvien = await this.$axios.get(
-        `/api/danhmucs/dmbenhvienwithtinh-dienchau?matinh=${this.matinh}`
+        `/api/danhmucs/dmbenhvienwithtinh-${company.dmbenhvien}?matinh=${this.matinh}`
       );
       this.dmbenhvien = res_benhvien.data;
     } else {
@@ -1814,7 +1814,7 @@ export default {
 
                 const maTinh = data.maTinh.replace("TTT", "");
                 const maHuyen = data.maHuyen.replace("HH", "");
-                const maXa = data.maXa
+                const maXa = data.maXa;
 
                 // console.log("Mã tỉnh:", maTinh); // "42"
                 // console.log("Mã huyện:", maHuyen); // "449"

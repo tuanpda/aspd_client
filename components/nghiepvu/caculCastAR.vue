@@ -1757,7 +1757,7 @@ export default {
       );
       this.dmquanhuyen = res_quanhuyen.data;
       const res_benhvien = await this.$axios.get(
-        `/api/danhmucs/dmbenhvienwithtinh-dienchau?matinh=${this.matinh}`
+        `/api/danhmucs/dmbenhvienwithtinh-${company.dmbenhvien}?matinh=${this.matinh}`
       );
       this.dmbenhvien = res_benhvien.data;
     } else {
@@ -2070,7 +2070,7 @@ export default {
 
                 const maTinh = data.maTinh.replace("TTT", "");
                 const maHuyen = data.maHuyen.replace("HH", "");
-                const maXa = data.maXa
+                const maXa = data.maXa;
 
                 // console.log("Mã tỉnh:", maTinh); // "42"
                 // console.log("Mã huyện:", maHuyen); // "449"
@@ -3269,7 +3269,7 @@ export default {
     //   }
     // },
 
-async checkFormData() {
+    async checkFormData() {
       for (let i = 0; i < this.items.length; i++) {
         if (!this.items[i].masobhxh) {
           this.$toasted.show("Thiếu mã số BHXH", {
@@ -3334,8 +3334,6 @@ async checkFormData() {
           return false;
         }
 
-        
-
         if (!this.items[i].maphuongan || !this.items[i].tenphuongan) {
           this.$toasted.show("Chọn một phương án", {
             duration: 3000,
@@ -3383,7 +3381,6 @@ async checkFormData() {
 
           return false;
         }
-
 
         if (!this.items[i].mabenhvien || !this.items[i].tenbenhvien) {
           this.$toasted.show("Chọn bệnh viện", {
@@ -3615,7 +3612,6 @@ async checkFormData() {
       }
     },
 
-
     async inBienLaiDientu(data) {
       const doc = new jsPDF({
         orientation: "l",
@@ -3660,11 +3656,11 @@ async checkFormData() {
       doc.setDrawColor(248, 215, 218);
       doc.setLineWidth(0.4); // Độ dày đường gạch
 
-      const y_line = 19;      // Vị trí theo chiều dọc
+      const y_line = 19; // Vị trí theo chiều dọc
 
       // Di chuyển sang trái nhiều hơn và rút ngắn chiều dài
-      const x1 = 40;          // điểm bắt đầu (trái)
-      const lineLength = 42;  // chiều dài line
+      const x1 = 40; // điểm bắt đầu (trái)
+      const lineLength = 42; // chiều dài line
       const x2 = x1 + lineLength;
       doc.line(x1, y_line, x2, y_line);
 
@@ -3912,14 +3908,9 @@ async checkFormData() {
 
       doc.setFontSize(11);
       doc.setTextColor("#dc143c");
-      doc.text(
-        `${company.urlBienlaidientu}`,
-        toadoXInfo + 2,
-        toadoYInfo + 58,
-        {
-          fontWeight: "bold",
-        }
-      );
+      doc.text(`${company.urlBienlaidientu}`, toadoXInfo + 2, toadoYInfo + 58, {
+        fontWeight: "bold",
+      });
 
       const tenbienlai = data.urlNameInvoice;
 
@@ -3956,7 +3947,7 @@ async checkFormData() {
         // Giả sử file của bạn có dữ liệu ở sheet đầu tiên
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
         const jsonData = XLSX.utils.sheet_to_json(sheet);
-        
+
         // Kiểm tra và xử lý dữ liệu sau khi đọc từ file Excel
         if (jsonData.length > 0) {
           jsonData.forEach((row) => {
@@ -3964,7 +3955,7 @@ async checkFormData() {
           });
         }
       };
-      
+
       reader.readAsBinaryString(file);
     },
 
@@ -3982,9 +3973,7 @@ async checkFormData() {
       }
 
       console.log(this.items);
-      
     },
-
 
     async importKekhai() {
       this.isActive_import = true;
