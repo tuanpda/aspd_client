@@ -18,11 +18,13 @@ const dantoc = require("../../data/dantoc");
 const reles = require("../../data/moiquanhe");
 const mhbhyt = require("../../data/muchuongbhyt");
 const titleVnptD05 = require("../../data/titleVnptD05");
+import { mixinDmBhxh } from "../../mixins/mixinDmBhxh";
 
 import ExcelJS from "exceljs";
 const { DateTime } = require("luxon");
 export default {
-  components: {},
+  mixins: [mixinDmBhxh],
+
   props: {
     // Prop để nhận dữ liệu từ bên ngoài
     data_execl: [],
@@ -33,6 +35,52 @@ export default {
   },
   data() {
     return {};
+  },
+
+  async created() {
+    this.$on("danhmucs-loaded", () => {
+      // console.log("Tất cả các danh mục đã được tải.");
+      // console.log(this.loaihinhtg);
+      // console.log(this.dmluongcs);
+      // console.log(this.nguoithu);
+      // console.log(this.phuongthucdong);
+      // console.log(this.doituongdong);
+      // console.log(this.doituongdongil);
+      // console.log(this.dmtylehotro);
+      // console.log(this.dmtinhthanhpho);
+      // console.log(this.dmtyledongbhtn);
+      // console.log(this.dmchuanngheo);
+      // console.log(this.dmtylehotrodiaphuongis);
+      if (this.dmluongcs.length > 0) {
+        this.luongcoso = this.dmluongcs[0].luongcs;
+      }
+      if (this.dmtylehotro.length > 0) {
+        this.tylengansachtw = this.dmtylehotro[0].tylengansachtw;
+        this.tylenngansachdp = this.dmtylehotro[0].tylenngansachdp;
+        this.hotrokhac = this.dmtylehotro[0].tylehotrokhac;
+      }
+      if (this.dmtyledongbhtn.length > 0) {
+        this.tyledongbhyt = this.dmtyledongbhtn[0].tyledong;
+        // console.log(this.tyledongbhyt);
+      }
+      if (this.dmchuanngheo.length > 0) {
+        this.chuanngheo = this.dmchuanngheo[0].chuanngheo;
+        // console.log(this.chuanngheo);
+      }
+      if (this.dmtylehotrodiaphuongis.length > 0) {
+        this.tylediaphuonghotroIs =
+          this.dmtylehotrodiaphuongis[0].tylediaphuong;
+        this.tylehotrokhacIs = this.dmtylehotrodiaphuongis[0].tylekhac;
+        // console.log(this.tylediaphuonghotroIs);
+        // console.log(this.tylehotrokhacIs);
+      }
+      if (this.dmtylehotrodiaphuongil.length > 0) {
+        this.tylediaphuonghotroIl =
+          this.dmtylehotrodiaphuongil[0].tylediaphuong;
+        // console.log(this.tylediaphuonghotroIl);
+        // console.log(this.tylehotrokhacIs);
+      }
+    });
   },
 
   methods: {
@@ -418,41 +466,58 @@ export default {
         row.getCell(8).value = item.maphuongthucdong; // cột H
         row.getCell(9).value = "22"; // cột I
 
+        const doituong = this.doituongdong.find(
+          (d) => d.madoituong === item.madoituong
+        );
+        const tyleHotroTW = doituong ? doituong.tylehotro : 0;
+        // console.log(tyleHotroTW);
+
         // tạm thời làm thủ công sau sửa sau
         // Cột J
-        if (item.madoituong !== null || item.madoituong !== "") {
-          if (item.madoituong == "BT") {
-            row.getCell(10).value = "10";
-          } else if (item.madoituong == "CN") {
-            row.getCell(10).value = "25";
-          } else {
-            row.getCell(10).value = "30";
-          }
-        }
+        // if (item.madoituong !== null || item.madoituong !== "") {
+        //   if (item.madoituong == "BT") {
+        //     row.getCell(10).value = "20";
+        //   } else if (item.madoituong == "CN") {
+        //     row.getCell(10).value = "40";
+        //   } else {
+        //     row.getCell(10).value = "50";
+        //   }
+        // }
+
+        row.getCell(10).value = tyleHotroTW.toString();
 
         // Cột K
-        let tienNSNNHT
-        if (item.madoituong !== null || item.madoituong !== "") {
-          if (item.madoituong == "BT") {
-            tienNSNNHT = (((1500000 * 22) / 100) * 10) / 100;
-            row.getCell(11).value = tienNSNNHT * item.maphuongthucdong;
-          } else if (item.madoituong == "CN") {
-            tienNSNNHT = (((1500000 * 22) / 100) * 25) / 100;
-            row.getCell(11).value = tienNSNNHT * item.maphuongthucdong;
-          } else {
-            tienNSNNHT = (((1500000 * 22) / 100) * 30) / 100;
-            row.getCell(11).value = tienNSNNHT * item.maphuongthucdong;
-          }
+        let tienNSNNHT = 0;
+        // if (item.madoituong !== null || item.madoituong !== "") {
+        //   if (item.madoituong == "BT") {
+        //     tienNSNNHT = (((1500000 * 22) / 100) * 20) / 100;
+        //     row.getCell(11).value = tienNSNNHT * item.maphuongthucdong;
+        //   } else if (item.madoituong == "CN") {
+        //     tienNSNNHT = (((1500000 * 22) / 100) * 40) / 100;
+        //     row.getCell(11).value = tienNSNNHT * item.maphuongthucdong;
+        //   } else {
+        //     tienNSNNHT = (((1500000 * 22) / 100) * 50) / 100;
+        //     row.getCell(11).value = tienNSNNHT * item.maphuongthucdong;
+        //   }
+        // }
+
+        if (item.madoituong && tyleHotroTW > 0) {
+          const base = 1500000;
+          const bhxh = (base * 22) / 100;
+          const tienNSNNHT = (bhxh * tyleHotroTW) / 100;
+
+          row.getCell(11).value = tienNSNNHT * item.maphuongthucdong;
+        } else {
+          row.getCell(11).value = 0;
         }
 
-        // cột L
-        row.getCell(12).value = "0";
+        // cột L % ngân sách địa phương hỗ trợ
+        // row.getCell(12).value = "20";
+        row.getCell(12).value = this.tylediaphuonghotroIs
 
         // cột M
         const tienNSDP = (((1500000 * 22) / 100) * 20) / 100;
-        // cột L // tiền htdp tạm thời bằng 0
-        // row.getCell(13).value = tienNSDP * item.maphuongthucdong;
-        row.getCell(13).value = 0
+        row.getCell(13).value = tienNSDP * item.maphuongthucdong;
 
         // cột P
         row.getCell(16).value = Number(item.sotien);
@@ -517,13 +582,14 @@ export default {
           25
         ).value = `Số biên lai: ${item.sobienlai}. Người nhập: ${item.tennguoitao}`; // Cột Y
         row.getCell(26).value = item.maphuongthucdong; // Cột Z
-
+        row.getCell(26).value = item.maphuongthucdong;
         row.getCell(28).value = item.cccd; // Cột AB
         // cột AA hệ số
         let mucdong = item.muctiendong || 0;
         let heso = Math.floor((mucdong - 1500000) / 50000);
         heso = heso < 0 ? 0 : heso;
         row.getCell(27).value = heso;
+
         row.getCell(29).value = item.sobienlai; // Cột AC
 
         if (item.ngaybienlai !== null || item.ngaybienlai !== "") {
@@ -536,7 +602,7 @@ export default {
         }
 
         const maNhanVienThu = item.sohoso.split("/").pop();
-        row.getCell(31).value = `NV${maNhanVienThu}`; // Cột AE
+        row.getCell(31).value = `NV${maNhanVienThu}`;
 
         row.getCell(33).value = item.cccd; // Cột AG
         row.getCell(35).value = item.ngaysinh; // Cột AI
@@ -565,7 +631,7 @@ export default {
       // Tạo thẻ <a> để kích hoạt tải xuống
       const a = document.createElement("a");
       a.href = url;
-      a.download = `D05_VNPT.xlsx`;
+      a.download = "D05_VNPT.xlsx";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
