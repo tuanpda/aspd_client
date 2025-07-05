@@ -690,8 +690,8 @@
     <div class="">
       <div :class="{ 'is-active': isActive_nhaphoso }" class="modal">
         <div class="modal-background"></div>
-        <div class="modal-content modal-card-kekhai box">
-          <section class="modal-card-kekhai-body">
+          <div class="modal-content modal-card-predata">
+            <section class="modal-card-body box">
             <div>
               <div>
                 <span style="font-weight: 800; font-size: 15px; color: #3cb371"
@@ -1255,8 +1255,8 @@
     <div class="">
       <div :class="{ 'is-active': isActive_xacnhan }" class="modal">
         <div class="modal-background"></div>
-        <div class="modal-content modal-card-kekhai box">
-          <section class="modal-card-kekhai-body">
+          <div class="modal-content modal-card-predata">
+            <section class="modal-card-body box">
             <div>
               <div>
                 <span style="font-weight: 800; font-size: 15px; color: red"
@@ -3635,6 +3635,16 @@ export default {
       const img = new Image();
       img.src = backgroundImage; // hoặc base64 string
 
+      // img.onload = () => {
+      //   console.log("✅ Ảnh đã load xong");
+      //   doc.addImage(img, "PNG", x, y, imageWidth, imageHeight);
+      //   console.log("➡️ Đã add image");
+      // };
+
+      // img.onerror = (err) => {
+      //   console.error("❌ Lỗi load ảnh:", err);
+      // };
+
       // add the font to jsPDF
       doc.addFont("OpenSans-Bold-normal.ttf", "OpenSans-Bold", "bold");
       doc.setFont("OpenSans-Bold", "bold");
@@ -3721,12 +3731,13 @@ export default {
         }
       );
 
+      const ngayBienLai = data.ngaybienlai.split(" ")[0];
       doc.setFontSize(9);
       doc.setTextColor("#00008b");
       doc.text(`Ngày: `, 155, 50, {
         fontWeight: "bold",
       });
-      doc.text(`${data.ngaybienlai}`, 165, 50, {
+      doc.text(`${ngayBienLai}`, 165, 50, {
         fontWeight: "bold",
       });
 
@@ -3785,9 +3796,12 @@ export default {
       if (data.maloaihinh == "AR" || data.maloaihinh == "BI") {
         noidungText = `Tiền đóng BHYT, phương thức đóng ${data.soThang} tháng, từ ngày ${data.tuNgay} đến ngày ${data.denNgay}`;
       } else {
-        noidungText = `Đóng tiền tham gia BHXH Tự nguyện`;
+        if (data.maphuongan !== "DB") {
+          noidungText = `Tiền đóng BHXH Tự nguyện, phương thức đóng ${data.soThang} tháng, từ ngày ${data.tuThang} đến ngày ${data.denThang}`;
+        } else {
+          noidungText = `BHXH Tự nguyện, ${data.tenphuongthucdong}, ${data.sothang} tháng, từ tháng ${data.tuThang}`;
+        }
       }
-
       doc.text(`Nội dung: `, toadoXInfo, toadoYInfo + 16, {
         fontWeight: "bold",
       });
@@ -3809,21 +3823,15 @@ export default {
         fontWeight: "bold",
       });
 
-      // console.log(data.soTien);
-
       let tienbangchuText = num2words(data.soTien);
       let tienHoa = this.capitalizeFirstLetter(tienbangchuText);
       tienHoa += " đồng./.";
 
-      // console.log(tienHoa);
 
       doc.text(`(Viết bằng chữ: ${tienHoa}) `, toadoXInfo, toadoYInfo + 32, {
         fontWeight: "bold",
       });
-      // doc.text(`${tienHoa}`, toadoXInfo + 35, toadoYInfo + 32, {
-      //   fontWeight: "bold",
-      // });
-      // console.log("check");
+
       doc.addFont(
         "OpenSans-ExtraBold-normal.ttf",
         "OpenSans-ExtraBold-normal",
@@ -3853,24 +3861,24 @@ export default {
         align: "center",
       });
 
-      doc.setFontSize(10);
+      doc.setFontSize(8);
       doc.setTextColor("#dc3545");
-      // doc.text(
-      //   `Đã được ký bởi: CÔNG TY TNHH AN SINH PHỦ DIỄN`,
-      //   toadoXInfo + 100,
-      //   toadoYInfo + 53,
-      //   {
-      //     fontWeight: "bold",
-      //   }
-      // );
-      // doc.text(
-      //   `Ngày ký: ${data.ngaybienlai}`,
-      //   toadoXInfo + 110,
-      //   toadoYInfo + 58,
-      //   {
-      //     fontWeight: "bold",
-      //   }
-      // );
+      doc.text(
+        `Đã được ký bởi: ${company.companyName}`,
+        toadoXInfo + 106,
+        toadoYInfo + 53,
+        {
+          fontWeight: "bold",
+        }
+      );
+      doc.text(
+        `Ngày ký: ${ngayBienLai}`,
+        toadoXInfo + 124,
+        toadoYInfo + 58,
+        {
+          fontWeight: "bold",
+        }
+      );
 
       doc.addFont(
         "OpenSans-ExtraBold-normal.ttf",
@@ -3893,24 +3901,27 @@ export default {
         "italic"
       );
       doc.setFont("OpenSans_SemiCondensed-Italic-normal", "italic");
-      doc.setFontSize(10);
+      doc.setFontSize(8);
       doc.setTextColor("#04368c");
       doc.text(
         `Vui lòng tra cứu biên lai điện tử tại: `,
-        toadoXInfo + 2,
-        toadoYInfo + 53,
+        toadoXInfo + 54,
+        toadoYInfo + 82,
         {
           fontWeight: "bold",
         }
       );
 
-      // console.log(data.maXacNhan);
-
-      doc.setFontSize(11);
+      doc.setFontSize(8);
       doc.setTextColor("#dc143c");
-      doc.text(`${company.urlBienlaidientu}`, toadoXInfo + 2, toadoYInfo + 58, {
-        fontWeight: "bold",
-      });
+      doc.text(
+        `${company.urlBienlaidientu}`,
+        toadoXInfo + 92,
+        toadoYInfo + 82,
+        {
+          fontWeight: "bold",
+        }
+      );
 
       const tenbienlai = data.urlNameInvoice;
 
@@ -4009,4 +4020,17 @@ export default {
   position: absolute !important;
   transform: translateY(-100%) !important;
 }
+
+  /* Mặc định cho thiết bị di động */
+  .modal-card-predata {
+    max-height: 80vh; /* Chiều cao tối đa là 80% màn hình */
+    overflow-y: auto; /* Cho phép cuộn nếu nội dung quá dài */
+  }
+
+  /* Cho thiết bị máy tính */
+  @media (min-width: 1024px) {
+    .modal-card-predata {
+      max-height: 90vh; /* Tăng chiều cao tối đa cho máy tính */
+    }
+  }
 </style>

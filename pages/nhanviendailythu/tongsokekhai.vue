@@ -186,10 +186,34 @@
 </template>
 
 <script>
-
+import ExportExcel_Viettel from "@/components/exportExecl/viettel";
+import ExportExcel_Vnpt from "@/components/exportExecl/vnpt";
 import Swal from "sweetalert2";
+import ExcelJS from "exceljs";
+import * as XLSX from "xlsx";
+const { DateTime } = require("luxon");
+import jsPDF from "jspdf";
+import "~/assets/font/OpenSans-Light-normal";
+import "~/assets/font/OpenSans-SemiBold-normal";
+import "~/assets/font/OpenSans-Bold-normal";
+import "~/assets/font/OpenSans_SemiCondensed-Italic-normal";
+import "~/assets/font/OpenSans-ExtraBold-normal";
+import "~/assets/font/OpenSans_Condensed-Bold-normal";
+import "~/assets/font/OpenSans-Regular-normal";
+import "~/assets/font/Times New Roman Bold-normal";
+
+import backgroundImage from "~/assets/images/bhxh.png";
+import qrcode from "~/assets/images/QR-BHXH.png";
+
+import num2words from "vn-num2words";
 
 export default {
+  name: "DanhsachKekhaiPage",
+  components: {
+    ExportExcel_Viettel,
+    ExportExcel_Vnpt,
+  },
+
   data() {
     const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 
@@ -224,6 +248,7 @@ export default {
       suggestions_diemthu: [],
       diemthu: "",
       madaily: "",
+      cccd: "",
       isDiemthu: false,
 
       dtaDiemthu: [],
@@ -239,17 +264,14 @@ export default {
 
     this.dailyview = user.madaily;
     this.tochuc = user.matochuc;
+    this.cccd = user.cccd
+    this.isRoleSent = user.res_sent;
+    this.madaily = user.madaily;
+    this.diemthu = user.tendaily;
+
     if (user.role == 2) {
       this.diemthu = "Tài khoản tổng hợp";
-      // console.log(this.diemthu);
-      // console.log(user.role);
     } else {
-      this.diemthu = user.tendaily;
-    }
-    this.isRoleSent = user.res_sent;
-
-    if (user.nvcongty == 0) {
-      this.madaily = user.madaily;
       this.diemthu = user.tendaily;
       this.isDiemthu = true;
     }
@@ -340,11 +362,11 @@ export default {
           console.log(error);
         }
       } else {
-        const madaily = { madaily: this.dailyview };
+        const cccd = { cccd: this.cccd };
         try {
           const res = await this.$axios.post(
             `/api/kekhai/allsonguoidakekhai-diemthu`,
-            madaily
+            cccd
           );
           // console.log(res);
           if (res.data.success == true) {

@@ -1323,8 +1323,8 @@
     <div class="">
       <div :class="{ 'is-active': isActive_xacnhan }" class="modal">
         <div class="modal-background"></div>
-        <div class="modal-content modal-card-kekhai box">
-          <section class="modal-card-kekhai-body">
+          <div class="modal-content modal-card-predata">
+            <section class="modal-card-body box">
             <div>
               <div>
                 <span style="font-weight: 800; font-size: 15px; color: red"
@@ -4185,15 +4185,6 @@ export default {
     },
 
     async inBienLaiDientu(data) {
-      // console.log("dữ liệu tạo pdf: ", data);
-
-      // const res = await this.$axios(
-      //   `/api/kekhai/bienlaidientu?_id_hskk=${item._id}&hosoIdentity=${item.hosoIdentity}`
-      // );
-      // // console.log(res.data[0]);
-      // let data = res.data[0];
-      // bỏ đoạn này do in biên lai khi gửi lên cổng code ngày 08/5/2025
-
       const doc = new jsPDF({
         orientation: "l",
         format: "a5",
@@ -4312,20 +4303,15 @@ export default {
         }
       );
 
+      const ngayBienLai = data.ngaybienlai.split(" ")[0];
       doc.setFontSize(9);
       doc.setTextColor("#00008b");
       doc.text(`Ngày: `, 155, 50, {
         fontWeight: "bold",
       });
-      doc.text(`${data.ngaybienlai}`, 165, 50, {
+      doc.text(`${ngayBienLai}`, 165, 50, {
         fontWeight: "bold",
       });
-
-      // const dateTimeString = data.ngaybienlai;
-      // // Tách chuỗi ngày tháng theo định dạng
-      // const parts = dateTimeString.split(" ")[0].split("-"); // Lấy phần ngày và tách theo dấu "-"
-      // // Lấy giá trị năm
-      // const year = parts[2];
 
       const year = data.ngaybienlai.split("-")[2].split(" ")[0];
 
@@ -4409,21 +4395,15 @@ export default {
         fontWeight: "bold",
       });
 
-      // console.log(data.soTien);
-
       let tienbangchuText = num2words(data.soTien);
       let tienHoa = this.capitalizeFirstLetter(tienbangchuText);
       tienHoa += " đồng./.";
 
-      // console.log(tienHoa);
 
       doc.text(`(Viết bằng chữ: ${tienHoa}) `, toadoXInfo, toadoYInfo + 32, {
         fontWeight: "bold",
       });
-      // doc.text(`${tienHoa}`, toadoXInfo + 35, toadoYInfo + 32, {
-      //   fontWeight: "bold",
-      // });
-      // console.log("check");
+
       doc.addFont(
         "OpenSans-ExtraBold-normal.ttf",
         "OpenSans-ExtraBold-normal",
@@ -4440,15 +4420,6 @@ export default {
         fontWeight: "bold",
       });
 
-      // doc.addFont(
-      //   "OpenSans-Regular-normal.ttf",
-      //   "OpenSans-Regular-normal",
-      //   "bold"
-      // );
-      // doc.setFont("OpenSans-Regular-normal", "bold");
-      // doc.setFontSize(12);
-      // doc.setTextColor("#dc143c");
-
       doc.addFont(
         "OpenSans-ExtraBold-normal.ttf",
         "OpenSans-ExtraBold-normal",
@@ -4461,6 +4432,25 @@ export default {
         fontWeight: "bold",
         align: "center",
       });
+
+      doc.setFontSize(8);
+      doc.setTextColor("#dc3545");
+      doc.text(
+        `Đã được ký bởi: ${company.companyName}`,
+        toadoXInfo + 106,
+        toadoYInfo + 53,
+        {
+          fontWeight: "bold",
+        }
+      );
+      doc.text(
+        `Ngày ký: ${ngayBienLai}`,
+        toadoXInfo + 124,
+        toadoYInfo + 58,
+        {
+          fontWeight: "bold",
+        }
+      );
 
       doc.addFont(
         "OpenSans-ExtraBold-normal.ttf",
@@ -4483,74 +4473,29 @@ export default {
         "italic"
       );
       doc.setFont("OpenSans_SemiCondensed-Italic-normal", "italic");
-      doc.setFontSize(10);
+      doc.setFontSize(8);
       doc.setTextColor("#04368c");
       doc.text(
         `Vui lòng tra cứu biên lai điện tử tại: `,
-        toadoXInfo + 2,
-        toadoYInfo + 53,
+        toadoXInfo + 54,
+        toadoYInfo + 82,
         {
           fontWeight: "bold",
         }
       );
 
-      // console.log(data.maXacNhan);
-
-      doc.setFontSize(11);
+      doc.setFontSize(8);
       doc.setTextColor("#dc143c");
       doc.text(
-        `http://14.224.129.177:1970/tracuubienlaidientu-ansinhphudien `,
-        toadoXInfo + 2,
-        toadoYInfo + 58,
+        `${company.urlBienlaidientu}`,
+        toadoXInfo + 92,
+        toadoYInfo + 82,
         {
           fontWeight: "bold",
         }
       );
 
-      // doc.setFontSize(10);
-      // doc.setTextColor("#04368c");
-      // doc.text(
-      //   `Sử dụng để tra cứu thông tin ghi nhận đóng trên Cổng thông tin điện tử`,
-      //   toadoXInfo - 8,
-      //   toadoYInfo + 62,
-      //   {
-      //     fontWeight: "bold",
-      //   }
-      // );
-
-      // doc.text(
-      //   `Người tham gia có thể sử dụng ứng dụng VSSID của Bảo hiểm Xã hội`,
-      //   toadoXInfo - 8,
-      //   toadoYInfo + 70,
-      //   {
-      //     fontWeight: "bold",
-      //   }
-      // );
-      // doc.text(
-      //   `Việt Nam để theo dõi quá trính đóng BHXH, sử dụng thay thế thẻ BHYT`,
-      //   toadoXInfo - 8,
-      //   toadoYInfo + 75,
-      //   {
-      //     fontWeight: "bold",
-      //   }
-      // );
-      // doc.text(
-      //   `https://baohiemxahoi.gov.vn/gioithieu/pages/tai-ung-dung-vssid.aspx`,
-      //   toadoXInfo - 8,
-      //   toadoYInfo + 80,
-      //   {
-      //     fontWeight: "bold",
-      //   }
-      // );
-
-      // Lưu file PDF trên một tab mới
-
       const tenbienlai = data.urlNameInvoice;
-      // console.log(tenbienlai);
-
-      // doc.output("dataurlnewwindow");
-      // window.open(pdfURL, tenbienlai);
-      // doc.save("a4.pdf");
 
       const pdfBlob = doc.output("blob");
 
@@ -4577,4 +4522,17 @@ export default {
 @import "@/assets/customCss/common.css";
 
 @import "@/assets/customCss/footerTable.css";
+
+  /* Mặc định cho thiết bị di động */
+  .modal-card-predata {
+    max-height: 80vh; /* Chiều cao tối đa là 80% màn hình */
+    overflow-y: auto; /* Cho phép cuộn nếu nội dung quá dài */
+  }
+
+  /* Cho thiết bị máy tính */
+  @media (min-width: 1024px) {
+    .modal-card-predata {
+      max-height: 90vh; /* Tăng chiều cao tối đa cho máy tính */
+    }
+  }
 </style>
