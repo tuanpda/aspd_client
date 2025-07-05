@@ -3954,24 +3954,24 @@ export default {
         align: "center",
       });
 
-      doc.setFontSize(8);
-      doc.setTextColor("#dc3545");
-      doc.text(
-        `Đã được ký bởi: ${company.companyName}`,
-        toadoXInfo + 106,
-        toadoYInfo + 53,
-        {
-          fontWeight: "bold",
-        }
-      );
-      doc.text(
-        `Ngày ký: ${ngayBienLai}`,
-        toadoXInfo + 124,
-        toadoYInfo + 58,
-        {
-          fontWeight: "bold",
-        }
-      );
+      // doc.setFontSize(8);
+      // doc.setTextColor("#dc3545");
+      // doc.text(
+      //   `Đã được ký bởi: ${company.companyName}`,
+      //   toadoXInfo + 106,
+      //   toadoYInfo + 53,
+      //   {
+      //     fontWeight: "bold",
+      //   }
+      // );
+      // doc.text(
+      //   `Ngày ký: ${ngayBienLai}`,
+      //   toadoXInfo + 124,
+      //   toadoYInfo + 58,
+      //   {
+      //     fontWeight: "bold",
+      //   }
+      // );
 
       doc.addFont(
         "OpenSans-ExtraBold-normal.ttf",
