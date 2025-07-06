@@ -176,6 +176,7 @@
                   type="text"
                   placeholder="MM/YYYY"
                   class="input is-small"
+                  @blur="changeTuThang(index)"
                 />
               </td>
 
@@ -3181,6 +3182,36 @@ export default {
 
       return Math.round(tienCanNap);
     },
+
+    changeTuThang(index) {
+      const item = this.items[index];
+      const tuthang = item.tuthang.trim();
+
+      // Kiểm tra định dạng MM/YYYY bằng RegEx
+      const regex = /^(0[1-9]|1[0-2])\/\d{4}$/;
+      if (!regex.test(tuthang)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Định dạng không hợp lệ',
+          text: '❌ Tháng không đúng định dạng. Vui lòng nhập MM/YYYY (ví dụ: 07/2025, 09/2030 ... )',
+          confirmButtonText: 'Đã hiểu',
+        });
+        return;
+      }
+
+      const madoituong = item.madoituong;
+      const muctiendong = parseFloat(item.muctiendong.replace(/,/g, ""));
+      const maphuongthucdong = item.maphuongthucdong;
+
+      item.sotien = this.tinhTienPhaiDong(
+        madoituong,
+        muctiendong,
+        maphuongthucdong,
+        tuthang
+      );
+    },
+
+
 
     async doituongChange(e, index) {
       const madoituong = e.target.value;
