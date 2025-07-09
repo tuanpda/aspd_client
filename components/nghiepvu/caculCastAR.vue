@@ -690,8 +690,8 @@
     <div class="">
       <div :class="{ 'is-active': isActive_nhaphoso }" class="modal">
         <div class="modal-background"></div>
-          <div class="modal-content modal-card-predata">
-            <section class="modal-card-body box">
+        <div class="modal-content modal-card-predata">
+          <section class="modal-card-body box">
             <div>
               <div>
                 <span style="font-weight: 800; font-size: 15px; color: #3cb371"
@@ -1255,8 +1255,8 @@
     <div class="">
       <div :class="{ 'is-active': isActive_xacnhan }" class="modal">
         <div class="modal-background"></div>
-          <div class="modal-content modal-card-predata">
-            <section class="modal-card-body box">
+        <div class="modal-content modal-card-predata">
+          <section class="modal-card-body box">
             <div>
               <div>
                 <span style="font-weight: 800; font-size: 15px; color: red"
@@ -3589,7 +3589,7 @@ export default {
           const fileName = `${hs.sobienlai}_${encodeURIComponent(
             hs.hoten
           )}.pdf`;
-          const pdfUrl = `http://14.224.148.17:4042/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
+          const pdfUrl = `${company.clientURL}/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
           // const pdfUrl = `${company.clientURL}/bienlaidientu/bienlai/${hs.urlNameInvoice}.pdf`;
           // const pdfUrl = `http://localhost:4042/bienlaidientu/bienlai/${hs.urlNameInvoice}.pdf`;
 
@@ -3827,7 +3827,6 @@ export default {
       let tienHoa = this.capitalizeFirstLetter(tienbangchuText);
       tienHoa += " đồng./.";
 
-
       doc.text(`(Viết bằng chữ: ${tienHoa}) `, toadoXInfo, toadoYInfo + 32, {
         fontWeight: "bold",
       });
@@ -4021,16 +4020,16 @@ export default {
   transform: translateY(-100%) !important;
 }
 
-  /* Mặc định cho thiết bị di động */
-  .modal-card-predata {
-    max-height: 80vh; /* Chiều cao tối đa là 80% màn hình */
-    overflow-y: auto; /* Cho phép cuộn nếu nội dung quá dài */
-  }
+/* Mặc định cho thiết bị di động */
+.modal-card-predata {
+  max-height: 80vh; /* Chiều cao tối đa là 80% màn hình */
+  overflow-y: auto; /* Cho phép cuộn nếu nội dung quá dài */
+}
 
-  /* Cho thiết bị máy tính */
-  @media (min-width: 1024px) {
-    .modal-card-predata {
-      max-height: 90vh; /* Tăng chiều cao tối đa cho máy tính */
-    }
+/* Cho thiết bị máy tính */
+@media (min-width: 1024px) {
+  .modal-card-predata {
+    max-height: 90vh; /* Tăng chiều cao tối đa cho máy tính */
   }
+}
 </style>
