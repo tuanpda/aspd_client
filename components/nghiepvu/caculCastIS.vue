@@ -3,7 +3,7 @@
     <div style="margin-top: 20px">
       <div class="columns">
         <div class="column">
-          <!-- <div
+          <div
             class="field is-grouped is-grouped-multiline is-justify-content-flex-end"
           >
             <p class="control">
@@ -15,14 +15,14 @@
               </button>
             </p>
             <p class="control">
-              <button class="button is-small is-info">
+              <button @click="intestBienLai" class="button is-small is-info">
                 <span class="icon">
                   <i class="fas fa-file-import"></i>
                 </span>
                 <span>Import tờ khai</span>
               </button>
             </p>
-          </div> -->
+          </div>
         </div>
       </div>
       <div class="table_wrapper">
@@ -4383,6 +4383,43 @@ export default {
           this.isLoading = false;
         }
       }
+    },
+
+    // dùng để in thử
+    async intestBienLai() {
+      const data = {
+        hosoIdentity:
+          "1750751032953-aykztybeu5m4017614355040300020117040175021992",
+        maSoBhxh: "4221317885",
+        hoTen: "Lê Phú Tài",
+        soCccd: "042097007945",
+        ngaySinh: "18/11/1997",
+        gioiTinh: "Nam",
+        soDienThoai: "",
+        nguoithutien: "Phạm Thị Tuyết",
+        loaiDt: "BHXH Tự nguyện",
+        soTien: 1185444,
+        soThang: "1",
+        tuNgay: "",
+        denNgay: "",
+        tuThang: "05/2025",
+        denThang: "05/2025",
+        maDaiLy: "DT0034",
+        tenDaiLy: "Điểm thu BHXH, BHYT Xã DiễnTrường",
+        createdBy: "04-07-2025 15:09:30",
+        sobienlai: "0000330",
+        ngaybienlai: "04-07-2025 15:09:30",
+        maloaihinh: "IS",
+        tothon: "",
+        tenquanhuyen: "Thị xã Kỳ Anh",
+        tentinh: "Tỉnh Hà Tĩnh",
+        currentYear: "2025",
+        urlNameInvoice:
+          "1751616568179-i9p1i2z4fgg4221317885042097007945042180014714_04_07_2025_15_09_30_0000330_Lê Phú Tài",
+        cccd_nguoithutien: "040175021992",
+      };
+
+      await this.inBienLaiDientu(data);
     },
 
     async inBienLaiDientu(data) {

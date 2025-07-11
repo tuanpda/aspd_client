@@ -2,8 +2,8 @@
   <div>
     <div style="margin-top: 20px">
       <div class="columns">
-        <div class="column">
-          <!-- <div
+        <!-- <div class="column">
+          <div
             class="field is-grouped is-grouped-multiline is-justify-content-flex-end"
           >
             <p class="control">
@@ -22,8 +22,8 @@
                 <span>Import tờ khai</span>
               </button>
             </p>
-          </div> -->
-        </div>
+          </div>
+        </div> -->
       </div>
       <div class="table_wrapper">
         <table
