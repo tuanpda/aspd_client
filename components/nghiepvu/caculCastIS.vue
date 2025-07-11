@@ -2,7 +2,7 @@
   <div>
     <div style="margin-top: 20px">
       <div class="columns">
-        <div class="column">
+        <!-- <div class="column">
           <div
             class="field is-grouped is-grouped-multiline is-justify-content-flex-end"
           >
@@ -23,7 +23,7 @@
               </button>
             </p>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="table_wrapper">
         <table
