@@ -2921,6 +2921,96 @@ export default {
       }
     },
 
+    // tinhTienPhaiDong(madoituong, muctiendong, maphuongthucdong, tuthang) {
+    //   // === BƯỚC 1: TÍNH TỔNG SỐ THÁNG TỪ tuthang đến denthang ===
+    //   const denthang = this.tinhDenThang(tuthang, maphuongthucdong);
+    //   const [startMonth, startYear] = tuthang.split("/").map(Number);
+    //   const [endMonth, endYear] = denthang.split("/").map(Number);
+
+    //   let tongThang = 0;
+    //   let month = startMonth;
+    //   let year = startYear;
+
+    //   while (year < endYear || (year === endYear && month <= endMonth)) {
+    //     tongThang++;
+    //     month++;
+    //     if (month > 12) {
+    //       month = 1;
+    //       year++;
+    //     }
+    //   }
+
+    //   // === BƯỚC 2: TÍNH TỶ LỆ VÀ TIỀN HỖ TRỢ ===
+    //   const tyleDong = this.tyledongbhyt / 100;
+    //   const castMucdong = muctiendong * tyleDong;
+    //   const castSubTwhotro = this.chuanngheo * tyleDong;
+    //   const doituong = this.doituongdong.find(
+    //     (d) => d.madoituong === madoituong
+    //   );
+    //   const tyleHotroTW = doituong ? doituong.tylehotro : 0;
+
+    //   const tienTrungUongHoTro = castSubTwhotro * (tyleHotroTW / 100);
+    //   const tienDiaPhuongHoTro =
+    //     castSubTwhotro * (this.tylediaphuonghotroIl / 100); // lấy tỷ lệ phần trăm trong bảng danh mục dm_tylediaphuonghtIL
+    //   const tongHoTroDong = tienTrungUongHoTro + tienDiaPhuongHoTro;
+
+    //   // === BƯỚC 3: TÍNH SỐ THÁNG TRỄ VÀ LÃI SUẤT ===
+    //   const today = new Date();
+    //   const [startMonthLai, startYearLai] = tuthang.split("/").map(Number);
+    //   const checkDongLaiChamDong =
+    //     (today.getFullYear() - startYearLai) * 12 +
+    //     (today.getMonth() + 1 - startMonthLai);
+
+    //   let thangQuenDong = 0;
+    //   const phuongthuc = Number(maphuongthucdong);
+
+    //   if (phuongthuc === 1 && checkDongLaiChamDong > 0)
+    //     thangQuenDong = checkDongLaiChamDong;
+
+    //   if (phuongthuc === 3 && checkDongLaiChamDong >= 3)
+    //     thangQuenDong = checkDongLaiChamDong - 2;
+
+    //   if (phuongthuc === 6 && checkDongLaiChamDong > 3)
+    //     thangQuenDong = checkDongLaiChamDong - 3;
+
+    //   if (phuongthuc === 12 && checkDongLaiChamDong > 6)
+    //     thangQuenDong = checkDongLaiChamDong - 6;
+
+    //   // === BƯỚC 4: TÍNH TIỀN CẦN NẠP ===
+    //   let tienCanNap = 0;
+    //   let tienLai = 0;
+
+    //   if (thangQuenDong === 0) {
+    //     const tienPhaiDong = (castMucdong - tongHoTroDong) * tongThang;
+    //     tienCanNap = tienPhaiDong;
+    //   } else {
+    //     const laiSuat = 0.00322;
+    //     const tongDongCoLai =
+    //       castMucdong * phuongthuc * Math.pow(1 + laiSuat, thangQuenDong);
+    //     const tongHotro = tongHoTroDong * tongThang;
+    //     tienLai = tongDongCoLai - castMucdong * phuongthuc;
+    //     tienCanNap = tongDongCoLai - tongHotro;
+    //   }
+
+    //   // === PHẦN GOM LOG THEO GIAO DIỆN TỔNG HỢP ===
+    //   console.log("======== TỔNG HỢP ========");
+    //   console.log("=== THÔNG TIN ĐÓNG NẠP ===");
+    //   console.log("Từ tháng: ", tuthang);
+    //   console.log("Đến tháng: ", denthang);
+    //   console.log("Tổng tháng:", tongThang);
+    //   console.log("=== THÔNG TIN TÍNH TIỀN ===");
+    //   console.log("Trong đó lãi:", Math.round(tienLai));
+    //   console.log("Số tháng quên đóng lãi: ", thangQuenDong);
+    //   console.log("NSNN Hỗ trợ:", Math.round(tienTrungUongHoTro * tongThang));
+    //   console.log("NSĐP Hỗ trợ:", Math.round(tienDiaPhuongHoTro * tongThang));
+    //   console.log("Hỗ trợ khác:", 0);
+    //   console.log("NLĐ phải nộp:", Math.round(tienCanNap));
+    //   console.log("NLĐ đã nộp:", 0);
+    //   console.log("===========================");
+
+    //   return Math.round(tienCanNap);
+    // },
+
     tinhTienPhaiDong(madoituong, muctiendong, maphuongthucdong, tuthang) {
       // === BƯỚC 1: TÍNH TỔNG SỐ THÁNG TỪ tuthang đến denthang ===
       const denthang = this.tinhDenThang(tuthang, maphuongthucdong);
@@ -2928,11 +3018,25 @@ export default {
       const [endMonth, endYear] = denthang.split("/").map(Number);
 
       let tongThang = 0;
+      let thangTruocMoc = 0; // <= 30/06/2025
+      let thangTuMoc = 0; // 01/07/2025 đến 31/12/2030
+
       let month = startMonth;
       let year = startYear;
 
       while (year < endYear || (year === endYear && month <= endMonth)) {
         tongThang++;
+
+        const current = new Date(year, month - 1, 1); // JS: tháng tính từ 0
+        const moc = new Date(2025, 6, 1); // 01/07/2025
+        const cuoi2030 = new Date(2030, 11, 31); // 31/12/2030
+
+        if (current < moc) {
+          thangTruocMoc++;
+        } else if (current >= moc && current <= cuoi2030) {
+          thangTuMoc++;
+        }
+
         month++;
         if (month > 12) {
           month = 1;
@@ -2940,73 +3044,97 @@ export default {
         }
       }
 
+      console.log("Tổng tháng:", tongThang);
+      console.log("Trước hoặc bằng 30/06/2025:", thangTruocMoc);
+      console.log("Từ 01/07/2025 đến 31/12/2030:", thangTuMoc);
+
       // === BƯỚC 2: TÍNH TỶ LỆ VÀ TIỀN HỖ TRỢ ===
       const tyleDong = this.tyledongbhyt / 100;
       const castMucdong = muctiendong * tyleDong;
       const castSubTwhotro = this.chuanngheo * tyleDong;
+      // TÌM LOẠI ĐỐI TƯỢNG ĐÓNG
+      // 1. THEO MỨC MỚI
       const doituong = this.doituongdong.find(
         (d) => d.madoituong === madoituong
       );
       const tyleHotroTW = doituong ? doituong.tylehotro : 0;
 
-      const tienTrungUongHoTro = castSubTwhotro * (tyleHotroTW / 100);
+      // 2. THEO MỨC CŨ
+      const doituongdongCu = [
+        { madoituong: "BT", tylehotro: 10 },
+        { madoituong: "CN", tylehotro: 25 },
+        { madoituong: "N", tylehotro: 30 },
+      ];
+      const doituongCu = doituongdongCu.find(
+        (d) => d.madoituong === madoituong
+      );
+      const tyleHotroTWMucCu = doituongCu ? doituongCu.tylehotro : 0;
+
+
+      // NGÂN SÁCH NHÀ NƯỚC HỖ TRỢ
+      console.log(
+        "Ngân sách nhà nước hỗ trợ cho",
+        madoituong, 
+        "theo mức mới là :",
+        tyleHotroTW
+      );
+      console.log(
+        "Ngân sách nhà nước hỗ trợ cho",
+        madoituong, 
+        "theo mức cũ là :",
+        tyleHotroTWMucCu
+      );
+
+
+      // IL NGHỆ AN HỖ TRỢ TOÀN BỘ 50% CHO TẤT CẢ CÁC ĐỐI TƯỢNG
+      // === Xác định tỷ lệ ngân sách địa phương theo mã đối tượng ===
       const tienDiaPhuongHoTro =
-        castSubTwhotro * (this.tylediaphuonghotroIl / 100); // lấy tỷ lệ phần trăm trong bảng danh mục dm_tylediaphuonghtIL
-      const tongHoTroDong = tienTrungUongHoTro + tienDiaPhuongHoTro;
+      castSubTwhotro * (this.tylediaphuonghotroIl / 100); // lấy tỷ lệ phần trăm trong bảng danh mục dm_tylediaphuonghtIL
+      console.log(
+        "Ngân sách địa phương hỗ trợ cho",
+        madoituong,
+        "là :",
+        tienDiaPhuongHoTro
+      );
 
-      // === BƯỚC 3: TÍNH SỐ THÁNG TRỄ VÀ LÃI SUẤT ===
-      const today = new Date();
-      const [startMonthLai, startYearLai] = tuthang.split("/").map(Number);
-      const checkDongLaiChamDong =
-        (today.getFullYear() - startYearLai) * 12 +
-        (today.getMonth() + 1 - startMonthLai);
+      // ĐẾN ĐOẠN NÀY SẼ RẼ NHÁNH. NẾU NHƯ CÓ THÁNG TRƯỚC MỐC 1/7/2025 THÌ
+      // TOÀN BỘ NGÂN SÁCH TRUNG ƯƠNG SẼ ĂN THEO MỨC CŨ
+      // CÒN NGÂN SÁCH ĐỊA PHƯƠNG CŨNG TÍNH LÀ KHÔNG CÓ. (TỨC LÀ CHỈ CÓ HỖ TRỢ: 33.000)
+      // CHỈ CÓ ĐÓNG MỚI HOÀN TOÀN TỪ THÁNG 7/2025 TRỞ ĐI THÌ MỚI CÓ HỖ TRỢ ĐỊA PHƯƠNG
+      // VÀ MỨC NSNN MỚI (82.500)
 
-      let thangQuenDong = 0;
-      const phuongthuc = Number(maphuongthucdong);
+      let tienCanNap = 0; // tổng tiền cần phải nạp
 
-      if (phuongthuc === 1 && checkDongLaiChamDong > 0)
-        thangQuenDong = checkDongLaiChamDong;
+      if (thangTruocMoc > 0) {
+        console.log('TỔNG MỨC HỖ TRỢ CHỈ CÓ NSNN MỨC CŨ CHO TOÀN BỘ QUÁ TRÌNH ĐÓNG')
+        // Tiền trung ương hỗ trợ (danh mục hỗ trợ cũ)
+        const tienTrungUongHoTro = castSubTwhotro * (tyleHotroTWMucCu / 100);
+        const tongTienHoTro = tienTrungUongHoTro + tienDiaPhuongHoTro
 
-      if (phuongthuc === 3 && checkDongLaiChamDong >= 3)
-        thangQuenDong = checkDongLaiChamDong - 2;
+        console.log("Tổng hỗ trợ (NSNN , mức cũ) + NSDP cho IL (50%)", tongTienHoTro);
 
-      if (phuongthuc === 6 && checkDongLaiChamDong > 3)
-        thangQuenDong = checkDongLaiChamDong - 3;
+        // TÍNH TIỀN CẦN NẠP
+        tienCanNap = (castMucdong - tongTienHoTro) * tongThang
+        console.log("Trung ương hỗ trợ: ", tienTrungUongHoTro);
+        console.log("Địa phương hỗ trợ: ", tienDiaPhuongHoTro);
+        console.log("Tổng hỗ trợ: ", tongTienHoTro);
+        console.log("Tổng tiền cần nạp: ", tienCanNap);
+        console.log("Công thức tính là: ** (Mức tiền đóng x tỷ lệ đóng (22%) - NSNN hỗ trợ CŨ) x số tháng cần nạp")
 
-      if (phuongthuc === 12 && checkDongLaiChamDong > 6)
-        thangQuenDong = checkDongLaiChamDong - 6;
+      }else{
+        console.log('TỔNG MỨC HỖ TRỢ GỒM NSNN MỨC MỚI VÀ NSĐP TOÀN BỘ QUÁ TRÌNH ĐÓNG')
+        // Tiền trung ương hỗ trợ (danh mục hỗ trợ MỚI)
+        const tienTrungUongHoTro = castSubTwhotro * (tyleHotroTW / 100);
+        const tongTienHoTro = tienTrungUongHoTro + tienDiaPhuongHoTro
 
-      // === BƯỚC 4: TÍNH TIỀN CẦN NẠP ===
-      let tienCanNap = 0;
-      let tienLai = 0;
+        console.log("Tiền nhà nước hỗ trợ (Mức mới): ", tienTrungUongHoTro);
+        console.log("Tiền địa phương hỗ trợ: ", tienDiaPhuongHoTro);
+        console.log("Tổng cả 2: ", tongTienHoTro);
 
-      if (thangQuenDong === 0) {
-        const tienPhaiDong = (castMucdong - tongHoTroDong) * tongThang;
-        tienCanNap = tienPhaiDong;
-      } else {
-        const laiSuat = 0.00322;
-        const tongDongCoLai =
-          castMucdong * phuongthuc * Math.pow(1 + laiSuat, thangQuenDong);
-        const tongHotro = tongHoTroDong * tongThang;
-        tienLai = tongDongCoLai - castMucdong * phuongthuc;
-        tienCanNap = tongDongCoLai - tongHotro;
+        tienCanNap = (castMucdong - tongTienHoTro) * tongThang
+        console.log("Tổng tiền cần nạp: ", tienCanNap);
+        console.log("Công thức tính là: ** (Mức tiền đóng x tỷ lệ đóng (22%) -  NSNN hỗ trợ MỚI - hỗ trợ địa phương) x cho số tháng cần nạp")
       }
-
-      // === PHẦN GOM LOG THEO GIAO DIỆN TỔNG HỢP ===
-      console.log("======== TỔNG HỢP ========");
-      console.log("=== THÔNG TIN ĐÓNG NẠP ===");
-      console.log("Từ tháng: ", tuthang);
-      console.log("Đến tháng: ", denthang);
-      console.log("Tổng tháng:", tongThang);
-      console.log("=== THÔNG TIN TÍNH TIỀN ===");
-      console.log("Trong đó lãi:", Math.round(tienLai));
-      console.log("Số tháng quên đóng lãi: ", thangQuenDong);
-      console.log("NSNN Hỗ trợ:", Math.round(tienTrungUongHoTro * tongThang));
-      console.log("NSĐP Hỗ trợ:", Math.round(tienDiaPhuongHoTro * tongThang));
-      console.log("Hỗ trợ khác:", 0);
-      console.log("NLĐ phải nộp:", Math.round(tienCanNap));
-      console.log("NLĐ đã nộp:", 0);
-      console.log("===========================");
 
       return Math.round(tienCanNap);
     },

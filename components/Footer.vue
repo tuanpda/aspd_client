@@ -22,7 +22,7 @@
             class="footer-row"
             style="font-size: small; font-weight: 700; text-align: center"
           >
-            <span>Designed & Developed by Son Thu Software Company</span>
+            <span>Designed & Developed by ASXH PHỦ DIỄN Company</span>
             <br />
             <span
               >Copyright @2025 | Designed with by
