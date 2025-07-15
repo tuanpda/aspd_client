@@ -1745,7 +1745,7 @@ export default {
                 this.items[index].dienthoai = data.soDienThoai;
 
                 if (data.hanThe !== null && data.hanThe !== "") {
-                  this.items[index] = data.hanThe.split("-")[1]; // Kết quả: "31/12/2025"
+                  this.items[index].hanthecu = data.hanThe.split("-")[1]; // Kết quả: "31/12/2025"
 
                   // this.hanthecu = "31/04/2025"; -- dùng để test
                   // console.log(this.hanthecu);
@@ -1790,7 +1790,7 @@ export default {
                   }
 
                   this.items[index].tungay = formatDate(tuNgay);
-                  // console.log("🎯 Hạn thẻ từ (tungay):", this.items[index].tungay);
+                  console.log("🎯 Hạn thẻ từ (tungay):", this.items[index].tungay);
                 } else {
                   this.items[index].hanthecu = "Không tìm thấy hạn thẻ cũ";
                   // Gán ngày hiện tại + 30 ngày

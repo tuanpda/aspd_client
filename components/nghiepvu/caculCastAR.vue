@@ -2011,6 +2011,7 @@ export default {
                     const [day, month, year] = str.split("/").map(Number);
                     return new Date(year, month - 1, day);
                   };
+                  console.log('check')
 
                   // Hàm format Date về dd/mm/yyyy
                   const formatDate = (date) => {
