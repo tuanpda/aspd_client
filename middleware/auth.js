@@ -32,15 +32,21 @@ export default async function ({ store, redirect, req, app, route }) {
         store.commit("setUser", res.user);
 
         const user = store.state.user;
-        console.log(user.role);
+        // console.log(user.role);
 
-        // if (user.role === 9) {
-        //   console.log("check");
-        //   return redirect("/bienlaidientu");
-        // } else {
-        //   console.log("check index");
-        //   return redirect("/");
-        // }
+        if (route.path === "/login") {
+          if (user.role === 9) {
+            return redirect("/bienlaidientu");
+          } else {
+            return redirect("/");
+          }
+        }
+
+        // Nếu user là role = 9 mà đang vào trang "/", redirect sang /bienlaidentu
+        if (user.role === 9 && route.path === "/") {
+          console.log("User role=9 đang vào / → redirect sang /bienlaidientu");
+          return redirect("/bienlaidientu");
+        }
       } catch (error) {
         console.error("Lỗi khi gọi API:", error);
       }

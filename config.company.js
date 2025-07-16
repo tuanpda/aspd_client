@@ -2,7 +2,7 @@ export default {
   companyId: "phudien", 
   companyName: "CÔNG TY TNHH AN SINH XÃ HỘI PHỦ DIỄN",
   companyNameThuong: "Công ty TNHH An sinh xã hội Phủ Diễn",
-  bhxhName: "BẢO HIỂM XÃ HỘI LIÊN HUYỆN DIỄN CHÂU - NGHI LỘC",
+  bhxhName: "BẢO HIỂM XÃ HỘI CƠ SỞ DIỄN CHÂU",
   // apiBaseURL: "http://14.224.148.17:1552", //
   apiBaseURL: "http://ansinhxahoiphudien.vn:1552", //
   // clientURL: "http://14.224.148.17:4042", // 

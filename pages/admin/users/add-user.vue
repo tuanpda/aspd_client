@@ -289,6 +289,22 @@
                   </div>
                 </div>
 
+                <label class="label is-small">Quyền</label>
+                <div class="field">
+                  <div class="control">
+                    <div class="select is-small">
+                      <select
+                        @change="roleChange($event)"
+                      >
+                        <option selected>-- Chọn quyền --</option>
+                        <option value="2">Nhân viên tổng hợp công ty</option>
+                        <option value="4">Điểm thu</option>
+                        <option value="9">Tra cứu biên lai (Cơ quan BHXH)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
                 <div class="field">
                   <label class="label is-small">Địa chỉ</label>
                   <div class="control">
@@ -728,7 +744,7 @@ export default {
 
     const user = this.user;
     this.form.createdBy = user.username;
-    this.avatar = `${company.clientURL}/avatar/default-image.jpg`;
+    this.form.avatar = `${company.clientURL}/avatar/default-image.jpg`;
   },
 
   watch: {
@@ -961,6 +977,15 @@ export default {
 
       if (selectedOption) {
         this.form.res_sent = selectedOption;
+      }
+    },
+
+    roleChange(event) {
+      const selectedOption = event.target.value;
+      // console.log(selectedOption);
+
+      if (selectedOption) {
+        this.form.role = selectedOption;
       }
     },
 
@@ -1333,7 +1358,8 @@ export default {
         // random 8 ký tự
         const randomString = this.generateRandomString(10);
         // activeString
-        let passtranfomer = this.form.username + this.form.cccd + randomString;
+        // let passtranfomer = this.form.username + this.form.cccd + randomString;
+        let passtranfomer = 'Phudien@'
         // console.log(passtranfomer);
         // ngày tạo user
         const current = new Date();
