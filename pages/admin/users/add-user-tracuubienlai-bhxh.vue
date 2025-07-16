@@ -522,6 +522,7 @@
 </template>
 
 <script>
+import company from "@/config.company";
 import { mapState, mapActions } from "vuex";
 import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
@@ -549,7 +550,7 @@ export default {
         email: "",
         password: "",
         donvi: "",
-        avatar: "http://27.73.37.94:4042/avatar/default-image.jpg",
+        avatar: "",
         active: 0,
         createdAt: null,
       },
@@ -575,6 +576,7 @@ export default {
 
     const user = this.user;
     this.form.createdBy = user.username;
+    this.avatar = `${company.clientURL}/avatar/default-image.jpg`;
   },
 
   watch: {

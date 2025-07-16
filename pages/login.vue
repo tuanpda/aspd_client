@@ -142,7 +142,7 @@ export default {
 
         // console.log(comitLogin);
         if (comitLogin.success == true && item.user.role === 9) {
-          this.$router.push("/tracuubienlai");
+          this.$router.push("/bienlaidientu");
         } else {
           this.$router.push("/");
         }

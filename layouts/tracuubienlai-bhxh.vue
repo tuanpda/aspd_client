@@ -14,6 +14,7 @@ export default {
     Footer,
   },
   name: "TracuuBienLaiLayout",
+  
   middleware: "auth",
 
   computed: {

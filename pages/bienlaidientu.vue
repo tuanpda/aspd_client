@@ -132,7 +132,7 @@
                     {{ item.sobienlai }}
                   </td>
                   <td style="text-align: center">
-                    <a @click="inBienLaiDientu(item)">
+                    <a @click="viewBienlai(item)">
                       <span
                         style="color: #ff69b4"
                         class="icon is-small is-left"
@@ -390,6 +390,52 @@ export default {
 
         // ✅ Mở ra tab mới
         window.open(this.pdfSrc, "_blank");
+      }
+    },
+
+    async viewBienlai() {
+      const res = await this.$axios.post("/api/auth/view-bienlai-people", {
+        cccd: this.cccd,
+        masobhxh: this.masobhxh,
+        sobienlai: this.sobienlai,
+      });
+
+      // console.log(res.data);
+      if (res.data.hs) {
+        this.data = res.data.hs;
+        this.viewXacnhan = true;
+
+        // tạo tên file PDF từ sobienlai và hoten
+        const urlNameInvoice = res.data.hs.urlNameInvoice;
+
+        // encode để tránh lỗi Unicode trong URL
+        let pdfUrl = `${company.clientURL}/bienlaidientu/daky/${urlNameInvoice}.pdf`;
+        // console.log(this.pdfSrc);
+
+        if (window.innerWidth < 768) {
+          // Nếu là mobile, mở tab mới
+          window.open(pdfUrl, "_blank");
+        } else {
+          // Nếu không phải mobile, hiển thị trong iframe
+          this.viewXacnhan = true;
+          this.pdfSrc = pdfUrl;
+        }
+      } else {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
+        Toast.fire({
+          icon: "error",
+          title: `Không tìm thấy biên lai khớp thông tin`,
+        });
       }
     },
   },
