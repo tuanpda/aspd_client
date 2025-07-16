@@ -132,7 +132,7 @@
                     {{ item.sobienlai }}
                   </td>
                   <td style="text-align: center">
-                    <a @click="viewBienlai(item)">
+                    <a @click="pdfBienlai(item)">
                       <span
                         style="color: #ff69b4"
                         class="icon is-small is-left"
@@ -238,11 +238,13 @@
 
 <script>
 import Swal from "sweetalert2";
-
+import company from "@/config.company";
 export default {
   layout: "tracuubienlai-bhxh",
 
   data() {
+    const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+
     return {
       dataBienlai: [],
       pdfSrc: "", // đường dẫn file PDF
@@ -252,8 +254,8 @@ export default {
       totalPages: 1,
 
       maloaihinh: "",
-      ngaybienlaitu: "",
-      ngaybienlaiden: "",
+      ngaybienlaitu: today,
+      ngaybienlaiden: today,
       masobhxh: "",
       hoten: "",
     };
@@ -367,77 +369,45 @@ export default {
       // console.log(this.maloaihinh);
     },
 
-    async inBienLaiDientu(data) {
-      const res = await this.$axios.post("/api/auth/view-bienlai-people", {
-        cccd: data.cccd,
-        masobhxh: data.masobhxh,
-        sobienlai: data.sobienlai,
-      });
+    async pdfBienlai(item) {
+      // console.log(item.hosoIdentity);
 
-      // console.log(res.data);
-      if (res.data.hs) {
-        this.data = res.data.hs;
-        this.viewXacnhan = true;
+      try {
+        const res = await this.$axios.get(
+          `/api/kekhai/view-item-bienlai?hosoIdentity=${item.hosoIdentity}`
+        );
 
-        // tạo tên file PDF từ sobienlai và hoten
-        const sobienlai = res.data.hs.sobienlai;
-        const hoten = res.data.hs.hoten;
+        // console.log(res);
 
-        // encode để tránh lỗi Unicode trong URL
-        const fileName = `${sobienlai}_${hoten}`.replace(/\s+/g, "%20");
-        this.pdfSrc = `14.224.148.17:4042/bienlaidientu/${fileName}.pdf`;
-        // console.log(this.pdfSrc);
+        const hs = res.data.hs;
+        if (hs && hs.urlNameInvoice) {
+          const fileName = `${hs.sobienlai}_${encodeURIComponent(
+            hs.hoten
+          )}.pdf`;
+          const pdfUrl = `${company.clientURL}/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
+          // const pdfUrl = `${company.clientURL}/bienlaidientu/bienlai/${hs.urlNameInvoice}.pdf`; // chưa ký
+          // const pdfUrl = `http://localhost:1970/bienlaidientu/${hs.urlNameInvoice}.pdf`;
+          console.log(pdfUrl);
 
-        // ✅ Mở ra tab mới
-        window.open(this.pdfSrc, "_blank");
-      }
-    },
-
-    async viewBienlai() {
-      const res = await this.$axios.post("/api/auth/view-bienlai-people", {
-        cccd: this.cccd,
-        masobhxh: this.masobhxh,
-        sobienlai: this.sobienlai,
-      });
-
-      // console.log(res.data);
-      if (res.data.hs) {
-        this.data = res.data.hs;
-        this.viewXacnhan = true;
-
-        // tạo tên file PDF từ sobienlai và hoten
-        const urlNameInvoice = res.data.hs.urlNameInvoice;
-
-        // encode để tránh lỗi Unicode trong URL
-        let pdfUrl = `${company.clientURL}/bienlaidientu/daky/${urlNameInvoice}.pdf`;
-        // console.log(this.pdfSrc);
-
-        if (window.innerWidth < 768) {
-          // Nếu là mobile, mở tab mới
           window.open(pdfUrl, "_blank");
         } else {
-          // Nếu không phải mobile, hiển thị trong iframe
-          this.viewXacnhan = true;
-          this.pdfSrc = pdfUrl;
+          console.warn("Thiếu thông tin số biên lai hoặc họ tên!");
+          this.$swal.fire({
+            icon: "error",
+            title: "Lỗi",
+            text: "Không lấy được thông tin biên lai.",
+          });
         }
-      } else {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 2000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.addEventListener("mouseenter", Swal.stopTimer);
-            toast.addEventListener("mouseleave", Swal.resumeTimer);
-          },
-        });
-        Toast.fire({
+      } catch (error) {
+        console.error("Lỗi khi gọi API:", error);
+        this.$swal.fire({
           icon: "error",
-          title: `Không tìm thấy biên lai khớp thông tin`,
+          title: "Lỗi",
+          text: "Không thể kết nối đến máy chủ.",
         });
       }
     },
+
   },
 };
 </script>

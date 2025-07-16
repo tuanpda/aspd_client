@@ -2,16 +2,16 @@
   <div>
     <section class="special-layout">
       <nuxt />
-      <Footer />
+      <FooterBienlai />
     </section>
   </div>
 </template>
 
 <script>
-import Footer from "~/components/Footer";
+import FooterBienlai from "~/components/FooterBienlai";
 export default {
   components: {
-    Footer,
+    FooterBienlai,
   },
   name: "TracuuBienLaiLayout",
   
