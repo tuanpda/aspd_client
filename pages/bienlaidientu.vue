@@ -383,6 +383,7 @@ export default {
       // console.log(item.hosoIdentity);
       try {
         if (item && item.urlNameInvoice) {
+          let pdfUrl
           const trangthai = item.active;
           if (trangthai !== 0) {
             pdfUrl = `${company.clientURL}/bienlaidientu/daky/${item.urlNameInvoice}.pdf`;
