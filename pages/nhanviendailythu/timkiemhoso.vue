@@ -1171,7 +1171,7 @@ export default {
                 `/api/kekhai/find-bienlaidientu-huybienlai`,
                 dataFindbl
               );
-              console.log(res_finbl.data.hs);
+              // console.log(res_finbl.data.hs);
               // const dataBienlaidientu = res_finbl.data.hs;
               // console.log(dataBienlaidientu);
               const dataBienlaidientu = res_finbl.data.hs;
