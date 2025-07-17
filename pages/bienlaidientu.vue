@@ -146,7 +146,9 @@
                     <span v-if="item.active == 1" style="color: green">
                       ✔️ Đã duyệt
                     </span>
-                    <span v-else-if="item.active == 0" style="color: red"> ❌ Đã hủy </span>
+                    <span v-else-if="item.active == 0" style="color: red">
+                      ❌ Đã hủy
+                    </span>
                     <span v-else style="color: #ffc107"> 🕒 Chưa duyệt </span>
                   </td>
 
@@ -379,23 +381,14 @@ export default {
 
     async pdfBienlai(item) {
       // console.log(item.hosoIdentity);
-
       try {
-        const res = await this.$axios.get(
-          `/api/kekhai/view-item-bienlai?hosoIdentity=${item.hosoIdentity}`
-        );
-
-        // console.log(res);
-
-        const hs = res.data.hs;
-        if (hs && hs.urlNameInvoice) {
-          const fileName = `${hs.sobienlai}_${encodeURIComponent(
-            hs.hoten
-          )}.pdf`;
-          const pdfUrl = `${company.clientURL}/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
-          // const pdfUrl = `${company.clientURL}/bienlaidientu/bienlai/${hs.urlNameInvoice}.pdf`; // chưa ký
-          // const pdfUrl = `http://localhost:1970/bienlaidientu/${hs.urlNameInvoice}.pdf`;
-          console.log(pdfUrl);
+        if (item && item.urlNameInvoice) {
+          const trangthai = item.active;
+          if (trangthai !== 0) {
+            pdfUrl = `${company.clientURL}/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
+          } else {
+            pdfUrl = `${company.clientURL}/bienlaidientu/bienlaidahuy/${hs.urlNameInvoice}.pdf`;
+          }
 
           window.open(pdfUrl, "_blank");
         } else {
