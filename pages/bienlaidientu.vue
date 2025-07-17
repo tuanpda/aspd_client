@@ -385,9 +385,9 @@ export default {
         if (item && item.urlNameInvoice) {
           const trangthai = item.active;
           if (trangthai !== 0) {
-            pdfUrl = `${company.clientURL}/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
+            pdfUrl = `${company.clientURL}/bienlaidientu/daky/${item.urlNameInvoice}.pdf`;
           } else {
-            pdfUrl = `${company.clientURL}/bienlaidientu/bienlaidahuy/${hs.urlNameInvoice}.pdf`;
+            pdfUrl = `${company.clientURL}/bienlaidientu/bienlaidahuy/${item.urlNameInvoice}.pdf`;
           }
 
           window.open(pdfUrl, "_blank");
