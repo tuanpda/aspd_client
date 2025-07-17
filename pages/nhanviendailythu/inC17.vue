@@ -52,6 +52,15 @@
       </div>
 
       <div style="margin-top: 20px">
+        <div
+          style="margin: 5px; font-weight: 700; color: #dc3545; font-size: 13px"
+        >
+          Tổng số tiền: {{ tongSoTien | formatNumber }} VNĐ
+          <br />
+          Tổng số biên lai đã in:
+          {{ tongSoDong }}
+        </div>
+
         <div class="table_wrapper">
           <table
             class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
@@ -123,9 +132,7 @@
             </tbody>
           </table>
         </div>
-        <div style="margin: 5px; font-weight: 700; color: #dc3545">
-          Tổng tiền: {{ totalSoTien | formatNumber }}
-        </div>
+
         <!-- Phân trang -->
         <div v-if="data_kekhai.length > 0" style="margin-top: 10px">
           <nav
@@ -203,7 +210,7 @@ import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
 const { DateTime } = require("luxon");
 import { saveAs } from "file-saver";
-
+import company from "@/config.company";
 export default {
   data() {
     const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
@@ -260,6 +267,9 @@ export default {
       dulieuHuyPheDuyet: [],
       isLoading: false,
       isExport: false,
+
+      tongSoDong: 0,
+      tongSoTien: 0,
     };
   },
 
@@ -281,12 +291,12 @@ export default {
     },
   },
 
-mounted() {
+  async mounted() {
     const user = this.user;
 
     this.dailyview = user.madaily;
     this.tochuc = user.matochuc;
-    this.cccd = user.cccd
+    this.cccd = user.cccd;
     this.isRoleSent = user.res_sent;
     this.madaily = user.madaily;
     this.diemthu = user.tendaily;
@@ -301,6 +311,7 @@ mounted() {
     this.getDateTime();
     this.getDmDiemthu();
     this.hosoLoitrave();
+    this.getFullDataForExport();
   },
 
   computed: {
@@ -545,90 +556,189 @@ mounted() {
       // console.log(this.trangthaihs);
     },
 
-    xuatC17() {
-      // Bước 1: Chuẩn bị dữ liệu
-      const data = this.data_kekhai.map((item) => {
-        const sotien = item.sotien || 0;
-        const isBHXH = ["IS", "IL"].includes(item.maloaihinh);
-        const isBHYT = ["AR", "BI"].includes(item.maloaihinh);
+    async xuatC17() {
+      this.isLoading = true;
 
-        const ngaybienlai = item.ngaybienlai
-        ? item.ngaybienlai.split(" ")[0] // Lấy phần "23-06-2025"
-        : "";
+      try {
+        const results = await this.getFullDataForExport();
 
-        return {
-          matochuc: item.matochuc,
-          madaily: item.madaily,
-          manhanvienthu: "NV" + item.sohoso.slice(-12),
-          ngaybienlai: ngaybienlai,
-          sobienlai: item.sobienlai,
-          masobhxh: item.masobhxh,
-          sotien_bhxh: isBHXH ? sotien.toLocaleString("vi-VN") : "",
-          sotien_bhyt: isBHYT ? sotien.toLocaleString("vi-VN") : "",
+        if (!results.length) {
+          this.$swal.fire("Không có dữ liệu để xuất!", "", "warning");
+          this.isLoading = false;
+          return;
+        }
+
+        // Tính tổng tiền chỉ với các dòng trangthai === true
+        const totalAmount = results.reduce((sum, item) => {
+          const trangthai = item.status_naptien;
+          const raw = item.sotien
+            ?.toString()
+            .replace(/\./g, "")
+            .replace(/,/g, "");
+          const value = parseFloat(raw);
+          return trangthai && !isNaN(value) ? sum + value : sum;
+        }, 0);
+
+        const data = results.map((item) => {
+          const ngaybienlai = item.ngaybienlai
+            ? item.ngaybienlai.split(" ")[0]
+            : "";
+
+          const trangthai = item.status_naptien;
+          return {
+            sobienlai: item.sobienlai,
+            ngaybienlai,
+            masobhxh: item.masobhxh,
+            hoten: item.hoten,
+            maphuongthucdong: item.maphuongthucdong,
+            sotien: trangthai ? parseFloat(item.sotien) : 0,
+            ghichu: trangthai ? "" : "Đã hủy duyệt",
+          };
+        });
+
+        // 👉 Thêm dòng tổng vào cuối mảng data
+        data.push({
+          sobienlai: "Tổng cộng", // cột A
+          ngaybienlai: "",
+          masobhxh: "",
+          hoten: "",
+          maphuongthucdong: "",
+          sotien: totalAmount, // cột F
           ghichu: "",
-        };
+        });
+
+        const customHeader = [
+          "Số biên lai",
+          "Ngày biên lai",
+          "Mã số BHXH người tham gia",
+          "Họ tên người tham gia",
+          "Số tháng đóng",
+          "Số tiền thu",
+          "Ghi chú",
+        ];
+
+        const worksheet = XLSX.utils.json_to_sheet(data, {
+          header: [
+            "sobienlai",
+            "ngaybienlai",
+            "masobhxh",
+            "hoten",
+            "maphuongthucdong",
+            "sotien",
+            "ghichu",
+          ],
+          skipHeader: true,
+          origin: "A2", // Ghi dữ liệu từ dòng 2
+        });
+
+        // 👉 Merge từ A + số dòng đến E + số dòng (dòng tổng cộng)
+        const totalRow = data.length + 1; // vì dữ liệu bắt đầu từ dòng 2 (A2), header ở dòng 1
+        worksheet["!merges"] = [
+          {
+            s: { r: totalRow - 1, c: 0 }, // start: dòng, cột (A)
+            e: { r: totalRow - 1, c: 4 }, // end:   dòng, cột (E)
+          },
+        ];
+
+        // Ghi tiêu đề vào dòng 1
+        XLSX.utils.sheet_add_aoa(worksheet, [customHeader], { origin: "A1" });
+
+        // Auto-fit column width
+        const columnWidths = customHeader.map((h, colIdx) => {
+          // Tìm độ dài lớn nhất của header và các giá trị trong từng cột
+          const maxLength = Math.max(
+            h.length,
+            ...data.map((row) => {
+              const value = row[Object.keys(row)[colIdx]];
+              return value ? value.toString().length : 0;
+            })
+          );
+          return { wch: maxLength + 2 }; // thêm padding
+        });
+        worksheet["!cols"] = columnWidths;
+
+        // 🔥 Format số tiền (cột F) theo dạng có dấu phẩy (ngăn cách hàng nghìn)
+        const range = XLSX.utils.decode_range(worksheet["!ref"]);
+        for (let row = 2; row <= range.e.r + 1; row++) {
+          const cellAddress = `F${row}`;
+          if (!worksheet[cellAddress]) continue;
+          worksheet[cellAddress].t = "n"; // đảm bảo là kiểu number
+          worksheet[cellAddress].z = "#,##0"; // format có dấu ngăn cách hàng nghìn
+        }
+
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "C17");
+
+        const excelBuffer = XLSX.write(workbook, {
+          bookType: "xlsx",
+          type: "array",
+        });
+
+        const fileName = `C17_${new Date().getTime()}.xlsx`;
+        const dataBlob = new Blob([excelBuffer], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+
+        saveAs(dataBlob, fileName);
+      } catch (err) {
+        console.error("❌ Lỗi export:", err);
+        this.$swal.fire("Lỗi khi xuất file!", "", "error");
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    async getFullDataForExport() {
+      const baseURL =
+        this.user.role === 2
+          ? "/api/kekhai/kykekhai-search-hoso"
+          : "/api/kekhai/kykekhai-search-hoso-diemthu";
+
+      const query = {
+        trangthaihs: this.trangthaihs,
+        dotkekhai: this.dotkekhai,
+        ngaykekhai: this.ngaykekhaitu,
+        ngaykekhaiden: this.ngaykekhaiden,
+        sohoso: this.sohoso,
+        masobhxh: this.masobhxh,
+        hoten: this.hoten,
+        maloaihinh: this.maloaihinh,
+        page: 1,
+        limit: 99999,
+      };
+
+      if (this.user.role !== 2) {
+        query.cccd = this.cccd;
+        query.madaily = this.madaily;
+      }
+
+      const res = await this.$axios.get(baseURL, { params: query });
+      const results = res.data.results || [];
+
+      // ✅ Tính tổng dòng và tiền từ những dòng đã nạp
+      // ✅ Tổng số biên lai: tính hết
+      const tongSoDong = results.length;
+
+      // ✅ Tổng tiền: chỉ cộng khi status_naptien === 1
+      let tongSoTien = 0;
+
+      results.forEach((item) => {
+        if (item.status_naptien === 1 || item.status_naptien === true) {
+          const raw = item.sotien
+            ?.toString()
+            .replace(/\./g, "")
+            .replace(/,/g, "");
+          const value = parseFloat(raw);
+          if (!isNaN(value)) tongSoTien += value;
+        }
       });
 
-      // Bước 2: Tiêu đề cột
-      const customHeader = [
-        "Mã Tổ chức dịch vụ",
-        "Mã điểm thu",
-        "Mã nhân viên thu",
-        "Ngày biên lai",
-        "Số biên lai",
-        "Mã số BHXH người tham gia",
-        "Tiền thu BHXH TN",
-        "Tiền thu BHYT HGĐ",
-        "Ghi chú",
-      ];
+      // ✅ Gán vào component để hiển thị, KHÔNG ảnh hưởng return
+      this.tongSoDong = tongSoDong;
+      this.tongSoTien = tongSoTien;
 
-      // Bước 3: Tạo file Excel
-      const worksheet = XLSX.utils.json_to_sheet(data, {
-        header: [
-          "matochuc",
-          "madaily",
-          "manhanvienthu",
-          "ngaybienlai",
-          "sobienlai",
-          "masobhxh",
-          "sotien_bhxh",
-          "sotien_bhyt",
-          "ghichu",
-        ],
-        skipHeader: true,
-      });
-
-      const formatCurrency = (val) =>
-        val && !isNaN(val) ? Number(val).toLocaleString("vi-VN") : "";
-
-      const total_bhxh = data.reduce(
-        (sum, item) =>
-          sum + (parseInt(item.sotien_bhxh.replace(/,/g, "")) || 0),
-        0
-      );
-      const total_bhyt = data.reduce(
-        (sum, item) =>
-          sum + (parseInt(item.sotien_bhyt.replace(/,/g, "")) || 0),
-        0
-      );
-
-      // Bước 4: Ghi tiêu đề tùy chỉnh vào hàng đầu tiên
-      XLSX.utils.sheet_add_aoa(worksheet, [customHeader], { origin: "A1" });
-
-      // Bước 5: Tạo file Excel
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "C17");
-
-      const excelBuffer = XLSX.write(workbook, {
-        bookType: "xlsx",
-        type: "array",
-      });
-
-      const fileName = `C17_${new Date().getTime()}.xlsx`;
-      const dataBlob = new Blob([excelBuffer], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      });
-      saveAs(dataBlob, fileName);
+      // ✅ Giữ nguyên return để export Excel dùng
+      return results;
     },
 
     async filterData(page) {
@@ -775,9 +885,9 @@ mounted() {
           const fileName = `${hs.sobienlai}_${encodeURIComponent(
             hs.hoten
           )}.pdf`;
-          const pdfUrl = `http://14.224.148.17:4042/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
+          const pdfUrl = `${company.clientURL}/bienlaidientu/${hs.urlNameInvoice}.pdf`;
           // const pdfUrl = `http://localhost:1970/bienlaidientu/${hs.urlNameInvoice}.pdf`;
-          console.log(pdfUrl);
+          // console.log(pdfUrl);
 
           window.open(pdfUrl, "_blank");
         } else {

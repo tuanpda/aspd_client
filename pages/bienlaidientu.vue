@@ -143,10 +143,11 @@
                     </a>
                   </td>
                   <td style="text-align: center; font-weight: 500">
-                    <span v-if="item.active === true" style="color: green">
+                    <span v-if="item.active == 1" style="color: green">
                       ✔️ Đã duyệt
                     </span>
-                    <span v-else style="color: red"> ❌ Đã hủy </span>
+                    <span v-else-if="item.active == 0" style="color: red"> ❌ Đã hủy </span>
+                    <span v-else style="color: #ffc107"> 🕒 Chưa duyệt </span>
                   </td>
 
                   <td style="text-align: center; font-weight: 500">
