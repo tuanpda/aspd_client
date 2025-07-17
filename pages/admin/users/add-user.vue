@@ -1398,8 +1398,8 @@ export default {
         data.append("updatedAt", this.form.updatedAt);
         data.append("updatedBy", this.form.updatedBy);
         data.append("res_sent", this.form.res_sent);
-        data.append("macqbhxh", "04013");
-        data.append("tencqbhxh", "Bảo hiểm xã hội thị xã Kỳ Anh");
+        data.append("macqbhxh", "");
+        data.append("tencqbhxh", "");
 
         try {
           const response = await this.$store.dispatch("createUser", data);

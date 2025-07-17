@@ -106,6 +106,7 @@
                   <td style="text-align: center">_ID</td>
                   <td style="text-align: center">Số biên lai</td>
                   <td style="text-align: center">Xem</td>
+                  <td style="text-align: center">Trạng thái</td>
                   <td style="text-align: center">Ngày biên lai</td>
                   <td style="text-align: center">Họ tên</td>
                   <td style="text-align: center">Mã số BHXH</td>
@@ -140,6 +141,12 @@
                         <i class="fas fa-print"></i>
                       </span>
                     </a>
+                  </td>
+                  <td style="text-align: center; font-weight: 500">
+                    <span v-if="item.active === true" style="color: green">
+                      ✔️ Đã duyệt
+                    </span>
+                    <span v-else style="color: red"> ❌ Đã hủy </span>
                   </td>
 
                   <td style="text-align: center; font-weight: 500">
@@ -407,7 +414,6 @@ export default {
         });
       }
     },
-
   },
 };
 </script>

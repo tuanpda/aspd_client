@@ -60,15 +60,15 @@ export default {
     // baseURL: "/",
     // baseURL: "http://14.224.148.17:1552", // MÁY CHỦ PHỦ DIỄN
     // baseURL: "http://14.224.148.17:4019", // MÁY CHỦ HƯNG NGUYÊN
-    baseURL: "http://localhost:1552",
-    // baseURL: companyConfig.apiBaseURL,
+    // baseURL: "http://localhost:1552",
+    baseURL: companyConfig.apiBaseURL,
     credentials: true,
   },
 
   server: {
     port: companyConfig.port_client,
-    // host: companyConfig.host,
-    host: "localhost",
+    host: companyConfig.host,
+    // host: "localhost",
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
