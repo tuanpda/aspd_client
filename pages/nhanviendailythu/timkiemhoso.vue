@@ -981,6 +981,48 @@ export default {
       }
     },
 
+    async inLaiBienLaiDienTu(dataBienlaidientu) {
+      // NẾU HỦY THÀNH CÔNG THÌ HỦY BIÊN LAI VÀ GHI VÀO DỮ LIỆU
+      // gọi hàm tạo lại hóa đơn
+      const dateStr = dataBienlaidientu.ngaybienlai;
+      const year = dateStr.split(" ")[0].split("-")[2];
+      // console.log(dateStr, year);
+
+      const dataPost = {
+        hosoIdentity: dataBienlaidientu.hosoIdentity,
+        maSoBhxh: dataBienlaidientu.masobhxh,
+        hoTen: dataBienlaidientu.hoten,
+        soCccd: dataBienlaidientu.cccd,
+        ngaySinh: dataBienlaidientu.ngaysinh,
+        gioiTinh: dataBienlaidientu.gioitinh,
+        soDienThoai: dataBienlaidientu.sodienthoai,
+        nguoithutien: dataBienlaidientu.nguoithutien,
+        maloaihinh: dataBienlaidientu.loaihinh,
+        soTien: dataBienlaidientu.sotien,
+        soThang: dataBienlaidientu.sothang,
+        tuNgay: dataBienlaidientu.tungay,
+        denNgay: dataBienlaidientu.denngay,
+        tuThang: dataBienlaidientu.tuthang,
+        denThang: dataBienlaidientu.denthang,
+        maDaiLy: dataBienlaidientu.madaily,
+        tenDaiLy: dataBienlaidientu.tendaily,
+        sobienlai: dataBienlaidientu.sobienlai,
+        ngaybienlai: dataBienlaidientu.ngaybienlai,
+        tothon: dataBienlaidientu.tothon,
+        tenquanhuyen: dataBienlaidientu.tenquanhuyen,
+        tentinh: dataBienlaidientu.tentinh,
+        currentYear: year,
+        urlNameInvoice: dataBienlaidientu.urlNameInvoice,
+        cccd_nguoithutien: dataBienlaidientu.cccd_nguoithutien,
+        lydohuy: dataBienlaidientu.lydohuy,
+        ngayhuybienlai: dataBienlaidientu.ngayhuybienlai,
+        nguoihuybienlai: dataBienlaidientu.nguoihuybienlai,
+      };
+      // console.log(dataPost);
+
+      await this.inBienLaiDientu(dataPost);
+    },
+
     // HÀM XÁC NHẬN HỒ SƠ KE KHAI CHO TRƯỜNG STATUS_NAPTIEN==1
     async xacNhanBienLai() {
       if (!this.selectedItems || this.selectedItems.length === 0) {
@@ -1092,19 +1134,6 @@ export default {
         this.isLoading = true;
 
         for (const item of this.selectedItems) {
-          const dataFindbl = {
-            hosoIdentity: item.hosoIdentity,
-          };
-          const res_finbl = await this.$axios.post(
-            `/api/kekhai/find-bienlaidientu-huybienlai`,
-            dataFindbl
-          );
-
-          const dataBienlaidientu = res_finbl.data.hs;
-
-          const dateStr = dataBienlaidientu.ngaybienlai;
-          const year = dateStr.split(" ")[0].split("-")[2];
-
           const nowInVietnam = DateTime.now().setZone("Asia/Ho_Chi_Minh");
           const formattedDate = nowInVietnam.toFormat("dd-MM-yyyy HH:mm:ss");
           try {
@@ -1117,6 +1146,10 @@ export default {
                 ghichu: lyDo,
                 nguoipheduyet: this.user.name,
                 ngaypheduyet: formattedDate,
+                hosoIdentity: item.hosoIdentity,
+                lydohuy: lyDo,
+                ngayhuybienlai: formattedDate,
+                nguoihuybienlai: this.user.name,
               }
             );
 
@@ -1130,37 +1163,21 @@ export default {
                 message: res.data.message,
               });
 
-              // NẾU HỦY THÀNH CÔNG THÌ HỦY BIÊN LAI VÀ GHI VÀO DỮ LIỆU
-              // gọi hàm tạo lại hóa đơn
-              const dataPost = {
-                hosoIdentity: dataBienlaidientu.hosoIdentity,
-                maSoBhxh: dataBienlaidientu.masobhxh,
-                hoTen: dataBienlaidientu.hoten,
-                soCccd: dataBienlaidientu.cccd,
-                ngaySinh: dataBienlaidientu.ngaysinh,
-                gioiTinh: dataBienlaidientu.gioitinh,
-                soDienThoai: dataBienlaidientu.sodienthoai,
-                nguoithutien: dataBienlaidientu.nguoithutien,
-                maloaihinh: dataBienlaidientu.loaihinh,
-                soTien: dataBienlaidientu.sotien,
-                soThang: dataBienlaidientu.sothang,
-                tuNgay: dataBienlaidientu.tungay,
-                denNgay: dataBienlaidientu.denngay,
-                tuThang: dataBienlaidientu.tuthang,
-                denThang: dataBienlaidientu.denthang,
-                maDaiLy: dataBienlaidientu.madaily,
-                tenDaiLy: dataBienlaidientu.tendaily,
-                sobienlai: dataBienlaidientu.sobienlai,
-                ngaybienlai: dataBienlaidientu.ngaybienlai,
-                tothon: dataBienlaidientu.tothon,
-                tenquanhuyen: dataBienlaidientu.tenquanhuyen,
-                tentinh: dataBienlaidientu.tentinh,
-                currentYear: year,
-                urlNameInvoice: dataBienlaidientu.urlNameInvoice,
-                cccd_nguoithutien: dataBienlaidientu.cccd_nguoithutien,
+              // gọi lại tìm biên lai
+              const dataFindbl = {
+                hosoIdentity: item.hosoIdentity,
               };
+              const res_finbl = await this.$axios.post(
+                `/api/kekhai/find-bienlaidientu-huybienlai`,
+                dataFindbl
+              );
+              console.log(res_finbl.data.hs);
+              // const dataBienlaidientu = res_finbl.data.hs;
+              // console.log(dataBienlaidientu);
+              const dataBienlaidientu = res_finbl.data.hs;
 
-              await this.inBienLaiDientu(dataPost);
+              // gọi hàm in lại biên lai
+              await this.inLaiBienLaiDienTu(dataBienlaidientu);
             } else {
               ketquaTongHop.push({
                 _id: res.data.data._id,
@@ -1176,7 +1193,6 @@ export default {
               _id: item._id,
               hoten: item.hoten,
               masobhxh: item.masobhxh,
-              ghichu: res.data.data.ghichu,
               status: "❌ Lỗi hệ thống",
               error: error.response?.data?.message || error.message,
             });
@@ -1286,6 +1302,7 @@ export default {
               {
                 _id: data._id,
                 hosoIdentity: data.hosoIdentity,
+
               }
             );
 
@@ -1350,13 +1367,13 @@ export default {
           `/api/kekhai/view-item-bienlai?hosoIdentity=${item.hosoIdentity}`
         );
 
-        // console.log(res);
-
         const hs = res.data.hs;
         let pdfUrl = "";
         if (hs && hs.urlNameInvoice) {
           const trangthai = hs.active;
-          if (trangthai == true) {
+
+          // pdfUrl = `${company.clientURL}/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
+          if (trangthai !== 0) {
             pdfUrl = `${company.clientURL}/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
           } else {
             pdfUrl = `${company.clientURL}/bienlaidientu/bienlaidahuy/${hs.urlNameInvoice}.pdf`;
@@ -1425,6 +1442,27 @@ export default {
       doc.addImage(huyHoadon, "PNG", x, y, imageWidthHUY, imageHeightHUY);
       const img_trangthai = new Image();
       img_trangthai.src = huyHoadon; // hoặc base64 string
+
+      // lấy lại tâm trang
+      const centerXLydoHuy = pageWidth / 2;       // Tâm ngang trang
+      doc.addFont("OpenSans-Bold-normal.ttf", "OpenSans-Bold", "bold");
+      doc.setFont("OpenSans-Bold", "bold");
+      doc.setFontSize(11);
+      doc.setTextColor("#ff0000");
+      doc.text(`Lý do hủy biên lai: ${data.lydohuy}`, centerXLydoHuy, y + 75, {
+        align: "center",
+        fontWeight: "bold",
+      });
+      doc.text(`Người hủy: ${data.nguoihuybienlai}`, centerXLydoHuy, y + 80, {
+        align: "center",
+        fontWeight: "bold",
+      });
+      doc.text(`Ngày hủy: ${data.ngayhuybienlai}`, centerXLydoHuy, y + 85, {
+        align: "center",
+        fontWeight: "bold",
+      });
+
+
 
       // img.onload = () => {
       //   console.log("✅ Ảnh đã load xong");
