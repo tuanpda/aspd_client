@@ -60,8 +60,9 @@ export default {
       }
 
       const ctx = this.$refs.chartTongTien.getContext("2d");
+      console.log(this.chartData);
 
-      const labels = this.chartData.map((item) => item.madaily);
+      const labels = this.chartData.map((item) => item.name);
       const data = this.chartData.map((item) => item.tongtien);
 
       const backgroundColors = [
@@ -96,7 +97,8 @@ export default {
             tooltip: {
               callbacks: {
                 label: function (context) {
-                  return `${context.formattedValue.toLocaleString()} VNĐ`;
+                  const value = context.parsed.y;
+                  return `Tổng tiền (VNĐ): ${value.toLocaleString("vi-VN")} đ`;
                 },
               },
             },
@@ -105,7 +107,7 @@ export default {
             y: {
               beginAtZero: true,
               ticks: {
-                callback: (value) => value.toLocaleString() + " đ",
+                callback: (value) => value.toLocaleString("vi-VN") + " đ",
               },
             },
           },
