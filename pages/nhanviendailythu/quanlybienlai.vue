@@ -142,7 +142,7 @@
                   <template v-else-if="item.active === 0">
                     <span style="font-weight: 700; color: #dc3545">Đã huỷ</span>
                   </template>
-                  <template v-else="item.active === 0">
+                  <template v-else>
                     <span style="font-weight: 700; color: #ffc107">Chưa duyệt</span>
                   </template>
                 </td>
