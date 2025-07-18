@@ -186,6 +186,8 @@
                 <td rowspan="2" style="text-align: center">Từ tháng</td>
                 <td rowspan="2" style="text-align: center">Đối tượng</td>
                 <td rowspan="2" style="text-align: center">Ghi chú</td>
+                                <td rowspan="2" style="text-align: center">Lý do hủy hồ sơ</td>
+                
               </tr>
             </thead>
             <tbody>
@@ -276,6 +278,7 @@
                 <td style="text-align: center">{{ item.tuthang }}</td>
                 <td style="text-align: center">{{ item.tendoituong }}</td>
                 <td style="text-align: center">{{ item.ghichu }}</td>
+                <td style="text-align: center">{{ item.lydohuy }}</td>
               </tr>
             </tbody>
           </table>
@@ -1143,7 +1146,6 @@ export default {
                 _id: item._id,
                 hoten: item.hoten,
                 masobhxh: item.masobhxh,
-                ghichu: lyDo,
                 nguoipheduyet: this.user.name,
                 ngaypheduyet: formattedDate,
                 hosoIdentity: item.hosoIdentity,
