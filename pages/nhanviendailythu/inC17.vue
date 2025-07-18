@@ -878,16 +878,17 @@ export default {
           `/api/kekhai/view-item-bienlai?hosoIdentity=${item.hosoIdentity}`
         );
 
-        // console.log(res);
-
         const hs = res.data.hs;
+        let pdfUrl = "";
         if (hs && hs.urlNameInvoice) {
-          const fileName = `${hs.sobienlai}_${encodeURIComponent(
-            hs.hoten
-          )}.pdf`;
-          const pdfUrl = `${company.clientURL}/bienlaidientu/${hs.urlNameInvoice}.pdf`;
-          // const pdfUrl = `http://localhost:1970/bienlaidientu/${hs.urlNameInvoice}.pdf`;
-          // console.log(pdfUrl);
+          const trangthai = hs.active;
+
+          // pdfUrl = `${company.clientURL}/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
+          if (trangthai !== 0) {
+            pdfUrl = `${company.clientURL}/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
+          } else {
+            pdfUrl = `${company.clientURL}/bienlaidientu/bienlaidahuy/${hs.urlNameInvoice}.pdf`;
+          }
 
           window.open(pdfUrl, "_blank");
         } else {
