@@ -3209,7 +3209,7 @@ export default {
         // TÍNH TIỀN CẦN NẠP
         tienCanNap = (castMucdong - tongTienHoTro) * tongThang
         console.log("Tiền nhà nước hỗ trợ (Mức mới): ", tienTrungUongHoTro);
-        console.log("Tiền địa phương hỗ trợ: ", tienDiaPhuongHoTro);
+        console.log("Tiền địa phương hỗ trợ: ", 0);
         console.log("Tổng cả 2: ", tongTienHoTro);
         console.log("Tổng tiền cần nạp: ", tienCanNap);
         console.log("Công thức tính là: ** (Mức tiền đóng x tỷ lệ đóng (22%) - NSNN hỗ trợ CŨ) x số tháng cần nạp")
