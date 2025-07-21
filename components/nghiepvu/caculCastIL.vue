@@ -3012,6 +3012,7 @@ export default {
     // },
 
     tinhTienPhaiDong(madoituong, muctiendong, maphuongthucdong, tuthang) {
+      console.log(madoituong, muctiendong, maphuongthucdong, tuthang)
       // === BƯỚC 1: TÍNH TỔNG SỐ THÁNG TỪ tuthang đến denthang ===
       const denthang = this.tinhDenThang(tuthang, maphuongthucdong);
       const [startMonth, startYear] = tuthang.split("/").map(Number);
@@ -3400,6 +3401,7 @@ export default {
         this.items[index].NVS = false;
       }
     },
+
     // phương án
     async phuonganChange(e, index) {
       const maphuongan = e.target.value;
