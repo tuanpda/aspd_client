@@ -893,7 +893,7 @@ export default {
           // tạm thời bỏ điểm thu ra code ngày 07/5/2025. code sửa ngày 18/06/2025 bỏ kỳ kê khai ra khỏi thành phần tìm kiếm. thay vào đó là
           // trạng thái hồ sơ. đẩy query tên trangthaihs (đại diện thay cho trangthai và status_naptien)
           const res = await this.$axios.get(
-            `/api/kekhai/kykekhai-search-hoso?trangthaihs=${this.trangthaihs}&dotkekhai=${this.dotkekhai}&ngaykekhai=${this.ngaykekhaitu}&ngaykekhaiden=${this.ngaykekhaiden}&sohoso=${this.sohoso}&masobhxh=${this.masobhxh}&hoten=${this.hoten}&maloaihinh=${this.maloaihinh}&page=${page}`
+            `/api/kekhai/kykekhai-search-hoso-pheduyeths?trangthaihs=${this.trangthaihs}&dotkekhai=${this.dotkekhai}&ngaykekhai=${this.ngaykekhaitu}&ngaykekhaiden=${this.ngaykekhaiden}&sohoso=${this.sohoso}&masobhxh=${this.masobhxh}&hoten=${this.hoten}&maloaihinh=${this.maloaihinh}&page=${page}`
           );
           // console.log(res);
           if (res.data.results.length > 0) {
@@ -939,7 +939,7 @@ export default {
       } else {
         try {
           const res = await this.$axios.get(
-            `/api/kekhai/kykekhai-search-hoso-diemthu?cccd=${this.cccd}&trangthaihs=${this.trangthaihs}&dotkekhai=${this.dotkekhai}&ngaykekhai=${this.ngaykekhaitu}&ngaykekhaiden=${this.ngaykekhaiden}&sohoso=${this.sohoso}&masobhxh=${this.masobhxh}&hoten=${this.hoten}&madaily=${this.madaily}&maloaihinh=${this.maloaihinh}&page=${page}`
+            `/api/kekhai/kykekhai-search-hoso-diemthu-pheduyeths?cccd=${this.cccd}&trangthaihs=${this.trangthaihs}&dotkekhai=${this.dotkekhai}&ngaykekhai=${this.ngaykekhaitu}&ngaykekhaiden=${this.ngaykekhaiden}&sohoso=${this.sohoso}&masobhxh=${this.masobhxh}&hoten=${this.hoten}&madaily=${this.madaily}&maloaihinh=${this.maloaihinh}&page=${page}`
           );
           if (res.data.results.length > 0) {
             this.data_kekhai = res.data.results;
@@ -1146,10 +1146,10 @@ export default {
                 _id: item._id,
                 hoten: item.hoten,
                 masobhxh: item.masobhxh,
+                lydohuy: lyDo,
                 nguoipheduyet: this.user.name,
                 ngaypheduyet: formattedDate,
                 hosoIdentity: item.hosoIdentity,
-                lydohuy: lyDo,
                 ngayhuybienlai: formattedDate,
                 nguoihuybienlai: this.user.name,
               }
@@ -1160,7 +1160,7 @@ export default {
                 _id: res.data.data._id,
                 hoten: res.data.data.hoten,
                 masobhxh: res.data.data.masobhxh,
-                ghichu: res.data.data.ghichu,
+                lydohuy: lyDo,
                 status: "✅ Thành công",
                 message: res.data.message,
               });
@@ -1185,7 +1185,7 @@ export default {
                 _id: res.data.data._id,
                 hoten: res.data.data.hoten,
                 masobhxh: res.data.data.masobhxh,
-                ghichu: res.data.data.ghichu,
+                lydohuy: lydohuy,
                 status: "❌ Thất bại",
                 error: res.data.message,
               });

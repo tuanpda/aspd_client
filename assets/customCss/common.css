@@ -89,33 +89,25 @@ datalist option:not(:checked) {
   width: 100%;
   height: 100%;
   background-color: rgba(255, 255, 255, 0.5);
-  /* Mờ nền */
   z-index: 9999;
-  /* Đặt vị trí cao hơn */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* CSS của biểu tượng loading */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .loading-spinner {
   border: 4px solid rgba(0, 0, 0, 0.1);
-  /* Màu đường viền của spinner */
   border-top: 4px solid red;
-  /* Màu của đường viền phía trên */
   border-radius: 50%;
-  /* Hình dạng của spinner */
   width: 30px;
-  /* Chiều rộng của spinner */
   height: 30px;
-  /* Chiều cao của spinner */
   animation: spin 1s linear infinite;
-  /* Animation cho spinner */
-  position: absolute;
-  /* Đặt vị trí tuyệt đối */
-  top: 50%;
-  /* Đặt vị trí ở giữa theo chiều dọc */
-  left: 50%;
-  /* Đặt vị trí ở giữa theo chiều ngang */
-  transform: translate(-50%, -50%);
-  /* Dịch chuyển spinner về trung tâm */
 }
 
 @keyframes spin {
@@ -123,12 +115,16 @@ datalist option:not(:checked) {
     transform: rotate(0deg);
   }
 
-  /* Góc quay ban đầu */
   100% {
     transform: rotate(360deg);
   }
+}
 
-  /* Góc quay cuối cùng */
+.loading-text {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #333;
+  font-style: italic;
 }
 
 #preview {
