@@ -3070,26 +3070,24 @@ export default {
       );
       const tyleHotroTWMucCu = doituongCu ? doituongCu.tylehotro : 0;
 
-
       // NGÂN SÁCH NHÀ NƯỚC HỖ TRỢ
       console.log(
         "Ngân sách nhà nước hỗ trợ cho",
-        madoituong, 
+        madoituong,
         "theo mức mới là :",
         tyleHotroTW
       );
       console.log(
         "Ngân sách nhà nước hỗ trợ cho",
-        madoituong, 
+        madoituong,
         "theo mức cũ là :",
         tyleHotroTWMucCu
       );
 
-
       // IL NGHỆ AN HỖ TRỢ TOÀN BỘ 50% CHO TẤT CẢ CÁC ĐỐI TƯỢNG
       // === Xác định tỷ lệ ngân sách địa phương theo mã đối tượng ===
       const tienDiaPhuongHoTro =
-      castSubTwhotro * (this.tylediaphuonghotroIl / 100); // lấy tỷ lệ phần trăm trong bảng danh mục dm_tylediaphuonghtIL
+        castSubTwhotro * (this.tylediaphuonghotroIl / 100); // lấy tỷ lệ phần trăm trong bảng danh mục dm_tylediaphuonghtIL
       console.log(
         "Ngân sách địa phương hỗ trợ cho",
         madoituong,
@@ -3106,34 +3104,44 @@ export default {
       let tienCanNap = 0; // tổng tiền cần phải nạp
 
       if (thangTruocMoc > 0) {
-        console.log('TỔNG MỨC HỖ TRỢ CHỈ CÓ NSNN MỨC CŨ CHO TOÀN BỘ QUÁ TRÌNH ĐÓNG')
+        console.log(
+          "TỔNG MỨC HỖ TRỢ CHỈ CÓ NSNN MỨC CŨ CHO TOÀN BỘ QUÁ TRÌNH ĐÓNG"
+        );
         // Tiền trung ương hỗ trợ (danh mục hỗ trợ cũ)
         const tienTrungUongHoTro = castSubTwhotro * (tyleHotroTWMucCu / 100);
-        const tongTienHoTro = tienTrungUongHoTro + tienDiaPhuongHoTro
+        const tongTienHoTro = tienTrungUongHoTro + tienDiaPhuongHoTro;
 
-        console.log("Tổng hỗ trợ (NSNN , mức cũ) + NSDP cho IL (50%)", tongTienHoTro);
+        console.log(
+          "Tổng hỗ trợ (NSNN , mức cũ) + NSDP cho IL (50%)",
+          tongTienHoTro
+        );
 
         // TÍNH TIỀN CẦN NẠP
-        tienCanNap = (castMucdong - tongTienHoTro) * tongThang
+        tienCanNap = (castMucdong - tongTienHoTro) * tongThang;
         console.log("Trung ương hỗ trợ: ", tienTrungUongHoTro);
         console.log("Địa phương hỗ trợ: ", tienDiaPhuongHoTro);
         console.log("Tổng hỗ trợ: ", tongTienHoTro);
         console.log("Tổng tiền cần nạp: ", tienCanNap);
-        console.log("Công thức tính là: ** (Mức tiền đóng x tỷ lệ đóng (22%) - NSNN hỗ trợ CŨ) x số tháng cần nạp")
-
-      }else{
-        console.log('TỔNG MỨC HỖ TRỢ GỒM NSNN MỨC MỚI VÀ NSĐP TOÀN BỘ QUÁ TRÌNH ĐÓNG')
+        console.log(
+          "Công thức tính là: ** (Mức tiền đóng x tỷ lệ đóng (22%) - NSNN hỗ trợ CŨ) x số tháng cần nạp"
+        );
+      } else {
+        console.log(
+          "TỔNG MỨC HỖ TRỢ GỒM NSNN MỨC MỚI VÀ NSĐP TOÀN BỘ QUÁ TRÌNH ĐÓNG"
+        );
         // Tiền trung ương hỗ trợ (danh mục hỗ trợ MỚI)
         const tienTrungUongHoTro = castSubTwhotro * (tyleHotroTW / 100);
-        const tongTienHoTro = tienTrungUongHoTro + tienDiaPhuongHoTro
+        const tongTienHoTro = tienTrungUongHoTro + tienDiaPhuongHoTro;
 
         console.log("Tiền nhà nước hỗ trợ (Mức mới): ", tienTrungUongHoTro);
         console.log("Tiền địa phương hỗ trợ: ", tienDiaPhuongHoTro);
         console.log("Tổng cả 2: ", tongTienHoTro);
 
-        tienCanNap = (castMucdong - tongTienHoTro) * tongThang
+        tienCanNap = (castMucdong - tongTienHoTro) * tongThang;
         console.log("Tổng tiền cần nạp: ", tienCanNap);
-        console.log("Công thức tính là: ** (Mức tiền đóng x tỷ lệ đóng (22%) -  NSNN hỗ trợ MỚI - hỗ trợ địa phương) x cho số tháng cần nạp")
+        console.log(
+          "Công thức tính là: ** (Mức tiền đóng x tỷ lệ đóng (22%) -  NSNN hỗ trợ MỚI - hỗ trợ địa phương) x cho số tháng cần nạp"
+        );
       }
 
       return Math.round(tienCanNap);
@@ -3357,8 +3365,6 @@ export default {
       // console.log(tendoituong);
     },
 
-
-    // áp dụng cho đóng bù
     async phuongthucdChange(e, index) {
       const maphuongthucdong = e.target.value;
       const tenphuongthucdong = e.target.options[e.target.selectedIndex].text;
@@ -3379,7 +3385,8 @@ export default {
         madoituong,
         muctiendong,
         maphuongthucdong,
-        tuthang
+        tuthang,
+        index
       );
 
       if (maphuongthucdong == "D1LNCT") {
@@ -3393,7 +3400,6 @@ export default {
         this.items[index].NVS = false;
       }
     },
-
     // phương án
     async phuonganChange(e, index) {
       const maphuongan = e.target.value;
