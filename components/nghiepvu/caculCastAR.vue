@@ -1870,7 +1870,7 @@ export default {
           this.items[index].maxaphuong = data.xa.maxa;
           this.items[index].tenxaphuong = data.xa.tenxa;
           this.items[index].tenxaphuong = data.xa.tenxa;
-          this.items[index].mabenhvien = `42${data.benhvien.mabenhvien}`;
+          this.items[index].mabenhvien = `40${data.benhvien.mabenhvien}`;
           this.items[index].tenbenhvien = data.benhvien.tenbenhvien;
           this.items[index].tothon = data.diachidangsinhsong;
 
