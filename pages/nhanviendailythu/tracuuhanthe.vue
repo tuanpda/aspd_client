@@ -90,7 +90,7 @@
               <td style="text-align: center">{{ item.ngaysinh }}</td>
               <td style="text-align: center">{{ item.sodienthoai }}</td>
               <td style="text-align: center">
-                {{ item.gioitinh == 1 ? "Nữ" : "Nam" }}
+                {{ item.gioitinh === "1" ? "Nam" : "Nữ" }}
               </td>
               <td style="text-align: center">
                 {{ loaihinh === "bhyt" ? item.hanthecu : item.tuthang }}
