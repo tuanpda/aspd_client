@@ -2017,27 +2017,8 @@ export default {
             const date = new Date(str);
             const thang = String(date.getMonth() + 1).padStart(2, "0");
             const nam = date.getFullYear();
-            const thangdenhan = `${thang}/${nam}`;
-            // console.log(thangdenhan);
-            const [thangStr, namStr] = thangdenhan.split("/");
-
-            let thangDenthang = parseInt(thangStr);
-            let namDenthang = parseInt(namStr);
-
-            // Tăng tháng
-            thangDenthang += 1;
-            if (thangDenthang > 12) {
-              thangDenthang = 1;
-              namDenthang += 1;
-            }
-
-            // Định dạng lại chuỗi MM/yyyy
-            const denThang = `${String(thangDenthang).padStart(
-              2,
-              "0"
-            )}/${namDenthang}`;
-            // console.log(denThang); // ví dụ: "09/2025" hoặc "01/2026"
-            this.items[index].tuthang = denThang;
+            const tuthang = `${thang}/${nam}`;
+            this.items[index].tuthang = tuthang;
             this.items[index].muctiendong = data.muctiendong;
           }
 

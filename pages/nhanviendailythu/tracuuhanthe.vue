@@ -1,46 +1,49 @@
 <template>
   <div class="column">
     <div class="box">
+      <!-- Header -->
       <div class="columns">
         <div class="column">
           <div class="control">
             <span style="color: #198754" class="icon is-small is-left">
               <i class="far fa-calendar-alt"></i>
             </span>
-            <span style="font-weight: bold; color: #198754"
-              >Tra cứu hạn thẻ</span
-            >
+            <span style="font-weight: bold; color: #198754">
+              Tra cứu hạn thẻ
+            </span>
           </div>
         </div>
       </div>
 
+      <!-- Search Box -->
       <div class="box">
         <div class="columns">
           <div class="column">
-            <label class="label">Mã số BHXH</label
-            ><input
+            <label class="label">Loại hình</label>
+            <div class="select is-small is-fullwidth">
+              <select v-model="loaihinh" @change="handleChange">
+                <option disabled value="">- Chọn loại hình -</option>
+                <option value="bhyt">Bảo hiểm y tế</option>
+                <option value="bhxh">Bảo hiểm xã hội</option>
+              </select>
+            </div>
+          </div>
+          <div class="column">
+            <label class="label">Mã số BHXH</label>
+            <input
               v-model="soSoBhxh"
               type="text"
               class="input is-small"
               placeholder="Nhập vào mã số BHXH cần tìm kiếm"
-              @keyup.enter="findHanthe(1)"
-            />
-          </div>
-          <div class="column">
-            <label class="label">Họ tên</label
-            ><input
-              v-model="hoTen"
-              type="text"
-              class="input is-small"
-              placeholder="Nhập vào họ tên đầy đủ"
-              @keyup.enter="findHanthe(1)"
+              @keyup.enter="findHanthe"
             />
           </div>
         </div>
-        <div class="columns"></div>
+
         <hr class="navbar-divider" />
+
         <footer class="has-text-right">
-          <button @click="findHanthe(1)" class="button is-success is-small">
+          <button @click="findHanthe" class="button is-success is-small">
             <span class="icon">
               <i class="fas fa-search"></i>
             </span>
@@ -49,110 +52,67 @@
         </footer>
       </div>
 
-      <div style="margin-top: 20px">
-        <div class="table_wrapper">
-          <table
-            class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
-          >
-            <thead style="font-weight: bold">
-              <tr style="font-size: small; background-color: #faf0e6">
-                <td rowspan="2" style="text-align: center; width: 3%">STT</td>
-                <td rowspan="2" style="text-align: center">Mã số BHXH</td>
-                <td style="text-align: center">Họ tên</td>
-                <td style="text-align: center">Ngày sinh</td>
-                <td rowspan="2" style="text-align: center">Giới tính</td>
-                <td rowspan="2" style="text-align: center">Mã đối tượng</td>
-                <td rowspan="2" style="text-align: center">Mã đơn vị thu</td>
-                <td rowspan="2" style="text-align: center">Từ ngày</td>
-                <td rowspan="2" style="text-align: center">Đến ngày</td>
-                <td rowspan="2" style="text-align: center">Địa chỉ</td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                style="font-size: small"
-                v-for="(item, index) in dulieuthe"
-                :key="index"
-              >
-                <td style="text-align: center">{{ index + 1 }}</td>
-                <td style="text-align: center">{{ item.soSoBhxh }}</td>
-                <td style="text-align: center">{{ item.hoTen }}</td>
-                <td style="text-align: center">{{ item.ngaySinh }}</td>
-                <td style="text-align: center">{{ item.gioiTinh }}</td>
-                <td style="text-align: center">{{ item.maDoiTuong }}</td>
-                <td style="text-align: center">{{ item.maDonViThu }}</td>
-                <td style="text-align: center">{{ item.tuNgay }}</td>
-                <td style="text-align: center">{{ item.denNgay }}</td>
-                <td style="text-align: left">{{ item.diaChi }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <!-- Phân trang -->
-        <div v-if="dulieuthe.length > 0" style="margin-top: 10px">
-          <nav
-            class="pagination is-centered is-rounded"
-            role="navigation"
-            aria-label="pagination"
-          >
-            <!-- Nút trang đầu tiên -->
-            <button
-              :disabled="currentPage === 1"
-              @click="goToPage(1)"
-              class="pagination-previous button is-info is-light is-small"
-            >
-              Đầu tiên
-            </button>
+      <!-- Kết quả -->
+      <div class="table_wrapper" style="margin-top: 20px">
+        <table
+          class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
+        >
+          <thead style="font-weight: bold">
+            <tr style="font-size: small; background-color: #faf0e6">
+              <td style="text-align: center; width: 3%">STT</td>
+              <td style="text-align: center">Mã số BHXH</td>
+              <td style="text-align: center">Họ tên</td>
+              <td style="text-align: center">Ngày sinh</td>
+              <td style="text-align: center">Số điện thoại</td>
+              <td style="text-align: center">Giới tính</td>
+              <td style="text-align: center">
+                {{ loaihinh === "bhyt" ? "Hạn thẻ" : "Đã đóng đến tháng" }}
+              </td>
+              <td v-if="loaihinh === 'bhyt'" style="text-align: center">
+                Nơi khám sức khỏe ban đầu
+              </td>
+              <td style="text-align: center">Tỉnh</td>
+              <td style="text-align: center">Huyện</td>
+              <td style="text-align: center">Xã</td>
+              <td style="text-align: center">Địa chỉ</td>
+            </tr>
+          </thead>
 
-            <!-- Nút Previous -->
-            <button
-              :disabled="currentPage === 1"
-              @click="goToPreviousPage"
-              class="pagination-previous button is-info is-light is-small"
+          <tbody>
+            <tr
+              v-for="(item, index) in dulieuthe"
+              :key="index"
+              style="font-size: small"
             >
-              Trang trước
-            </button>
+              <td style="text-align: center">{{ index + 1 }}</td>
+              <td style="text-align: center">{{ item.masobhxh }}</td>
+              <td style="text-align: center">{{ item.hoten }}</td>
+              <td style="text-align: center">{{ item.ngaysinh }}</td>
+              <td style="text-align: center">{{ item.sodienthoai }}</td>
+              <td style="text-align: center">
+                {{ item.gioitinh === 1 ? "Nữ" : "Nam" }}
+              </td>
+              <td style="text-align: center">
+                {{ loaihinh === "bhyt" ? item.hanthecu : item.tuthang }}
+              </td>
+              <td v-if="loaihinh === 'bhyt'" style="text-align: center">
+                {{ item.benhvien.tenbenhvien }}
+              </td>
+              <td style="text-align: center">{{ item.tinh.tentinh }}</td>
+              <td style="text-align: center">{{ item.quanhuyen.tenhuyen }}</td>
+              <td style="text-align: center">{{ item.xa.tenxa }}</td>
+              <td style="text-align: left">{{ item.diaChi }}</td>
+            </tr>
+          </tbody>
+        </table>
 
-            <!-- Nút Next -->
-            <button
-              :disabled="currentPage === totalPages"
-              @click="goToNextPage"
-              class="pagination-next button is-danger is-light is-small"
-            >
-              Trang tiếp
-            </button>
-
-            <!-- Nút trang cuối cùng -->
-            <button
-              :disabled="currentPage === totalPages"
-              @click="goToPage(totalPages)"
-              class="pagination-next button is-danger is-light is-small"
-            >
-              Cuối cùng
-            </button>
-
-            <ul class="pagination-list">
-              <!-- Hiển thị các nút phân trang -->
-              <li v-for="page in visiblePages" :key="page">
-                <button
-                  :class="[
-                    'pagination-link',
-                    { 'is-current': page === currentPage },
-                    'is-small',
-                  ]"
-                  @click="goToPage(page)"
-                >
-                  {{ page }}
-                </button>
-              </li>
-            </ul>
-          </nav>
-        </div>
-        <!-- Biểu tượng loading -->
         <div v-if="isLoading" class="loading-overlay">
-          <!-- Biểu tượng loading -->
-          <div class="loading-spinner"></div>
-          <span>waitting some minute ...</span>
+          <div class="loading-container">
+            <div class="loading-spinner"></div>
+            <span class="loading-text">
+              Đang lấy thông tin dữ liệu, xin chờ trong giây lát ...
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -160,128 +120,83 @@
 </template>
 
 <script>
-
 import Swal from "sweetalert2";
+const { DateTime } = require("luxon");
 
 export default {
-
   data() {
-    const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
-
     return {
-      // pagi
-      currentPage: 1,
-      totalPages: 1,
-
       isLoading: false,
-
       hoTen: "",
       soSoBhxh: "",
       dulieuthe: [],
+      loaihinh: "",
     };
-  },
-
-  mounted() {
-    const user = this.user;
-
-    this.dailyview = user.madaily;
-    this.tochuc = user.matochuc;
-    if (user.role == 2) {
-      this.diemthu = "Tài khoản tổng hợp";
-      // console.log(this.diemthu);
-      // console.log(user.role);
-    } else {
-      this.diemthu = user.tendaily;
-    }
-    this.isRoleSent = user.res_sent;
-
-    if (user.nvcongty == 0) {
-      this.madaily = user.madaily;
-      this.diemthu = user.tendaily;
-      this.isDiemthu = true;
-    }
   },
 
   computed: {
     user() {
       return this.$store.state.user || {};
     },
-
-    visiblePages() {
-      const pages = [];
-      const maxVisiblePages = 5; // Số lượng trang hiển thị tối đa
-
-      // Xác định phạm vi của các trang hiển thị
-      let startPage = Math.max(
-        1,
-        this.currentPage - Math.floor(maxVisiblePages / 2)
-      );
-      let endPage = Math.min(this.totalPages, startPage + maxVisiblePages - 1);
-
-      if (endPage - startPage < maxVisiblePages - 1) {
-        startPage = Math.max(1, endPage - maxVisiblePages + 1);
-      }
-
-      for (let i = startPage; i <= endPage; i++) {
-        pages.push(i);
-      }
-
-      return pages;
-    },
   },
 
   methods: {
-    goToPreviousPage() {
-      if (this.currentPage > 1) {
-        this.findHanthe(this.currentPage - 1);
+    async handleChange(event) {
+      this.dulieuthe = [];
+    },
+
+    async findHanthe() {
+      if (!this.soSoBhxh) return;
+
+      if (!this.loaihinh) {
+        Swal.fire({ text: "Phải chọn loại hình!", icon: "error" });
+        return;
       }
-    },
 
-    goToNextPage() {
-      if (this.currentPage < this.totalPages) {
-        this.findHanthe(this.currentPage + 1);
-      }
-    },
+      try {
+        const dataFind = { masobhxh: this.soSoBhxh };
+        this.isLoading = true;
 
-    goToPage(page) {
-      this.findHanthe(page); // Di chuyển đến trang được chỉ định
-    },
+        let res_data;
+        if (this.loaihinh === "bhyt") {
+          res_data = await this.$axios.post(`/api/kekhai/getinfo`, dataFind);
+        } else {
+          res_data = await this.$axios.post(
+            `/api/kekhai/getinfo-bhxh`,
+            dataFind
+          );
+        }
 
-    async findHanthe(page) {
-      this.isLoading = true;
-      const res = await this.$axios.get(
-        `/api/nguoihuong/tim-kiem-thong-tin-han-the?page=${page}&hoTen=${this.hoTen}&soSoBhxh=${this.soSoBhxh}`
-      );
-      // console.log(res.data.results.length);
-      if (res.data.results.length > 0) {
-        this.dulieuthe = res.data.results;
-        this.totalPages = res.data.info.pages;
-        this.currentPage = page; // Cập nhật trang hiện tại
-        this.isLoading = false;
-      } else {
-        this.isLoading = false;
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 2000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.addEventListener("mouseenter", Swal.stopTimer);
-            toast.addEventListener("mouseleave", Swal.resumeTimer);
-          },
-        });
-        Toast.fire({
+        const data = res_data?.data?.data;
+        // console.log(data);
+        
+        if (data) {
+          const formatted = {
+            ...data,
+            ngaysinh: DateTime.fromISO(data.ngaysinh).toFormat("dd/MM/yyyy"),
+            ...(this.loaihinh === "bhxh" && {
+              benhvien: {},
+              tuthang: DateTime.fromISO(data.tuthang).toFormat("dd/MM/yyyy"),
+            }),
+          };
+
+          this.dulieuthe = [formatted];
+        }
+      } catch (err) {
+        console.error(err);
+        Swal.fire({
+          text: "Không tìm được thông tin người hưởng!",
           icon: "error",
-          title: `Không tìm thấy dữ liệu`,
         });
+      } finally {
+        this.isLoading = false;
       }
     },
   },
 };
 </script>
 
-<style scoped lang="css">
+<style scoped>
 @import "@/assets/customCss/common.css";
 @import "@/assets/customCss/footerTable.css";
 

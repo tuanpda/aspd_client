@@ -3211,8 +3211,8 @@ export default {
     async hopChangeReset(e, index) {
       const mabenhvien = e.target.value;
       const text = e.target.options[e.target.selectedIndex].text;
-      // console.log(mabenhvien);
-      // console.log(text);
+      console.log(mabenhvien);
+      console.log(text);
 
       this.items[index].mabenhvien = mabenhvien;
       this.items[index].tenbenhvien = text;

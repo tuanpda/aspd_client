@@ -1966,7 +1966,7 @@ export default {
       }
     },
 
-    async findNguoihuong(masobhxh, index) {
+async findNguoihuong(masobhxh, index) {
       if (!masobhxh) return;
 
       const isDuplicate = this.items.some(
@@ -1986,7 +1986,10 @@ export default {
           masobhxh: masobhxh,
         };
         this.isLoading = true;
-        const res = await this.$axios.post(`/api/kekhai/getinfo`, dataFind);
+        const res = await this.$axios.post(
+          `/api/kekhai/getinfo-bhxh`,
+          dataFind
+        );
         // console.log(res.data.data);
         const data = res.data.data;
         if (data) {
@@ -2000,8 +2003,20 @@ export default {
           this.items[index].cccd = data.cccd;
           (this.items[index].gioitinh = data.gioitinh === "1" ? "Nam" : "Nữ"),
             (this.items[index].dienthoai = data.sodienthoai);
-          this.items[index].hanthecu = data.hanthecu;
-          this.items[index].tungay = data.tungay;
+          
+          if (data.tuthang) {
+            this.items[index].hanthecu = data.tuthang | "";
+
+            const str = data.tuthang;
+            const date = new Date(str);
+            const thang = String(date.getMonth() + 1).padStart(2, "0");
+            const nam = date.getFullYear();
+            const tuthang = `${thang}/${nam}`;
+            // console.log(tuthang);
+            
+            this.items[index].tuthang = tuthang;
+            this.items[index].muctiendong = data.muctiendong;
+          }
 
           // Thông tin hành chính
           this.items[index].matinh = data.tinh.matinh;
@@ -2011,8 +2026,6 @@ export default {
           this.items[index].maxaphuong = data.xa.maxa;
           this.items[index].tenxaphuong = data.xa.tenxa;
           this.items[index].tenxaphuong = data.xa.tenxa;
-          this.items[index].mabenhvien = `42${data.benhvien.mabenhvien}`;
-          this.items[index].tenbenhvien = data.benhvien.tenbenhvien;
           this.items[index].tothon = data.diachidangsinhsong;
 
           //  TÌM VÀ GÁN LẠI TÊN XÃ MỚI 2 CẤP
@@ -2024,26 +2037,11 @@ export default {
           //   this.items[index].maxaphuong_new = res_xa.data[0].ward_code;
           // }
 
-          // console.log(data.hanthecu);
-          // 31/12/2025
-          
-          const hanTheCuStr = data.hanthecu; // từ data.hanthecu hoặc hardcode để test
-          const parts = hanTheCuStr.split('/');
-          const hanTheCu = new Date(parts[2], parts[1] - 1, parts[0]); // yyyy, MM-1, dd
-
-          const today = new Date();
-          const millisecondsPerDay = 1000 * 60 * 60 * 24;
-          const diffDays = Math.floor((hanTheCu - today) / millisecondsPerDay);
-
-          // console.log(diffDays);
-
-          if (diffDays >= 30) {
-            Swal.fire({
-              icon: "info",
-              title: "Thẻ vẫn còn hạn",
-              text: `Thẻ hiện còn hiệu lực thêm ${diffDays} ngày. Cân nhắc trước khi gia hạn!`
-            });
-          }
+          // // load xã theo tỉnh của mã số bhxh
+          // const response = await this.$axios.get(
+          //   `/api/danhmucs/hanhchinh2cap-xa-with-ma-tinh?province_code=${data.tinh.matinh}`
+          // );
+          // this.items[index].info_xaphuong = response.data;
         }
       } catch (err) {
         console.error(err);
