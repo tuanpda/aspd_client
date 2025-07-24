@@ -1525,10 +1525,10 @@ export default {
           maphuongan: "ON",
           tenphuongan: "Đóng tiếp",
         },
-        {
-          maphuongan: "DB",
-          tenphuongan: "Đóng bù",
-        },
+        // {
+        //   maphuongan: "DB",
+        //   tenphuongan: "Đóng bù",
+        // },
       ],
       phuongthucdong_All: [
         { maphuongthuc: "1", tenphuongthuc: "1 tháng" },
@@ -1545,7 +1545,7 @@ export default {
         { maphuongthuc: "12", tenphuongthuc: "12 tháng" },
         {
           maphuongthuc: "D1LNCT",
-          tenphuongthuc: "Đóng 1 lần cho những năm còn thiếu (Nghỉ hưu)",
+          tenphuongthuc: "Đóng 1 lần cho những năm còn thiếu",
         },
         {
           maphuongthuc: "D1LNVS",
@@ -2711,10 +2711,10 @@ async findNguoihuong(masobhxh, index) {
 
       try {
         // Lọc bỏ D1LNCT và D1LNVS khỏi mảng phuongthucdong khi thêm hàng mới
-        const phuongthucdongFilter = this.phuongthucdong_All.filter(
-          (item) =>
-            item.maphuongthuc !== "D1LNCT" && item.maphuongthuc !== "D1LNVS"
-        );
+        // const phuongthucdongFilter = this.phuongthucdong_All.filter(
+        //   (item) =>
+        //     item.maphuongthuc !== "D1LNCT" && item.maphuongthuc !== "D1LNVS"
+        // );
 
         this.items.push({
           matochuc: this.user.matochuc,
@@ -2741,7 +2741,7 @@ async findNguoihuong(masobhxh, index) {
           hotrokhac: this.hotrokhac,
           tungay: "",
           denngay: "",
-          phuongthucdong: phuongthucdongFilter,
+          phuongthucdong: this.phuongthucdong_All,
           maphuongthucdong: "",
           tenphuongthucdong: "",
           sotien: 0, // tiền phải đóng
@@ -3432,62 +3432,62 @@ async findNguoihuong(masobhxh, index) {
       // Chỉ thay đổi mảng phuongthucdong của dòng hiện tại (item)
       const itemPhuongthucdong = this.items[index].phuongthucdong;
 
-      // Khi chọn phương án "ON" hoặc "TM"
-      if (maphuongan === "ON" || maphuongan === "TM") {
-        // Loại bỏ các phần tử D1LNCT và D1LNVS trong item.phuongthucdong của dòng hiện tại
-        this.items[index].phuongthucdong = itemPhuongthucdong.filter(
-          (item) =>
-            item.maphuongthuc !== "D1LNCT" && item.maphuongthuc !== "D1LNVS"
-        );
-        // console.log(this.items[index].phuongthucdong); // Kiểm tra mảng phuongthucdong sau khi loại bỏ
-      }
+      // // Khi chọn phương án "ON" hoặc "TM"
+      // if (maphuongan === "ON" || maphuongan === "TM") {
+      //   // Loại bỏ các phần tử D1LNCT và D1LNVS trong item.phuongthucdong của dòng hiện tại
+      //   this.items[index].phuongthucdong = itemPhuongthucdong.filter(
+      //     (item) =>
+      //       item.maphuongthuc !== "D1LNCT" && item.maphuongthuc !== "D1LNVS"
+      //   );
+      //   // console.log(this.items[index].phuongthucdong); // Kiểm tra mảng phuongthucdong sau khi loại bỏ
+      // }
 
-      // Khi chọn phương án "DB" (Đóng bù)
-      else if (maphuongan === "DB") {
-        // Loại bỏ các mã từ 1 đến 12 trong item.phuongthucdong của dòng hiện tại
-        this.items[index].phuongthucdong = itemPhuongthucdong.filter(
-          (item) =>
-            ![
-              "1",
-              "2",
-              "3",
-              "4",
-              "5",
-              "6",
-              "7",
-              "8",
-              "9",
-              "10",
-              "11",
-              "12",
-            ].includes(item.maphuongthuc)
-        );
+      // // Khi chọn phương án "DB" (Đóng bù)
+      // else if (maphuongan === "DB") {
+      //   // Loại bỏ các mã từ 1 đến 12 trong item.phuongthucdong của dòng hiện tại
+      //   this.items[index].phuongthucdong = itemPhuongthucdong.filter(
+      //     (item) =>
+      //       ![
+      //         "1",
+      //         "2",
+      //         "3",
+      //         "4",
+      //         "5",
+      //         "6",
+      //         "7",
+      //         "8",
+      //         "9",
+      //         "10",
+      //         "11",
+      //         "12",
+      //       ].includes(item.maphuongthuc)
+      //   );
 
-        // Thêm lại các phương án "D1LNCT" và "D1LNVS" nếu chưa có trong item.phuongthucdong
-        if (
-          !this.items[index].phuongthucdong.some(
-            (item) => item.maphuongthuc === "D1LNCT"
-          )
-        ) {
-          this.items[index].phuongthucdong.push({
-            maphuongthuc: "D1LNCT",
-            tenphuongthuc: "Đóng 1 lần cho những năm còn thiếu (Nghỉ hưu)",
-          });
-        }
+      //   // Thêm lại các phương án "D1LNCT" và "D1LNVS" nếu chưa có trong item.phuongthucdong
+      //   if (
+      //     !this.items[index].phuongthucdong.some(
+      //       (item) => item.maphuongthuc === "D1LNCT"
+      //     )
+      //   ) {
+      //     this.items[index].phuongthucdong.push({
+      //       maphuongthuc: "D1LNCT",
+      //       tenphuongthuc: "Đóng 1 lần cho những năm còn thiếu (Nghỉ hưu)",
+      //     });
+      //   }
 
-        if (
-          !this.items[index].phuongthucdong.some(
-            (item) => item.maphuongthuc === "D1LNVS"
-          )
-        ) {
-          this.items[index].phuongthucdong.push({
-            maphuongthuc: "D1LNVS",
-            tenphuongthuc: "Đóng 1 lần cho những năm về sau",
-          });
-        }
+      //   if (
+      //     !this.items[index].phuongthucdong.some(
+      //       (item) => item.maphuongthuc === "D1LNVS"
+      //     )
+      //   ) {
+      //     this.items[index].phuongthucdong.push({
+      //       maphuongthuc: "D1LNVS",
+      //       tenphuongthuc: "Đóng 1 lần cho những năm về sau",
+      //     });
+      //   }
 
-        // console.log(this.items[index].phuongthucdong); // Kiểm tra mảng phuongthucdong sau khi thêm lại
-      }
+      //   // console.log(this.items[index].phuongthucdong); // Kiểm tra mảng phuongthucdong sau khi thêm lại
+      // }
     },
 
     // tỉnh thành phố
@@ -4137,6 +4137,7 @@ async findNguoihuong(masobhxh, index) {
               maphuongan: item.maphuongan,
               cccd_nguoithutien: cccd_nguoithutien,
               tenphuongthucdong: item.tenphuongthucdong,
+              maphuongthucdong: item.maphuongthucdong,
               sothang: item.sothang,
             };
 
@@ -4395,7 +4396,7 @@ async findNguoihuong(masobhxh, index) {
       if (data.maloaihinh == "AR" || data.maloaihinh == "BI") {
         noidungText = `Tiền đóng BHYT, phương thức đóng ${data.soThang} tháng, từ ngày ${data.tuNgay} đến ngày ${data.denNgay}`;
       } else {
-        if (data.maphuongan !== "DB") {
+        if (data.maphuongthucdong !== "D1LNVS" && data.maphuongthucdong !== "D1LNCT") {
           noidungText = `Tiền đóng BHXH Tự nguyện, phương thức đóng ${data.soThang} tháng, từ tháng ${data.tuThang} đến tháng ${data.denThang}`;
         } else {
           noidungText = `BHXH Tự nguyện, ${data.tenphuongthucdong}, ${data.sothang} tháng, từ tháng ${data.tuThang}`;

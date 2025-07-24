@@ -42,6 +42,8 @@ export default {
 
         if (res.status === 200) {
           this.chartData = res.data.data;
+          console.log(this.chartData);
+          
           this.$nextTick(() => this.renderChartTongTien());
         }
       } catch (err) {
@@ -62,7 +64,7 @@ export default {
       const ctx = this.$refs.chartTongTien.getContext("2d");
       // console.log(this.chartData);
 
-      const labels = this.chartData.map((item) => item.name);
+      const labels = this.chartData.map((item) => item.tennguoitao);
       const data = this.chartData.map((item) => item.tongtien);
 
       const backgroundColors = [
