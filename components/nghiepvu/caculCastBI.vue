@@ -1528,7 +1528,7 @@ export default {
       );
       this.dmquanhuyen = res_quanhuyen.data;
       const res_benhvien = await this.$axios.get(
-        `/api/danhmucs/dmbenhvienwithtinh-${company.dmbenhvien}?matinh=${this.matinh}`
+        `/api/danhmucs/dmbenhvienwithtinh?matinh=${this.matinh}`
       );
       this.dmbenhvien = res_benhvien.data;
     } else {
@@ -1601,7 +1601,6 @@ export default {
           (this.items[index].gioitinh = data.gioitinh === "1" ? "Nam" : "Nữ"),
             (this.items[index].dienthoai = data.sodienthoai);
           this.items[index].hanthecu = data.hanthecu;
-          this.items[index].tungay = data.tungay;
 
           // Thông tin hành chính
           this.items[index].matinh = data.tinh.matinh;
@@ -1644,6 +1643,46 @@ export default {
               text: `Thẻ hiện còn hiệu lực thêm ${diffDays} ngày. Cân nhắc trước khi gia hạn!`
             });
           }
+
+          // Hàm parse định dạng dd/mm/yyyy thành Date
+          const parseDate = (str) => {
+            const [day, month, year] = str.split("/").map(Number);
+            return new Date(year, month - 1, day);
+          };
+
+          // Hàm format Date về dd/mm/yyyy
+          const formatDate = (date) => {
+            const d = String(date.getDate()).padStart(2, "0");
+            const m = String(date.getMonth() + 1).padStart(2, "0");
+            const y = date.getFullYear();
+            return `${d}/${m}/${y}`;
+          };
+
+          const denNgay = parseDate(data.hanthecu);
+          const bienLai = today;
+
+          let tuNgay;
+
+          if (denNgay >= today) {
+            // Chưa hết hạn → ngày kế tiếp
+            const nextDay = new Date(denNgay);
+            nextDay.setDate(nextDay.getDate() + 1);
+            tuNgay = nextDay;
+          } else {
+            const daysDiff = (today - denNgay) / (1000 * 60 * 60 * 24);
+            if (daysDiff > 90) {
+              // Hết hạn > 3 tháng → sau hôm nay 30 ngày
+              const next30 = new Date();
+              next30.setDate(next30.getDate() + 30);
+              tuNgay = next30;
+            } else {
+              // Hết hạn < 3 tháng → dùng ngày biên lai
+              tuNgay = bienLai;
+            }
+          }
+
+          this.items[index].tungay = formatDate(tuNgay);
+          console.log("🎯 Hạn thẻ từ (tungay):", this.items[index].tungay);
         }
       } catch (err) {
         console.error(err);

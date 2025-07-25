@@ -147,6 +147,12 @@
                 </span>
                 &ensp; In C17
               </nuxt-link>
+              <nuxt-link to="/nhanviendailythu/trolycanhan" class="navbar-item">
+                <span style="color: #0dcaf0" class="icon is-small is-left">
+                  <i class="fas fa-bug"></i>
+                </span>
+                &ensp; Trợ lý cá nhân
+              </nuxt-link>
             </div>
           </div>
         </div>

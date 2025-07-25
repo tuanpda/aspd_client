@@ -42,7 +42,7 @@ export default {
 
         if (res.status === 200) {
           this.chartData = res.data.data;
-          console.log(this.chartData);
+          // console.log(this.chartData);
           
           this.$nextTick(() => this.renderChartTongTien());
         }
