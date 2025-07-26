@@ -3214,6 +3214,27 @@ export default {
         console.log(
           "Công thức tính là: ** (Mức tiền đóng x tỷ lệ đóng (22%) - NSNN hỗ trợ CŨ) x số tháng cần nạp"
         );
+
+        this.items[index].tylensnnht = tyleHotroTWMucCu;
+        this.items[index].tiennsnnht = tienTrungUongHoTro;
+        this.items[index].tylensdp = this.tylediaphuonghotroIl;
+        this.items[index].tiennsdp = tienDiaPhuongHoTro;
+        console.log(
+          "Tiền ngân sách nhà nước hỗ trợ: ",
+          this.items[index].tiennsnnht
+        );
+        console.log(
+          "Tỷ lệ ngân sách nhà nước hỗ trợ: ",
+          this.items[index].tylensnnht
+        );
+        console.log(
+          "Tỷ lệ ngân sách địa phương hỗ trợ: ",
+          this.items[index].tylensdp
+        );
+        console.log(
+          "Tiền ngân sách địa phương hỗ trợ: ",
+          this.items[index].tiennsdp
+        );
       } else {
         console.log(
           "TỔNG MỨC HỖ TRỢ GỒM NSNN MỨC MỚI VÀ NSĐP TOÀN BỘ QUÁ TRÌNH ĐÓNG"
@@ -3230,6 +3251,27 @@ export default {
         console.log("Tổng tiền cần nạp: ", tienCanNap);
         console.log(
           "Công thức tính là: ** (Mức tiền đóng x tỷ lệ đóng (22%) -  NSNN hỗ trợ MỚI - hỗ trợ địa phương) x cho số tháng cần nạp"
+        );
+
+        this.items[index].tylensnnht = tyleHotroTW;
+        this.items[index].tiennsnnht = tienTrungUongHoTro;
+        this.items[index].tylensdp = this.tylediaphuonghotroIl;
+        this.items[index].tiennsdp = tienDiaPhuongHoTro;
+        console.log(
+          "Tiền ngân sách nhà nước hỗ trợ: ",
+          this.items[index].tiennsnnht
+        );
+        console.log(
+          "Tỷ lệ ngân sách nhà nước hỗ trợ: ",
+          this.items[index].tylensnnht
+        );
+        console.log(
+          "Tỷ lệ ngân sách địa phương hỗ trợ: ",
+          this.items[index].tylensdp
+        );
+        console.log(
+          "Tiền ngân sách địa phương hỗ trợ: ",
+          this.items[index].tiennsdp
         );
       }
 
@@ -3260,7 +3302,8 @@ export default {
         madoituong,
         muctiendong,
         maphuongthucdong,
-        tuthang
+        tuthang,
+        index,
       );
     },
 
@@ -3283,7 +3326,8 @@ export default {
         muctiendong,
         maphuongthucdong,
         tuthang,
-        dadongdenthang
+        dadongdenthang,
+        index,
       );
     },
 
