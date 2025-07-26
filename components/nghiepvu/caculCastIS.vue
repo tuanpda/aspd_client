@@ -3398,7 +3398,6 @@ async findNguoihuong(masobhxh, index) {
         muctiendong,
         maphuongthucdong,
         tuthang,
-        dadongdenthang,
         index
       );
     },
