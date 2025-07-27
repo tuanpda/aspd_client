@@ -690,7 +690,7 @@ export default {
     // cập nhật ngày 27 tháng 7 năm 2025
     async getDsdaily(){
       const res = await this.$axios.get(`/api/kekhai/danhsachdaily`)
-      // console.log(res.data.hs)
+      console.log(res.data.hs)
       this.dsdaily=res.data.hs
     },
 
