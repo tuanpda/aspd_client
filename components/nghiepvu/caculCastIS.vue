@@ -3184,7 +3184,7 @@ async findNguoihuong(masobhxh, index) {
     // },
 
     tinhTienPhaiDong(madoituong, muctiendong, maphuongthucdong, tuthang, index) {
-      console.log(index)
+      // console.log(index)
       // console.log(madoituong, muctiendong, maphuongthucdong, tuthang)
       // === BƯỚC 1: TÍNH TỔNG SỐ THÁNG TỪ tuthang đến denthang ===
       const denthang = this.tinhDenThang(tuthang, maphuongthucdong);

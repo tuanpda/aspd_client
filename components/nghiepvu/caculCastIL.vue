@@ -3326,7 +3326,6 @@ export default {
         muctiendong,
         maphuongthucdong,
         tuthang,
-        dadongdenthang,
         index,
       );
     },

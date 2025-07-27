@@ -661,14 +661,6 @@ export default {
         const rowNumber = startRow + index;
         const row = worksheet.getRow(rowNumber);
 
-        const doituong = this.doituongdong.find((d) => d.madoituong === item.madoituong);
-        const tyleHotroTW = doituong ? doituong.tylehotro : 0;
-
-        const base = 1500000;
-        const bhxh = (base * 22) / 100;
-        const tienNSNNHT = (bhxh * tyleHotroTW) / 100;
-        const tienNSDP = (((1500000 * 22) / 100) * 20) / 100;
-
         row.getCell(1).value = `${index + 1}`;
         row.getCell(2).value = item.hoten;
         row.getCell(3).value = item.masobhxh;
@@ -677,12 +669,113 @@ export default {
         row.getCell(7).value = item.tuthang;
         row.getCell(8).value = item.maphuongthucdong;
         row.getCell(9).value = "22";
+
+        const doituong = this.doituongdong.find(
+          (d) => d.madoituong === item.madoituong
+        );
+        const tyleHotroTW = doituong ? doituong.tylehotro : 0;
+        // console.log(tyleHotroTW);
+
+        // tạm thời làm thủ công sau sửa sau
+        // Cột J
+        // if (item.madoituong !== null || item.madoituong !== "") {
+        //   if (item.madoituong == "BT") {
+        //     row.getCell(10).value = "20";
+        //   } else if (item.madoituong == "CN") {
+        //     row.getCell(10).value = "40";
+        //   } else {
+        //     row.getCell(10).value = "50";
+        //   }
+        // }
+
         row.getCell(10).value = tyleHotroTW.toString();
-        row.getCell(11).value = item.madoituong && tyleHotroTW > 0 ? tienNSNNHT * item.maphuongthucdong : 0;
-        row.getCell(12).value = this.tylediaphuonghotroIs;
+
+        // Cột K
+        let tienNSNNHT = 0;
+        // if (item.madoituong !== null || item.madoituong !== "") {
+        //   if (item.madoituong == "BT") {
+        //     tienNSNNHT = (((1500000 * 22) / 100) * 20) / 100;
+        //     row.getCell(11).value = tienNSNNHT * item.maphuongthucdong;
+        //   } else if (item.madoituong == "CN") {
+        //     tienNSNNHT = (((1500000 * 22) / 100) * 40) / 100;
+        //     row.getCell(11).value = tienNSNNHT * item.maphuongthucdong;
+        //   } else {
+        //     tienNSNNHT = (((1500000 * 22) / 100) * 50) / 100;
+        //     row.getCell(11).value = tienNSNNHT * item.maphuongthucdong;
+        //   }
+        // }
+
+        if (item.madoituong && tyleHotroTW > 0) {
+          const base = 1500000;
+          const bhxh = (base * 22) / 100;
+          const tienNSNNHT = (bhxh * tyleHotroTW) / 100;
+
+          row.getCell(11).value = tienNSNNHT * item.maphuongthucdong;
+        } else {
+          row.getCell(11).value = 0;
+        }
+
+        // cột L % ngân sách địa phương hỗ trợ
+        // row.getCell(12).value = "20";
+        row.getCell(12).value = this.tylediaphuonghotroIs
+
+        // cột M
+        const tienNSDP = (((1500000 * 22) / 100) * 20) / 100;
         row.getCell(13).value = tienNSDP * item.maphuongthucdong;
+
+        // cột P
         row.getCell(16).value = Number(item.sotien);
-        row.getCell(17).value = Number(item.sotien) + tienNSDP * item.maphuongthucdong + tienNSNNHT;
+
+        // cột Q
+        row.getCell(17).value =
+          Number(item.sotien) +
+          Number(tienNSDP * item.maphuongthucdong) +
+          Number(tienNSNNHT);
+
+        // // row.getCell(7).value = item.tylengansachdiaphuong; // Cột G ngân sách địa phương\
+        // row.getCell(7).value = "20"; // để 0 theo quỳnh nói
+
+        // if (item.ngaybienlai !== null || item.ngaybienlai !== "") {
+        //   const [datePart] = item.ngaybienlai.split(" ");
+        //   const [day, month, year] = datePart.split("-");
+
+        //   const formattedDate = `${day}/${month}/${year}`;
+
+        //   row.getCell(8).value = formattedDate; // Cột H ngày biên lai
+        // }
+        // row.getCell(9).value = item.sobienlai; // Cột I số biên lai
+
+        // // console.log(item.manguoithu);
+
+        // if (item.manguoithu == null || item.manguoithu == "") {
+        //   row.getCell(10).value = "Mặc định";
+        //   row.getCell(11).value = item.tienluongcs; // Cột K lương cs
+        // } else {
+        //   if (item.manguoithu !== 1) {
+        //     row.getCell(10).value = item.manguoithu; // Cột J người thứ
+        //     // gán luôn cột mức tiền đóng
+        //     // console.log(typeof item.tienluongcs);
+        //     if (item.manguoithu == 2) {
+        //       row.getCell(11).value = "1638000";
+        //     } else if (item.manguoithu == 3) {
+        //       row.getCell(11).value = "1404000";
+        //     } else if (item.manguoithu == 4) {
+        //       row.getCell(11).value = "1170000";
+        //     } else if (item.manguoithu == 5) {
+        //       row.getCell(11).value = "936000";
+        //     }
+        //   } else {
+        //     row.getCell(10).value = "Mặc định";
+        //     row.getCell(11).value = item.tienluongcs; // Cột K lương cs
+        //   }
+        // }
+
+        // row.getCell(12).value = item.sotien; // Cột L tiền thực tế
+
+        // row.getCell(14).value = item.tungay; // Cột N
+
+
+
         row.getCell(18).value = item.tentinh;
         row.getCell(19).value = item.matinh;
         row.getCell(20).value = item.tenquanhuyen;
