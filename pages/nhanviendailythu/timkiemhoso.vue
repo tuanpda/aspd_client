@@ -900,7 +900,8 @@ export default {
       // Xây dựng đường dẫn API dựa trên mã số thuế
 
       if (this.user.role == 2) {
-        const tennguoitao=this.infodaily.name
+        let tennguoitao = this.infodaily?.name || "";
+
         // const res = await this.$axios.get(
         //   `/api/kekhai/kykekhai-search-series-pagi-nvcty?kykekhai=${this.kykekhai}&page=${page}`
         // );
