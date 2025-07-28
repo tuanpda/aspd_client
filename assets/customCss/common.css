@@ -205,3 +205,23 @@ select:focus {
 .autocomplete-item:hover {
   background-color: #fffaeb;
 }
+
+::v-deep(.v-select .vs__selected) {
+  font-size: 0.7rem;
+  font-family: 'Roboto', sans-serif;
+}
+
+::v-deep(.v-select .vs__dropdown-menu) {
+  font-size: 0.7rem;
+  font-family: 'Roboto', sans-serif;
+}
+
+::v-deep(.v-select .vs__dropdown-option) {
+  padding: 6px 10px;
+  font-size: 0.7rem;
+}
+
+::v-deep(.v-select) {
+  min-width: 280px;   /* hoặc giá trị bạn thấy hợp */
+  max-width: 100%;    /* để không bị tràn nếu trong container hẹp */
+}

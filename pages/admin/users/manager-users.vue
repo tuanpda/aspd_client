@@ -27,13 +27,16 @@
                 <td style="text-align: center; color: white">Họ tên</td>
                 <td style="text-align: center; color: white">Tên người dùng</td>
                 <td style="text-align: center; color: white">CCCD</td>
+                <td style="text-align: center; color: white">Mã đại lý</td>
                 <td style="text-align: center; color: white">Email</td>
                 <td style="text-align: center; color: white">Điện thoại</td>
                 <td style="text-align: center; color: white">Quyền</td>
                 <td style="text-align: center; width: 40%; color: white">
-                  Địa chỉ
+                  Điểm thu
                 </td>
                 <td style="text-align: center; color: white">Tình trạng</td>
+                <!-- <td style="text-align: center; color: white">Ngày tạo</td>
+                <td style="text-align: center; color: white">Người tạo</td> -->
                 <td style="text-align: center; color: white">Cập nhật</td>
                 <td style="text-align: center; color: white">Xóa</td>
               </tr>
@@ -56,6 +59,9 @@
                 <td style="text-align: center">
                   {{ item.cccd }}
                 </td>
+                <td style="text-align: center">
+                  {{ item.madaily }}
+                </td>
                 <td>
                   {{ item.email }}
                 </td>
@@ -63,12 +69,14 @@
                   {{ item.sodienthoai }}
                 </td>
                 <td style="text-align: center">
-                  <template v-if="item.role === 1">
-                    <span>Quản trị viên</span>
-                  </template>
+                  <span v-if="item.role === 1">Quản trị viên</span>
+                  <span v-else-if="item.role === 2">Tổng hợp</span>
+                  <span v-else-if="item.role === 4">Điểm thu</span>
+                  <span v-else>-</span>
                 </td>
+
                 <td style="text-align: left">
-                  {{ item.diachi }}
+                  {{ item.tendaily }}
                 </td>
                 <td style="text-align: center">
                   <span v-if="item.active === false">
@@ -78,6 +86,12 @@
                     <i style="color: #00947e" class="fa fa-circle"></i>
                   </span>
                 </td>
+                <!-- <td style="text-align: center">
+                  {{ item.createdAt | formatDate }}
+                </td>
+                <td style="text-align: center">
+                  {{ item.createdBy }}
+                </td> -->
                 <td style="text-align: center">
                   <a @click="activeUpdate(item)">
                     <span class="icon is-larger" style="color: green">
@@ -192,75 +206,34 @@
                     </label>
                   </div>
 
-                  <!-- select tỉnh thành phố -->
-                  <div class="field">
-                    <label
-                      class="label is-small"
-                      style="font-weight: bold; color: red"
-                      >* {{ user_data.tentinh }}</label
+                  <div style="margin-top: 5px; margin-bottom: 5px">
+                    <label class="label is-small">Thông tin về Điểm thu</label>
+                    <div
+                      class="select is-fullwidth is-small"
+                      style="margin-bottom: 5px"
                     >
-                    <input
-                      autoComplete="on"
-                      list="provinceSuggestions"
-                      class="custom-input"
-                      @blur="provinceChange"
-                      ref="provinceInput"
-                    />
-                    <datalist id="provinceSuggestions">
-                      <option v-for="(item, index) in dm_Tinhs" :key="index">
-                        {{ item.matinh }} - {{ item.tentinh }}
-                      </option>
-                    </datalist>
-                  </div>
-
-                  <!-- select quận huyện -->
-                  <div class="field">
-                    <label
-                      class="label is-small"
-                      style="font-weight: bold; color: red"
-                      >* {{ user_data.tenhuyen }}</label
-                    >
-                    <input
-                      :disabled="isDisabled_Huyenxa"
-                      autoComplete="on"
-                      list="districtSuggestions"
-                      class="custom-input"
-                      @blur="quanhuyenChange"
-                      ref="districtInput"
-                    />
-                    <datalist id="districtSuggestions">
-                      <option
-                        v-for="(item, index) in quanhuyenData"
-                        :key="index"
+                      <select
+                        v-model="user_data.matinh"
+                        @change="provinceChange($event)"
                       >
-                        {{ item.maquanhuyen }} - {{ item.tenquanhuyen }}
-                      </option>
-                    </datalist>
-                  </div>
+                        <option
+                          v-for="(dt, index) in cq2cap_Tinh"
+                          :key="index"
+                          :value="dt.province_code"
+                        >
+                          {{ dt.name }}
+                        </option>
+                      </select>
+                    </div>
 
-                  <!-- select xã phường -->
-                  <div class="field">
-                    <label
-                      class="label is-small"
-                      style="font-weight: bold; color: red"
-                      >* {{ user_data.tenxa }}</label
-                    >
-                    <input
-                      :disabled="isDisabled_Xaphuong"
-                      autoComplete="on"
-                      list="xaphuongSuggestions"
-                      class="custom-input"
-                      @blur="xaphuongChange"
-                      ref="xphuongInput"
+                    <v-select
+                      :options="info_xaphuong"
+                      label="ward_name"
+                      v-model="user_data.tenxa"
+                      :reduce="(x) => x.ward_code"
+                      @input="xaphuongChange"
+                      :no-options="'Không tìm thấy kết quả nào'"
                     />
-                    <datalist id="xaphuongSuggestions">
-                      <option
-                        v-for="(item, index) in xaphuongData"
-                        :key="index"
-                      >
-                        {{ item.maxaphuong }} - {{ item.tenxaphuong }}
-                      </option>
-                    </datalist>
                   </div>
 
                   <div class="field">
@@ -484,6 +457,8 @@ export default {
       itemsPerPage: 10,
 
       dm_Tinhs: [],
+      cq2cap_Tinh: [],
+      info_xaphuong: [],
     };
   },
 
@@ -492,6 +467,7 @@ export default {
     this.fetchDatadmTinh();
     const user = this.user;
     this.form.createdBy = user.username;
+    this.loadTinh();
   },
 
   watch: {
@@ -568,6 +544,14 @@ export default {
   },
 
   methods: {
+    async loadTinh() {
+      const res = await this.$axios.get(`/api/danhmucs/hanhchinh2cap-tinh`);
+      // console.log(res.data);
+      if (res.data.length > 0) {
+        this.cq2cap_Tinh = res.data;
+      }
+    },
+
     // ...mapActions("modules/danhmucs", ["getdmTinhs"]),
     // ...mapActions("modules/danhmucs", ["getdmQuanhuyens"]),
     async fetchDataUsers() {
@@ -633,23 +617,47 @@ export default {
       return result;
     },
 
-    async provinceChange(event) {
-      const selectedOption = event.target.value;
-      let position = selectedOption.split("-");
-      // console.log(position);
-      this.user_data.matinh = position[0];
-      this.user_data.tentinh = position[1];
+    async provinceChange(e) {
+      // lấy thông tin thay đổi từ người dùng select
+      const matinh = e.target.value;
+      const tentinh = e.target.options[e.target.selectedIndex].text;
+      // console.log(matinh);
+      // console.log(tentinh);
+
+      // lấy dữ liệu quận huyện từ mã tỉnh đã được chọn
       try {
+        this.isLoading = true;
         const response = await this.$axios.get(
-          `/api/danhmucs/dmquanhuyenwithmatinh?matinh=${this.user_data.matinh}`
+          `/api/danhmucs/hanhchinh2cap-xa-with-ma-tinh?province_code=${matinh}`
         );
-        this.quanhuyenData = response.data;
-        if (this.quanhuyenData.length > 0) {
-          this.checkHuyenxaOpen = true;
-        }
+        // console.log(response.data);
+
+        // bind dữ liệu vào dữ liệu select của items để cho từng item sử dụng
+        // if (response.data.length > 0) {
+        //   this.checkXaphuongOpen = true;
+        this.info_xaphuong = response.data;
+        this.user_data.matinh = matinh;
+        this.user_data.tentinh = tentinh;
+        // }
+        this.isLoading = false;
       } catch (error) {
+        this.isLoading = false;
         console.error("Error fetching data:", error);
       }
+    },
+
+    // xã phường
+    async xaphuongChange(ward_code) {
+      const selected = this.info_xaphuong.find(
+        (b) => b.ward_code === ward_code
+      );
+
+      // console.log(selected);
+
+      this.user_data.maxa = selected.ward_code;
+      this.user_data.tenxa = selected.ward_name;
+      this.user_data.tendaily = selected.ward_name;
+      // console.log(this.user_data);
     },
 
     async quanhuyenChange(event) {
@@ -670,25 +678,6 @@ export default {
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-    },
-
-    async xaphuongChange(event) {
-      const selectedOption = event.target.value;
-      let position = selectedOption.split("-");
-      // console.log(position);
-      this.user_data.maxa = position[0];
-      this.user_data.tenxa = position[1];
-      // try {
-      //   const response = await this.$axios.get(
-      //     `/api/danhmucs/dmxaphuongwithmahuyen?maquanhuyen=${this.form.mahuyen}`
-      //   );
-      //   this.xaphuongData = response.data;
-      //   if (this.xaphuongData.length > 0) {
-      //     this.checkXaphuongOpen = true;
-      //   }
-      // } catch (error) {
-      //   console.error("Error fetching data:", error);
-      // }
     },
 
     onFileChange(e) {
@@ -730,110 +719,25 @@ export default {
       return emailRegex.test(email);
     },
 
-    async checkFormData() {
-      // Kiểm tra xem các trường thông tin bắt buộc đã được điền đầy đủ chưa
-      if (!this.user_data.name) {
-        // Hiển thị thông báo lỗi
-        this.$toasted.show("Tên người dùng không được để trống", {
-          duration: 3000,
-          theme: "bubble",
-        });
-        this.$refs.nameInput.focus();
-        return false; // Trả về false để ngăn chặn quá trình lưu dữ liệu
-      }
-      if (!this.user_data.matinh || !this.user_data.tentinh) {
-        // Hiển thị thông báo lỗi
-        this.$toasted.show("Chọn thông tin Tỉnh / Thành phố", {
-          duration: 3000,
-          theme: "bubble",
-        });
-        this.$refs.provinceInput.focus();
-        return false; // Trả về false để ngăn chặn quá trình lưu dữ liệu
-      }
-      if (!this.user_data.mahuyen || !this.user_data.tenhuyen) {
-        // Hiển thị thông báo lỗi
-        this.$toasted.show("Chọn thông tin Quận huyện", {
-          duration: 3000,
-          theme: "bubble",
-        });
-        this.$refs.districtInput.focus();
-        return false; // Trả về false để ngăn chặn quá trình lưu dữ liệu
-      }
-      if (!this.user_data.maxa || !this.user_data.tenxa) {
-        // Hiển thị thông báo lỗi
-        this.$toasted.show("Chọn thông tin Xã phường", {
-          duration: 3000,
-          theme: "bubble",
-        });
-        this.$refs.xphuongInput.focus();
-        return false; // Trả về false để ngăn chặn quá trình lưu dữ liệu
-      }
-      if (!this.user_data.diachi) {
-        // Hiển thị thông báo lỗi
-        this.$toasted.show("Chọn thông tin Địa chỉ", {
-          duration: 3000,
-          theme: "bubble",
-        });
-        this.$refs.diachiInput.focus();
-        return false; // Trả về false để ngăn chặn quá trình lưu dữ liệu
-      }
-      if (!this.user_data.cccd) {
-        // Hiển thị thông báo lỗi
-        this.$toasted.show("Chọn thông tin CCCD", {
-          duration: 3000,
-          theme: "bubble",
-        });
-        this.$refs.cccdInput.focus();
-        return false; // Trả về false để ngăn chặn quá trình lưu dữ liệu
-      }
-      if (!this.user_data.sodienthoai) {
-        // Hiển thị thông báo lỗi
-        this.$toasted.show("Chọn thông tin Số điện thoại", {
-          duration: 3000,
-          theme: "bubble",
-        });
-        this.$refs.sdtInput.focus();
-        return false; // Trả về false để ngăn chặn quá trình lưu dữ liệu
-      }
-      if (!this.user_data.email) {
-        // Hiển thị thông báo lỗi
-        this.$toasted.show("Chọn thông tin Email", {
-          duration: 3000,
-          theme: "bubble",
-        });
-        this.$refs.emailInput.focus();
-        return false; // Trả về false để ngăn chặn quá trình lưu dữ liệu
-      }
-      if (!this.isValidPhoneNumber(this.user_data.sodienthoai)) {
-        this.$toasted.show("Số điện thoại không hợp lệ", {
-          duration: 3000,
-          theme: "bubble",
-        });
-        return false;
-      }
-      if (!this.isValidCCCD(this.user_data.cccd)) {
-        this.$toasted.show("Căn cước công dân không hợp lệ", {
-          duration: 3000,
-          theme: "bubble",
-        });
-        return false;
-      }
-      if (!this.isValidEmail(this.user_data.email)) {
-        this.$toasted.show("Địa chỉ email không hợp lệ", {
-          duration: 3000,
-          theme: "bubble",
-        });
-        return false;
-      }
-
-      // Nếu tất cả thông tin đều hợp lệ, trả về true để cho phép quá trình lưu dữ liệu
-      return true;
-    },
-
     async activeUpdate(data) {
-      this.user_data = {};
-      this.user_data = data;
+      this.user_data = {}; // reset
       this.isActive = true;
+      this.isLoading = true;
+
+      try {
+        // Lấy danh sách xã/phường
+        const response = await this.$axios.get(
+          `/api/danhmucs/hanhchinh2cap-xa-with-ma-tinh?province_code=${data.matinh}`
+        );
+        this.info_xaphuong = response.data;
+
+        // Sau khi load options xong mới set lại dữ liệu người dùng
+        this.user_data = data;
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        this.isLoading = false;
+      }
     },
 
     async onSave() {
@@ -841,17 +745,9 @@ export default {
         title: `Xác nhận tạo mới người dùng ?`,
         showDenyButton: true,
         confirmButtonText: "Xác nhận tạo",
-        denyButtonText: `Hủy tạo`,
+        denyButtonText: `Hủy cập nhật`,
       });
       if (result.isConfirmed) {
-        // console.log(this.user_data);
-        // Kiểm tra dữ liệu trước khi ghi
-        const isDataValid = await this.checkFormData();
-        if (!isDataValid) {
-          // Dừng quá trình lưu dữ liệu nếu dữ liệu không hợp lệ
-          return;
-        }
-
         // Bắt đầu hiển thị biểu tượng loading
         this.isLoading = true;
         const current = new Date();
@@ -999,6 +895,7 @@ export default {
 </script>
 
 <style scoped lang="css">
+@import "@/assets/customCss/common.css";
 .table_wrapper {
   display: block;
   overflow: scroll;

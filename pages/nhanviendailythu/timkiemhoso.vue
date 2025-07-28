@@ -75,6 +75,7 @@
             v-model="infodaily"
             :options="dsdaily"
             :get-option-label="option => `${option.name} - ${option.cccd}`"
+            :disable="user.role !==2"
             />
           </div>
           <div class="column">
@@ -690,7 +691,7 @@ export default {
     // cập nhật ngày 27 tháng 7 năm 2025
     async getDsdaily(){
       const res = await this.$axios.get(`/api/kekhai/danhsachdaily`)
-      console.log(res.data.hs)
+      // console.log(res.data.hs)
       this.dsdaily=res.data.hs
     },
 
