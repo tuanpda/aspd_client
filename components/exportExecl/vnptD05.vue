@@ -122,170 +122,6 @@ export default {
         views: [{ state: "frozen", xSplit: 3, ySplit: 3 }],
       });
 
-      // 1. TẠO CÁC SHEET PHỤ LỤC 1 BÊN
-      // Tạo worksheet DM Quốc tịch
-      // console.log(countries);
-      const worksheetDmQt = workbook.addWorksheet("DM Quốc tịch");
-      worksheetDmQt.columns = [
-        { header: "Mã quốc gia", key: "code", width: 15 }, // Cột 1
-        { header: "Tên Quốc gia/ Vùng lãnh thổ", key: "name", width: 30 }, // Cột 2 với chiều rộng 30
-      ];
-      // Tô màu cho tiêu đề
-      const headerRow = worksheetDmQt.getRow(1); // Lấy hàng tiêu đề
-      headerRow.eachCell((cell) => {
-        cell.fill = {
-          type: "pattern",
-          pattern: "solid",
-          fgColor: { argb: "FFADD8E6" }, // Màu xanh nước biển nhạt
-        };
-      });
-      // Căn giữa tiêu đề
-      headerRow.eachCell((cell) => {
-        cell.alignment = {
-          horizontal: "center", // Căn giữa theo chiều ngang
-          vertical: "middle", // Căn giữa theo chiều dọc (tùy chọn)
-        };
-      });
-      // Tạo các hàng từ dữ liệu JSON
-      countries.forEach((country) => {
-        const row = worksheetDmQt.addRow([country.code, country.name]); // Thêm từng hàng vào Excel
-        // Chỉ căn giữa cột đầu tiên
-        row.getCell(1).alignment = {
-          horizontal: "center", // Căn giữa dữ liệu theo chiều ngang
-          vertical: "middle", // Căn giữa theo chiều dọc (tùy chọn)
-        };
-      });
-      worksheetDmQt.autoFilter = {
-        from: "A1",
-        to: "B1",
-      };
-
-      // Tạo worksheet DM dân tộc
-      // console.log(dantoc);
-      const worksheetDmDt = workbook.addWorksheet("Dân tộc");
-      worksheetDmDt.columns = [
-        { header: "Mã dân tộc", key: "id", width: 15 }, // Cột 1
-        { header: "Tên dân tộc", key: "name", width: 30 }, // Cột 2 với chiều rộng 30
-      ];
-      // Tô màu cho tiêu đề
-      const headerRowdt = worksheetDmDt.getRow(1); // Lấy hàng tiêu đề
-      headerRowdt.eachCell((cell) => {
-        cell.fill = {
-          type: "pattern",
-          pattern: "solid",
-          fgColor: { argb: "FFADD8E6" }, // Màu xanh nước biển nhạt
-        };
-      });
-      // Căn giữa tiêu đề
-      headerRowdt.eachCell((cell) => {
-        cell.alignment = {
-          horizontal: "center", // Căn giữa theo chiều ngang
-          vertical: "middle", // Căn giữa theo chiều dọc (tùy chọn)
-        };
-      });
-      // Tạo các hàng từ dữ liệu JSON
-      dantoc.forEach((dt) => {
-        const row = worksheetDmDt.addRow([dt.id, dt.name]); // Thêm từng hàng vào Excel
-        // Chỉ căn giữa cột đầu tiên
-        row.getCell(1).alignment = {
-          horizontal: "center", // Căn giữa dữ liệu theo chiều ngang
-          vertical: "middle", // Căn giữa theo chiều dọc (tùy chọn)
-        };
-      });
-      worksheetDmDt.autoFilter = {
-        from: "A1",
-        to: "B1",
-      };
-
-      // Tạo worksheet DM mối quan hệ
-      const worksheetDmMqh = workbook.addWorksheet("Mối quan hệ");
-      worksheetDmMqh.columns = [
-        { header: "Mã mối quan hệ", key: "code", width: 20 }, // Cột 1
-        { header: "Mối quan hệ", key: "name", width: 30 }, // Cột 2 với chiều rộng 30
-      ];
-      // Tô màu cho tiêu đề
-      const headerRowmqh = worksheetDmMqh.getRow(1); // Lấy hàng tiêu đề
-      headerRowmqh.eachCell((cell) => {
-        cell.fill = {
-          type: "pattern",
-          pattern: "solid",
-          fgColor: { argb: "FFADD8E6" }, // Màu xanh nước biển nhạt
-        };
-      });
-      // Căn giữa tiêu đề
-      headerRowmqh.eachCell((cell) => {
-        cell.alignment = {
-          horizontal: "center", // Căn giữa theo chiều ngang
-          vertical: "middle", // Căn giữa theo chiều dọc (tùy chọn)
-        };
-      });
-      // Tạo các hàng từ dữ liệu JSON
-      reles.forEach((dt) => {
-        const row = worksheetDmMqh.addRow([dt.code, dt.name]); // Thêm từng hàng vào Excel
-        // Chỉ căn giữa cột đầu tiên
-        row.getCell(1).alignment = {
-          horizontal: "center", // Căn giữa dữ liệu theo chiều ngang
-          vertical: "middle", // Căn giữa theo chiều dọc (tùy chọn)
-        };
-      });
-      worksheetDmMqh.autoFilter = {
-        from: "A1",
-        to: "B1",
-      };
-
-      // Tạo worksheet DM mức hưởng bhyt
-      const worksheetDmMhbhyt = workbook.addWorksheet("Mức hưởng BHYT");
-      worksheetDmMhbhyt.columns = [
-        { header: "Mã", key: "code", width: 15 }, // Cột 1
-        { header: "Diễn giải", key: "name", width: 100 }, // Cột 2 với chiều rộng 30
-      ];
-      // Tô màu cho tiêu đề
-      const headerRowMhbhyt = worksheetDmMhbhyt.getRow(1); // Lấy hàng tiêu đề
-      headerRowMhbhyt.eachCell((cell) => {
-        cell.fill = {
-          type: "pattern",
-          pattern: "solid",
-          fgColor: { argb: "FFADD8E6" }, // Màu xanh nước biển nhạt
-        };
-      });
-      // Căn giữa tiêu đề
-      headerRowMhbhyt.eachCell((cell) => {
-        cell.alignment = {
-          horizontal: "center", // Căn giữa theo chiều ngang
-          vertical: "middle", // Căn giữa theo chiều dọc (tùy chọn)
-        };
-      });
-      // Tạo các hàng từ dữ liệu JSON
-      mhbhyt.forEach((dt) => {
-        const row = worksheetDmMhbhyt.addRow([dt.code, dt.name]); // Thêm từng hàng vào Excel
-        // Chỉ căn giữa cột đầu tiên
-        row.getCell(1).alignment = {
-          horizontal: "center", // Căn giữa dữ liệu theo chiều ngang
-          vertical: "middle", // Căn giữa theo chiều dọc (tùy chọn)
-        };
-        row.getCell(2).alignment = {
-          wrapText: true, // Bọc văn bản để tránh tràn nội dung
-        };
-      });
-      worksheetDmMhbhyt.autoFilter = {
-        from: "A1",
-        to: "B1",
-      };
-
-      // Tạo worksheet DM DMHC
-      const worksheetDmDmhc = workbook.addWorksheet("DMHC");
-      worksheetDmDmhc.getCell("A1").value = {
-        text: "Tra cứu danh mục hành chính, bệnh viện",
-        hyperlink:
-          "http://viettel-ca.vn/download/soft/danh_muc_hanh_chinh.xlsx",
-        tooltip: "Download từ trang chủ của Viettel",
-      };
-      worksheetDmDmhc.getCell("A1").font = {
-        underline: true, // Gạch dưới
-        color: { argb: "0000FF" }, // Màu xanh lam
-      };
-      worksheetDmDmhc.getColumn(1).width = 60;
-
       // 2. THIẾT KẾ SHEET DỮ LIỆU
       // cột định nghĩa từ A - BD
       const columnNamesABD = this.generateColumnNamesAtoBD();
@@ -613,8 +449,25 @@ export default {
           row.getCell(36).value = "0"; // Cột AJ
         }
 
+        // Cột AS 45 - AX 50
+        row.getCell(45).value = item.tentinh; 
+        row.getCell(46).value = item.matinh;
+        row.getCell(47).value = item.tenquanhuyen; 
+        row.getCell(48).value = item.maquanhuyen; 
+        row.getCell(49).value = item.tenxaphuong; 
+        row.getCell(50).value = item.maxaphuong; 
+
+        // Cột AY 51 - BD 56
+        row.getCell(51).value = item.tentinh; 
+        row.getCell(52).value = item.matinh; 
+        row.getCell(53).value = item.tenquanhuyen;
+        row.getCell(54).value = item.maquanhuyen; 
+        row.getCell(55).value = item.tenxaphuong; 
+        row.getCell(56).value = item.maxaphuong; 
+
         row.getCell(57).value = item.tennguoitao; // Cột BE
         row.getCell(59).value = item.dienthoai; // Cột BG
+        row.getCell(74).value = item.ghichu; // Cột BV
 
         row.commit(); // Xác nhận thay đổi cho hàng
       });
@@ -637,6 +490,7 @@ export default {
       a.click();
       document.body.removeChild(a);
     },
+
 
     async exportExcel() {
       const workbook = new ExcelJS.Workbook();
@@ -661,6 +515,14 @@ export default {
         const rowNumber = startRow + index;
         const row = worksheet.getRow(rowNumber);
 
+        const doituong = this.doituongdong.find((d) => d.madoituong === item.madoituong);
+        const tyleHotroTW = doituong ? doituong.tylehotro : 0;
+
+        const base = 1500000;
+        const bhxh = (base * 22) / 100;
+        const tienNSNNHT = (bhxh * tyleHotroTW) / 100;
+        const tienNSDP = (((1500000 * 22) / 100) * 20) / 100;
+
         row.getCell(1).value = `${index + 1}`;
         row.getCell(2).value = item.hoten;
         row.getCell(3).value = item.masobhxh;
@@ -670,112 +532,17 @@ export default {
         row.getCell(8).value = item.maphuongthucdong;
         row.getCell(9).value = "22";
 
-        const doituong = this.doituongdong.find(
-          (d) => d.madoituong === item.madoituong
-        );
-        const tyleHotroTW = doituong ? doituong.tylehotro : 0;
-        // console.log(tyleHotroTW);
+        // row.getCell(10).value = tyleHotroTW.toString();
+        // row.getCell(11).value = item.madoituong && tyleHotroTW > 0 ? tienNSNNHT * item.maphuongthucdong : 0;
+        // row.getCell(12).value = this.tylediaphuonghotroIs;
+        // row.getCell(13).value = tienNSDP * item.maphuongthucdong;
+        row.getCell(10).value = item.tylensnnht;
+        row.getCell(11).value = parseFloat(item.tiennsnnht) * parseFloat(item.maphuongthucdong)
+        row.getCell(12).value = item.tylensdp;
+        row.getCell(13).value = parseFloat(item.tiennsdp) * parseFloat(item.maphuongthucdong)
 
-        // tạm thời làm thủ công sau sửa sau
-        // Cột J
-        // if (item.madoituong !== null || item.madoituong !== "") {
-        //   if (item.madoituong == "BT") {
-        //     row.getCell(10).value = "20";
-        //   } else if (item.madoituong == "CN") {
-        //     row.getCell(10).value = "40";
-        //   } else {
-        //     row.getCell(10).value = "50";
-        //   }
-        // }
-
-        row.getCell(10).value = tyleHotroTW.toString();
-
-        // Cột K
-        let tienNSNNHT = 0;
-        // if (item.madoituong !== null || item.madoituong !== "") {
-        //   if (item.madoituong == "BT") {
-        //     tienNSNNHT = (((1500000 * 22) / 100) * 20) / 100;
-        //     row.getCell(11).value = tienNSNNHT * item.maphuongthucdong;
-        //   } else if (item.madoituong == "CN") {
-        //     tienNSNNHT = (((1500000 * 22) / 100) * 40) / 100;
-        //     row.getCell(11).value = tienNSNNHT * item.maphuongthucdong;
-        //   } else {
-        //     tienNSNNHT = (((1500000 * 22) / 100) * 50) / 100;
-        //     row.getCell(11).value = tienNSNNHT * item.maphuongthucdong;
-        //   }
-        // }
-
-        if (item.madoituong && tyleHotroTW > 0) {
-          const base = 1500000;
-          const bhxh = (base * 22) / 100;
-          const tienNSNNHT = (bhxh * tyleHotroTW) / 100;
-
-          row.getCell(11).value = tienNSNNHT * item.maphuongthucdong;
-        } else {
-          row.getCell(11).value = 0;
-        }
-
-        // cột L % ngân sách địa phương hỗ trợ
-        // row.getCell(12).value = "20";
-        row.getCell(12).value = this.tylediaphuonghotroIs
-
-        // cột M
-        const tienNSDP = (((1500000 * 22) / 100) * 20) / 100;
-        row.getCell(13).value = tienNSDP * item.maphuongthucdong;
-
-        // cột P
         row.getCell(16).value = Number(item.sotien);
-
-        // cột Q
-        row.getCell(17).value =
-          Number(item.sotien) +
-          Number(tienNSDP * item.maphuongthucdong) +
-          Number(tienNSNNHT);
-
-        // // row.getCell(7).value = item.tylengansachdiaphuong; // Cột G ngân sách địa phương\
-        // row.getCell(7).value = "20"; // để 0 theo quỳnh nói
-
-        // if (item.ngaybienlai !== null || item.ngaybienlai !== "") {
-        //   const [datePart] = item.ngaybienlai.split(" ");
-        //   const [day, month, year] = datePart.split("-");
-
-        //   const formattedDate = `${day}/${month}/${year}`;
-
-        //   row.getCell(8).value = formattedDate; // Cột H ngày biên lai
-        // }
-        // row.getCell(9).value = item.sobienlai; // Cột I số biên lai
-
-        // // console.log(item.manguoithu);
-
-        // if (item.manguoithu == null || item.manguoithu == "") {
-        //   row.getCell(10).value = "Mặc định";
-        //   row.getCell(11).value = item.tienluongcs; // Cột K lương cs
-        // } else {
-        //   if (item.manguoithu !== 1) {
-        //     row.getCell(10).value = item.manguoithu; // Cột J người thứ
-        //     // gán luôn cột mức tiền đóng
-        //     // console.log(typeof item.tienluongcs);
-        //     if (item.manguoithu == 2) {
-        //       row.getCell(11).value = "1638000";
-        //     } else if (item.manguoithu == 3) {
-        //       row.getCell(11).value = "1404000";
-        //     } else if (item.manguoithu == 4) {
-        //       row.getCell(11).value = "1170000";
-        //     } else if (item.manguoithu == 5) {
-        //       row.getCell(11).value = "936000";
-        //     }
-        //   } else {
-        //     row.getCell(10).value = "Mặc định";
-        //     row.getCell(11).value = item.tienluongcs; // Cột K lương cs
-        //   }
-        // }
-
-        // row.getCell(12).value = item.sotien; // Cột L tiền thực tế
-
-        // row.getCell(14).value = item.tungay; // Cột N
-
-
-
+        row.getCell(17).value = Number(item.sotien) + tienNSDP * item.maphuongthucdong + tienNSNNHT;
         row.getCell(18).value = item.tentinh;
         row.getCell(19).value = item.matinh;
         row.getCell(20).value = item.tenquanhuyen;
@@ -839,6 +606,7 @@ export default {
       a.click();
       document.body.removeChild(a);
     }
+
   },
 };
 </script>

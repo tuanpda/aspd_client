@@ -26,19 +26,22 @@
   justify-content: center;
 }
 
-.modal-card {
-  width: 1450px;
-  height: auto;
-}
-
-.modal-card-kekhai {
-  width: 1250px;
-  height: auto;
-}
-
+.modal-card,
+.modal-card-kekhai,
 .modal-card-fix-hoso {
-  width: 1250px;
+  width: 95%;
+  max-width: 1250px; /* Giới hạn chiều rộng tối đa */
   height: auto;
+  margin: auto;
+}
+
+@media (max-width: 768px) {
+  .modal-card,
+  .modal-card-kekhai,
+  .modal-card-fix-hoso {
+    width: 98%;
+    max-width: none; /* Hủy giới hạn */
+  }
 }
 
 /* Tùy chỉnh giao diện của input */

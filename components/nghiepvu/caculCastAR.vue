@@ -693,7 +693,7 @@
     <div class="">
       <div :class="{ 'is-active': isActive_nhaphoso }" class="modal">
         <div class="modal-background"></div>
-        <div class="modal-content modal-card-predata">
+        <div class="modal-content modal-card-body box">
           <section class="modal-card-body box">
             <div>
               <div>
@@ -1398,7 +1398,7 @@
     <div class="">
       <div :class="{ 'is-active': isActive_import }" class="modal">
         <div class="modal-background"></div>
-        <div class="modal-content modal-card-kekhai box">
+        <div class="modal-content modal-card-body box">
           <section class="modal-card-kekhai-body">
             <div>
               <div>
@@ -1458,7 +1458,7 @@
               </div>
               <div class="columns table_wrapper">
                 <div class="column">
-                  <div v-if="items.length > 0">
+                  <div v-if="dataImport.length > 0">
                     <table
                       class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
                     >
@@ -1466,31 +1466,11 @@
                         <tr style="font-size: small; background-color: #fff8dc">
                           <td style="text-align: center; width: 3%">STT</td>
                           <td style="text-align: center">Mã số BHXH</td>
-                          <td style="text-align: center">Họ tên</td>
-                          <td style="text-align: center">Ngày sinh</td>
-                          <td style="text-align: center">Giới tính</td>
-                          <td style="text-align: center">CCCD</td>
-                          <td style="text-align: center">Điện thoại</td>
-                          <td style="text-align: center">Phương án</td>
-                          <td style="text-align: center">Lương cơ sở</td>
-                          <td style="text-align: center">Tỷ lệ NSTW %</td>
-                          <td style="text-align: center">Tỷ lệ NSĐP %</td>
-                          <td style="text-align: center">Tỷ lệ HT khác</td>
-                          <td style="text-align: center">Từ ngày</td>
-                          <td style="text-align: center">Số tháng</td>
-                          <td style="text-align: center">Số tiền phải đóng</td>
-                          <td style="text-align: center">Tỉnh / Thành phố</td>
-                          <td style="text-align: center">Quận / Huyện</td>
-                          <td style="text-align: center">Xã phường</td>
-                          <td style="text-align: center">Tổ thôn</td>
-                          <td style="text-align: center">Bệnh viện tỉnh</td>
-                          <td style="text-align: center">Bệnh viện</td>
-                          <td style="text-align: center">Ghi chú</td>
                         </tr>
                       </thead>
                       <tbody>
                         <tr
-                          v-for="(item, index) in items"
+                          v-for="(item, index) in dataImport"
                           :key="index"
                           style="font-size: small"
                         >
@@ -1501,79 +1481,6 @@
                           </td>
                           <td style="text-align: center; font-weight: 500">
                             {{ item.masobhxh }}
-                          </td>
-                          <td style="text-align: center; font-weight: 500">
-                            {{ item.hoten }}
-                          </td>
-                          <td style="text-align: center">
-                            {{ formatISODateToDMY(item.ngaysinh) }}
-                          </td>
-                          <td style="text-align: center">
-                            {{ item.gioitinh }}
-                          </td>
-                          <td style="text-align: center; font-weight: 500">
-                            {{ item.cccd }}
-                          </td>
-                          <td style="text-align: center; font-weight: 500">
-                            {{ item.dienthoai }}
-                          </td>
-                          <td style="text-align: center">
-                            {{ item.tenphuongan }}
-                          </td>
-                          <td style="text-align: center">
-                            {{ item.tienluongcs }}
-                          </td>
-                          <td style="text-align: center">
-                            {{ item.tylensnnht }}
-                          </td>
-                          <td style="text-align: center">
-                            {{ item.tylensdp }}
-                          </td>
-                          <td style="text-align: center">
-                            {{ item.hotrokhac }}
-                          </td>
-                          <td style="text-align: center">
-                            {{ formatISODateToDMY(item.tungay) }}
-                          </td>
-                          <td style="text-align: center">
-                            {{ item.tenphuongthucdong }}
-                          </td>
-                          <td
-                            style="
-                              text-align: center;
-                              font-weight: 500;
-                              color: red;
-                            "
-                          >
-                            {{ formatCurrency(item.sotien) }}
-                          </td>
-                          <!-- tỉnh-->
-                          <td style="text-align: center">
-                            {{ item.tentinh }}
-                          </td>
-                          <!-- quận huyện -->
-                          <td style="text-align: center">
-                            {{ item.tenquanhuyen }}
-                          </td>
-                          <!-- xã phường -->
-                          <td>
-                            {{ item.tenxaphuong }}
-                          </td>
-                          <!-- tổ thôn -->
-                          <td>
-                            {{ item.tothon }}
-                          </td>
-                          <!-- tỉnh bệnh viện -->
-                          <td style="text-align: center">
-                            {{ item.benhvientinh }}
-                          </td>
-                          <!-- bệnh viện -->
-                          <td>
-                            {{ item.tenbenhvien }}
-                          </td>
-                          <!-- ghi chú -->
-                          <td>
-                            {{ item.ghichu }}
                           </td>
                         </tr>
                       </tbody>
@@ -1589,7 +1496,7 @@
                   >
                     <div class="control">
                       <button
-                        @click="onSave"
+                        @click="XacNhanImport"
                         class="button is-success is-small"
                       >
                         Xác nhận nạp hồ sơ
@@ -1656,6 +1563,7 @@ export default {
   components: { DatePicker, vSelect },
   data() {
     return {
+      dataImport: [],
       isActive: false,
       isActive_nhaphoso: false,
       isActive_xacnhan: false,
@@ -1884,9 +1792,9 @@ export default {
 
           // console.log(data.hanthecu);
           // 31/12/2025
-          
+
           const hanTheCuStr = data.hanthecu; // từ data.hanthecu hoặc hardcode để test
-          const parts = hanTheCuStr.split('/');
+          const parts = hanTheCuStr.split("/");
           const hanTheCu = new Date(parts[2], parts[1] - 1, parts[0]); // yyyy, MM-1, dd
 
           const today = new Date();
@@ -1899,7 +1807,7 @@ export default {
             Swal.fire({
               icon: "info",
               title: "Thẻ vẫn còn hạn",
-              text: `Thẻ hiện còn hiệu lực thêm ${diffDays} ngày. Cân nhắc trước khi gia hạn!`
+              text: `Thẻ hiện còn hiệu lực thêm ${diffDays} ngày. Cân nhắc trước khi gia hạn!`,
             });
           }
 
@@ -4092,16 +4000,122 @@ export default {
         // Giả sử file của bạn có dữ liệu ở sheet đầu tiên
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
         const jsonData = XLSX.utils.sheet_to_json(sheet);
-
-        // Kiểm tra và xử lý dữ liệu sau khi đọc từ file Excel
-        if (jsonData.length > 0) {
-          jsonData.forEach((row) => {
-            this.addRowFromImportedData(row);
-          });
-        }
+        console.log(jsonData);
+        this.dataImport = jsonData;
       };
 
       reader.readAsBinaryString(file);
+    },
+
+    async getNguoiHuongBySoBHXH(masobhxh) {
+      if (!masobhxh) return null;
+      try {
+        const res = await this.$axios.post(`/api/kekhai/getinfo`, { masobhxh });
+        return res.data.data || null;
+      } catch (error) {
+        console.error("Không tìm được:", masobhxh);
+        return null;
+      }
+    },
+
+    async XacNhanImport() {
+      if (!this.dataImport || !this.dataImport.length) {
+        Swal.fire("Lỗi", "Không có dữ liệu import", "error");
+        return;
+      }
+
+      for (const row of this.dataImport) {
+        const masobhxh = row.masobhxh?.toString().trim();
+        if (!masobhxh) continue;
+
+        // Gọi API để lấy dữ liệu
+        const data = await this.getNguoiHuongBySoBHXH(masobhxh);
+        if (!data) continue;
+
+        // Dùng mẫu addRow
+        const phuongAnMacDinh =
+          this.phuongan.find((p) => p.maphuongan === "ON") || {};
+        const phuongThucMacDinh =
+          this.phuongthucdong.find((p) => p.maphuongthuc === "12") || {};
+
+        const item = {
+          matochuc: this.user.matochuc,
+          tentochuc: this.user.tentochuc,
+          madaily: this.user.madaily,
+          tendaily: this.user.tendaily,
+          maloaihinh: this.maloaihinh,
+          tenloaihinh: this.loaihinh,
+          masobhxh: masobhxh,
+          hoten: data.hoten || "",
+          ngaysinh:
+            data.ngaysinh?.slice(0, 10)?.split("-").reverse().join("/") || "",
+          gioitinh: data.gioitinh === "1" ? "Nam" : "Nữ",
+          cccd: data.cccd || "",
+          dienthoai: data.sodienthoai || "",
+          info_phuongan: this.phuongan,
+          maphuongan: phuongAnMacDinh.maphuongan || "",
+          tenphuongan: phuongAnMacDinh.tenphuongan || "",
+          tienluongcs: this.luongcoso,
+          tylensnnht: this.tylengansachtw,
+          tylensdp: this.tylenngansachdp,
+          hotrokhac: this.hotrokhac,
+          tungay: "", // tính sau nếu cần
+          denngay: "",
+          phuongthucdong: this.phuongthucdong,
+          maphuongthucdong: phuongThucMacDinh.maphuongthuc || "",
+          tenphuongthucdong: phuongThucMacDinh.tenphuongthuc || "",
+          sotien: 0,
+          info_tinh: { matinh: this.matinh, tentinh: this.tentinh },
+          matinh: this.matinh,
+          tentinh: this.tentinh,
+          info_huyen: this.dmquanhuyen,
+          maquanhuyen: data.quanhuyen?.mahuyen || "",
+          tenquanhuyen: data.quanhuyen?.tenhuyen || "",
+          info_xaphuong: [],
+          maxaphuong: data.xa?.maxa || "",
+          tenxaphuong: data.xa?.tenxa || "",
+          tothon: data.diachidangsinhsong || "",
+          info_benhvien: this.dmbenhvien,
+          benhvientinh: this.matinh,
+          mabenhvien: `40${data.benhvien?.mabenhvien}` || "",
+          tenbenhvien: data.benhvien?.tenbenhvien || "",
+          ghichu: "",
+          madoituong: "",
+          tendoituong: "",
+          tuthang: "",
+          denthang: "",
+          nguoithu: "",
+          manguoithu: 0,
+          tylengansachdiaphuong: 0,
+          tyledong: 0,
+          muctiendong: 0,
+          tientunguyendong: 0,
+          tienlai: 0,
+          tiennsnnht: 0,
+          tiennsdp: 0,
+          dotkekhai: "",
+          kykekhai: "",
+          ngaykekhai: "",
+          ngaybienlai: "",
+          sobienlai: "",
+          trangthai: 0,
+          status_hosoloi: 0,
+          status_naptien: 0,
+          hinhthucnap: 1,
+          hanthecu: data.hanthecu || "",
+        };
+
+        // Push vào danh sách
+        this.items.push(item);
+
+        // Tính tiền
+        await this.$nextTick(() => {
+          const index = this.items.length - 1;
+          this.tinhTienPhaiDong(index);
+        });
+      }
+
+      Swal.fire("Thành công", "Đã import dữ liệu kê khai", "success");
     },
 
     // Phương thức này sẽ thêm dữ liệu vào danh sách `items` từ file Excel
