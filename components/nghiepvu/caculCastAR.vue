@@ -57,7 +57,7 @@
               <td style="text-align: center">Số tháng</td>
               <td style="text-align: center">Số tiền phải đóng</td>
               <td style="text-align: center">Tỉnh / Thành phố</td>
-              <td style="text-align: center">Quận / Huyện</td>
+              <!-- <td style="text-align: center">Quận / Huyện</td> -->
               <td style="text-align: center">Xã phường</td>
               <td style="text-align: center">Tổ thôn</td>
               <!--<td style="text-align: center">Bệnh viện tỉnh</td> -->
@@ -244,7 +244,7 @@
                 />
               </td>
               <!-- tỉnh-->
-              <td style="text-align: center">
+              <!-- <td style="text-align: center">
                 <div class="select is-fullwidth is-small">
                   <select
                     v-model="item.matinh"
@@ -259,9 +259,25 @@
                     </option>
                   </select>
                 </div>
+              </td> -->
+              <td style="text-align: center">
+                <div class="select is-fullwidth is-small">
+                  <select
+                    v-model="item.matinh"
+                    @change="provinceChange($event, index)"
+                  >
+                    <option
+                      v-for="(dt, index) in cq2cap_Tinh"
+                      :key="index"
+                      :value="dt.province_code"
+                    >
+                      {{ dt.name }}
+                    </option>
+                  </select>
+                </div>
               </td>
               <!-- quận huyện -->
-              <td style="text-align: center">
+              <!-- <td style="text-align: center">
                 <div class="select is-fullwidth is-small">
                   <select
                     @change="quanhuyenChange($event, index)"
@@ -280,9 +296,9 @@
                     </option>
                   </select>
                 </div>
-              </td>
+              </td> -->
               <!-- xã phường -->
-              <td style="text-align: center">
+              <!-- <td style="text-align: center">
                 <div class="select is-fullwidth is-small">
                   <select
                     @change="xaphuongChange($event, index)"
@@ -302,6 +318,27 @@
                     </option>
                   </select>
                 </div>
+              </td> -->
+              <td style="text-align: center">
+                <v-select
+                  v-model="item.maxaphuong_new"
+                  :options="item.info_xaphuong"
+                  label="ward_name"
+                  :reduce="(b) => b.ward_code"
+                  :get-option-label="
+                    (val) => {
+                      if (typeof val === 'string') {
+                        const found = item.info_xaphuong.find(
+                          (x) => x.ward_code === val
+                        );
+                        return found ? found.ward_name : val;
+                      }
+                      return val.ward_name;
+                    }
+                  "
+                  @input="xaphuongChange($event, index)"
+                  :append-to-body="true"
+                />
               </td>
               <!-- tổ thôn -->
               <td style="text-align: center">
@@ -1621,6 +1658,10 @@ export default {
       dulieuInbienlai: [],
       dulieuTravedeinbienlai: [],
       lockButtonXacnhaninbldt: false, // khóa nút xác nhận biên lai khi đã gửi
+
+      // lam chinh quyen 2 cap 13/7/2025
+      cq2cap_Tinh: [],
+      cq2cap_Huyen: [],
     };
   },
 
@@ -1628,7 +1669,7 @@ export default {
     this.isRoleSent = this.user.res_sent;
     // console.log(this.isRoleSent);
 
-    // this.test();
+    this.loadTinh();
   },
 
   async created() {
@@ -1782,13 +1823,22 @@ export default {
           this.items[index].tothon = data.diachidangsinhsong;
 
           //  TÌM VÀ GÁN LẠI TÊN XÃ MỚI 2 CẤP
-          // const res_xa = await this.$axios.get(
-          //   `/api/danhmucs/hanhchinh2cap-find-tenxa?old_ward_code=${data.xa.maxa}`
-          // );
-          // if (res_xa.data.length > 0) {
-          //   this.items[index].tenxaphuong_new = res_xa.data[0].ward_name;
-          //   this.items[index].maxaphuong_new = res_xa.data[0].ward_code;
-          // }
+          const res_xa = await this.$axios.get(
+            `/api/danhmucs/hanhchinh2cap-find-tenxa?old_ward_code=${data.xa.maxa}`
+          );
+          if (res_xa.data.length > 0) {
+            this.items[index].tenxaphuong_new = res_xa.data[0].ward_name;
+            this.items[index].maxaphuong_new = res_xa.data[0].ward_code;
+          }
+
+          console.log(this.items[index].tenxaphuong_new);
+          console.log(this.items[index].maxaphuong_new);
+
+          // load xã theo tỉnh của mã số bhxh
+          const response = await this.$axios.get(
+            `/api/danhmucs/hanhchinh2cap-xa-with-ma-tinh?province_code=${data.tinh.matinh}`
+          );
+          this.items[index].info_xaphuong = response.data;
 
           // console.log(data.hanthecu);
           // 31/12/2025
@@ -1859,6 +1909,15 @@ export default {
         });
       } finally {
         this.isLoading = false;
+      }
+    },
+
+    // HANH CHINH 2 CAP
+    async loadTinh() {
+      const res = await this.$axios.get(`/api/danhmucs/hanhchinh2cap-tinh`);
+      // console.log(res.data);
+      if (res.data.length > 0) {
+        this.cq2cap_Tinh = res.data;
       }
     },
 
@@ -2884,7 +2943,7 @@ export default {
       }
     },
 
-    addRow() {
+    async addRow() {
       this.lockButtonXacnhaninbldt = false;
       const phuongAnMacDinh = this.phuongan.find(
         (p) => p.maphuongan === "ON"
@@ -2893,6 +2952,13 @@ export default {
       const phuongThucMacDinh = this.phuongthucdong.find(
         (p) => p.maphuongthuc === "12"
       ) || { maphuongthuc: "", tenphuongthuc: "" };
+
+      // load xã theo tỉnh
+      const response = await this.$axios.get(
+        `/api/danhmucs/hanhchinh2cap-xa-with-ma-tinh?province_code=${this.matinh}`
+      );
+      const dataXa = response.data;
+
       try {
         this.items.push({
           matochuc: this.user.matochuc,
@@ -2929,7 +2995,7 @@ export default {
           info_huyen: this.dmquanhuyen,
           maquanhuyen: "",
           tenquanhuyen: "",
-          info_xaphuong: [],
+          info_xaphuong: dataXa,
           maxaphuong: "",
           tenxaphuong: "",
           tothon: "",
@@ -2964,8 +3030,10 @@ export default {
           status_hosoloi: 0,
           status_naptien: 0,
           hinhthucnap: 1,
-
           hanthecu: "",
+
+          maxaphuong_new: "",
+          tenxaphuong_new: "",
         });
 
         // Tính tiền ngay sau khi add
@@ -3083,16 +3151,25 @@ export default {
       // lấy thông tin thay đổi từ người dùng select
       const matinh = e.target.value;
       const tentinh = e.target.options[e.target.selectedIndex].text;
+
       // lấy dữ liệu quận huyện từ mã tỉnh đã được chọn
       try {
+        this.isLoading = true;
         const response = await this.$axios.get(
-          `/api/danhmucs/dmquanhuyenwithmatinh?matinh=${matinh}`
+          `/api/danhmucs/hanhchinh2cap-xa-with-ma-tinh?province_code=${matinh}`
         );
+        // console.log(response.data);
+
         // bind dữ liệu vào dữ liệu select của items để cho từng item sử dụng
-        this.items[index].info_huyen = response.data;
-        this.items[index].matinh = matinh;
-        this.items[index].tentinh = tentinh;
+        if (response.data.length > 0) {
+          this.checkXaphuongOpen = true;
+          this.items[index].info_xaphuong = response.data;
+          this.items[index].matinh = matinh;
+          this.items[index].tentinh = tentinh;
+        }
+        this.isLoading = false;
       } catch (error) {
+        this.isLoading = false;
         console.error("Error fetching data:", error);
       }
     },
@@ -3117,11 +3194,23 @@ export default {
     },
 
     // xã phường
-    async xaphuongChange(e, index) {
-      const maxaphuong = e.target.value;
-      const tenxaphuong = e.target.options[e.target.selectedIndex].text;
-      this.items[index].maxaphuong = maxaphuong;
-      this.items[index].tenxaphuong = tenxaphuong;
+    async xaphuongChange(ward_code, index) {
+      const item = this.items[index];
+
+      const selected = item.info_xaphuong.find(
+        (b) => b.ward_code === ward_code
+      );
+
+      item.maxaphuong = ward_code;
+      item.tenxaphuong = selected ? selected.ward_name : "";
+
+      // console.log('xã change: ', item.maxaphuong, item.tenxaphuong);
+
+      this.items[index].maxaphuong_new = item.maxaphuong;
+      this.items[index].tenxaphuong_new = item.tenxaphuong;
+
+      console.log(this.items[index].maxaphuong_new);
+      console.log(this.items[index].tenxaphuong_new);
     },
 
     // tỉnh bệnh viện
@@ -3572,8 +3661,8 @@ export default {
               maloaihinh: item.maloaihinh,
               tothon: item.tothon,
               tenquanhuyen: item.tenquanhuyen,
-              // maxaphuong_new: item.maxaphuong_new,
-              // tenxaphuong_new: item.tenxaphuong_new,
+              maxaphuong_new: item.maxaphuong_new,
+              tenxaphuong_new: item.tenxaphuong_new,
               tentinh: item.tentinh,
               currentYear: currentYear,
               urlNameInvoice: urlNameInvoice,
@@ -3824,7 +3913,8 @@ export default {
         }
       );
 
-      const diachi = data.tenquanhuyen + "; " + data.tentinh;
+      const diachi = data.tenxaphuong_new + "; " + data.tentinh;
+      // const diachi = data.tenquanhuyen + "; " + data.tentinh;
       // data.tothon + "; " +
 
       doc.text(`Địa chỉ: `, toadoXInfo, toadoYInfo + 8, {

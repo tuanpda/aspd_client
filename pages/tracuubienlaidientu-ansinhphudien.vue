@@ -120,6 +120,9 @@ export default {
         this.data = res.data.hs;
         this.viewXacnhan = true;
 
+        console.log(res.data.hs.status);
+        
+
         // tạo tên file PDF từ sobienlai và hoten
         const urlNameInvoice = res.data.hs.urlNameInvoice;
 
