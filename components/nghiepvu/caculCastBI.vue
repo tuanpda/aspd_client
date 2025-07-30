@@ -6,14 +6,6 @@
           <div
             class="field is-grouped is-grouped-multiline is-justify-content-flex-end"
           >
-            <!-- <p class="control">
-              <button @click="addHosokekhai" class="button is-small is-success">
-                <span class="icon">
-                  <i class="fas fa-pen-nib"></i>
-                </span>
-                <span>Nhập dữ liệu kê khai</span>
-              </button>
-            </p> -->
             <p class="control">
               <button @click="importKekhai" class="button is-small is-info">
                 <span class="icon">
@@ -23,11 +15,23 @@
               </button>
             </p>
             <p class="control">
-              <button class="button is-small is-warning">
+              <a
+                :href="urlDownload + '/filemauimport/mauimport.xlsx'"
+                download
+                class="button is-small is-warning"
+              >
                 <span class="icon">
                   <i class="fas fa-file-download"></i>
                 </span>
                 <span>Tải về mẫu Import</span>
+              </a>
+            </p>
+            <p class="control">
+              <button @click="clearAllItems" class="button is-small is-danger">
+                <span class="icon">
+                  <i class="fas fa-trash-alt"></i>
+                </span>
+                <span>Xoá toàn bộ dữ liệu kê khai</span>
               </button>
             </p>
           </div>
@@ -1427,6 +1431,242 @@
         </div>
       </div>
     </div>
+
+    <!-- modal import dữ liệu kê khai -->
+    <div class="">
+      <div :class="{ 'is-active': isActive_import }" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-content modal-card-predata box">
+          <section class="modal-card-kekhai-body">
+            <div>
+              <div>
+                <span style="font-weight: 800; font-size: 15px; color: #3cb371"
+                  >Import dữ liệu kê khai</span
+                >
+              </div>
+              <div style="text-align: end">
+                <button
+                  @click="isActive_import = false"
+                  class="button is-small is-info"
+                >
+                  Thoát
+                </button>
+              </div>
+            </div>
+            <div>
+              <div class="titleKk">
+                <hr class="line" />
+                <div class="topleft">
+                  <span style="color: red; font-weight: 700">1.</span> Chọn file
+                  dữ liệu
+                </div>
+              </div>
+              <div class="columns">
+                <div class="column">
+                  <div>
+                    <div class="file is-info has-name is-small">
+                      <label class="file-label">
+                        <input
+                          @change="onFileChange"
+                          class="file-input"
+                          type="file"
+                          name="resume"
+                          ref="importFileInput"
+                        />
+                        <span class="file-cta">
+                          <span class="file-icon">
+                            <i class="fas fa-upload"></i>
+                          </span>
+                          <span class="file-label"> Chọn file dữ liệu </span>
+                        </span>
+                        <span class="file-name">
+                          {{ fileName }}
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="titleKk" style="margin-top: 10px">
+                <hr class="line" />
+                <div class="topleft">
+                  <span style="color: red; font-weight: 700">2.</span> Danh sách
+                  kê khai
+                </div>
+              </div>
+              <div class="columns table_wrapper">
+                <div class="column">
+                  <div v-if="dataImport.length > 0">
+                    <table
+                      class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
+                    >
+                      <thead>
+                        <tr style="font-size: small; background-color: #fff8dc">
+                          <td style="text-align: center; width: 3%">STT</td>
+                          <td style="text-align: center">Mã số BHXH</td>
+                          <td style="text-align: center">Mã loại hình</td>
+                          <td style="text-align: center">Tên loại hình</td>
+                          <td style="text-align: center">Họ tên</td>
+                          <td style="text-align: center">Ngày sinh</td>
+                          <td style="text-align: center">Giới tính</td>
+                          <td style="text-align: center">CCCD</td>
+                          <td style="text-align: center">Điện thoại</td>
+                          <td style="text-align: center">Mã phương án</td>
+                          <td style="text-align: center">Tên phương án</td>
+                          <td style="text-align: center">Người thu</td>
+                          <td style="text-align: center">Tiền lương CS</td>
+                          <td style="text-align: center">Số tiền</td>
+                          <td style="text-align: center">Từ ngày</td>
+                          <td style="text-align: center">
+                            Mã phương thức đóng
+                          </td>
+                          <td style="text-align: center">
+                            Tên phương thức đóng
+                          </td>
+                          <td style="text-align: center">Mã tỉnh</td>
+                          <td style="text-align: center">Tên tỉnh</td>
+                          <td style="text-align: center">Mã quận/huyện</td>
+                          <td style="text-align: center">Tên quận/huyện</td>
+                          <td style="text-align: center">Mã xã/phường</td>
+                          <td style="text-align: center">Tên xã/phường</td>
+                          <td style="text-align: center">Tổ thôn</td>
+                          <td style="text-align: center">BV tuyến tỉnh</td>
+                          <td style="text-align: center">Mã bệnh viện</td>
+                          <td style="text-align: center">Tên bệnh viện</td>
+                          <td style="text-align: center">Hình thức nạp</td>
+                          <td style="text-align: center">Ghi chú</td>
+                          <td style="text-align: center">Mã xã/phường mới</td>
+                          <td style="text-align: center">Tên xã/phường mới</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          v-for="(item, index) in dataImport"
+                          :key="index"
+                          style="font-size: small"
+                        >
+                          <td
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            {{ index + 1 }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.masobhxh }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.maloaihinh }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.tenloaihinh }}
+                          </td>
+                          <td style="text-align: center">{{ item.hoten }}</td>
+                          <td style="text-align: center">
+                            {{ item.ngaysinh }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.gioitinh }}
+                          </td>
+                          <td style="text-align: center">{{ item.cccd }}</td>
+                          <td style="text-align: center">
+                            {{ item.dienthoai }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.maphuongan }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.tenphuongan }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.nguoithu }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.tienluongcs }}
+                          </td>
+                          <td style="text-align: center">{{ item.sotien }}</td>
+                          <td style="text-align: center">{{ item.tungay }}</td>
+
+                          <td style="text-align: center">
+                            {{ item.maphuongthucdong }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.tenphuongthucdong }}
+                          </td>
+                          <td style="text-align: center">{{ item.matinh }}</td>
+                          <td style="text-align: center">{{ item.tentinh }}</td>
+                          <td style="text-align: center">
+                            {{ item.maquanhuyen }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.tenquanhuyen }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.maxaphuong }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.tenxaphuong }}
+                          </td>
+                          <td style="text-align: center">{{ item.tothon }}</td>
+                          <td style="text-align: center">
+                            {{ item.benhvientinh }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.mabenhvien }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.tenbenhvien }}
+                          </td>
+                          <td style="text-align: center">
+                            {{
+                              item.hinhthucnap === 1
+                                ? "Chuyển khoản"
+                                : "Tiền mặt"
+                            }}
+                          </td>
+
+                          <td style="text-align: center">{{ item.ghichu }}</td>
+                          <td style="text-align: center">
+                            {{ item.maxaphuong_new }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.tenxaphuong_new }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <hr class="navbar-divider" />
+              <div class="columns">
+                <div class="column" style="margin-top: 10px">
+                  <div
+                    class="field is-grouped is-flex is-justify-content-center"
+                  >
+                    <div class="control">
+                      <button
+                        @click="XacNhanImport"
+                        class="button is-success is-small"
+                      >
+                        Xác nhận import
+                      </button>
+                    </div>
+                    <div class="control">
+                      <button
+                        @click="cancelImport"
+                        class="button is-warning is-light is-small"
+                      >
+                        Hủy import
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -1442,6 +1682,7 @@ const currencyMask = createNumberMask({
   allowNegative: false,
 });
 import Swal from "sweetalert2";
+import XLSX from "xlsx";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 import vSelect from "vue-select";
@@ -1473,9 +1714,11 @@ export default {
 
   data() {
     return {
+      dataImport: [],
       isActive: false,
       isActive_nhaphoso: false,
       isActive_xacnhan: false,
+      isActive_import: false,
       mask: currencyMask,
       items: [],
       selectedOptionpa: "- Chọn phương án -",
@@ -1515,6 +1758,11 @@ export default {
       // phục vụ việc nhập item từ modal
       addedIndex: 0,
       datanhaphosomodal: {},
+
+      // thêm cho việc import dữ liệu kê khai từ file execl
+      fileName: "",
+      selectedFile: null,
+
       isRoleSent: false,
       benhvienInfo: null,
 
@@ -1526,12 +1774,16 @@ export default {
       // lam chinh quyen 2 cap 13/7/2025
       cq2cap_Tinh: [],
       cq2cap_Huyen: [],
+
+      // import data
+      urlDownload: "",
     };
   },
 
   mounted() {
     this.isRoleSent = this.user.res_sent;
-    this.loadTinh()
+    this.urlDownload = company.clientURL;
+    this.loadTinh();
   },
 
   async created() {
@@ -1665,7 +1917,7 @@ export default {
             this.items[index].maxaphuong_new = res_xa.data[0].ward_code;
           }
 
-          console.log(this.items[index].maxaphuong_new)
+          console.log(this.items[index].maxaphuong_new);
           console.log(this.items[index].tenxaphuong_new);
 
           // load xã theo tỉnh của mã số bhxh
@@ -1676,9 +1928,9 @@ export default {
 
           // console.log(data.hanthecu);
           // 31/12/2025
-          
+
           const hanTheCuStr = data.hanthecu; // từ data.hanthecu hoặc hardcode để test
-          const parts = hanTheCuStr.split('/');
+          const parts = hanTheCuStr.split("/");
           const hanTheCu = new Date(parts[2], parts[1] - 1, parts[0]); // yyyy, MM-1, dd
 
           const today = new Date();
@@ -1691,7 +1943,7 @@ export default {
             Swal.fire({
               icon: "info",
               title: "Thẻ vẫn còn hạn",
-              text: `Thẻ hiện còn hiệu lực thêm ${diffDays} ngày. Cân nhắc trước khi gia hạn!`
+              text: `Thẻ hiện còn hiệu lực thêm ${diffDays} ngày. Cân nhắc trước khi gia hạn!`,
             });
           }
 
@@ -2273,7 +2525,6 @@ export default {
         return false;
       }
 
-
       if (!item.maxaphuong || !item.tenxaphuong) {
         this.$toasted.show("Thiếu xã phường", {
           duration: 3000,
@@ -2842,6 +3093,11 @@ export default {
     },
 
     async addRow() {
+      if (this.items.length >= 15) {
+        Swal.fire("Giới hạn", "Chỉ được thêm tối đa 15 dòng", "warning");
+        return;
+      }
+
       this.lockButtonXacnhaninbldt = false;
       const phuongAnMacDinh = this.phuongan.find(
         (p) => p.maphuongan === "ON"
@@ -3457,7 +3713,6 @@ export default {
 
           return false;
         }
-
 
         if (!this.items[i].maxaphuong || !this.items[i].tenxaphuong) {
           this.$toasted.show("Thiếu xã phường", {
@@ -4246,16 +4501,225 @@ export default {
       return str.charAt(0).toUpperCase() + str.slice(1);
     },
 
+    async onFileChange(event) {
+      this.dataImport = [];
+      const file = event.target.files[0];
+      if (!file) {
+        Swal.fire("Lỗi", "Chưa chọn file", "error");
+        return;
+      }
+
+      this.isLoading = true;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const binaryString = e.target.result;
+        const workbook = XLSX.read(binaryString, { type: "binary" });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const jsonData = XLSX.utils.sheet_to_json(sheet);
+
+        // ✅ Danh sách cột chuẩn theo mẫu (đủ 31 cột)
+        const requiredColumns = [
+          "maloaihinh",
+          "tenloaihinh",
+          "masobhxh",
+          "hoten",
+          "ngaysinh",
+          "gioitinh",
+          "cccd",
+          "dienthoai",
+          "maphuongan",
+          "tenphuongan",
+          "tienluongcs",
+          "sotien",
+          "tungay",
+          "maphuongthucdong",
+          "tenphuongthucdong",
+          "matinh",
+          "tentinh",
+          "maquanhuyen",
+          "tenquanhuyen",
+          "maxaphuong",
+          "tenxaphuong",
+          "tothon",
+          "benhvientinh",
+          "mabenhvien",
+          "tenbenhvien",
+          "hinhthucnap",
+          "ghichu",
+          "maxaphuong_new",
+          "tenxaphuong_new",
+        ];
+
+        // Gộp tất cả các key xuất hiện trong toàn bộ sheet
+        const fileColumns = Array.from(
+          new Set(jsonData.flatMap((row) => Object.keys(row)))
+        );
+        const missing = requiredColumns.filter(
+          (col) => !fileColumns.includes(col)
+        );
+
+        if (missing.length > 0) {
+          this.isLoading = false;
+          Swal.fire(
+            "File import sai định dạng!",
+            `File thiếu cột: ${missing.join(", ")}`,
+            "error"
+          );
+          return;
+        }
+
+        // ✅ Nếu đúng định dạng thì gán dữ liệu
+        this.dataImport = jsonData;
+        this.isLoading = false;
+      };
+
+      reader.readAsBinaryString(file);
+    },
+
+    async XacNhanImport() {
+      if (!this.dataImport || !this.dataImport.length) {
+        Swal.fire("Lỗi", "Không có dữ liệu import", "error");
+        return;
+      }
+
+      // code ngày 30 tháng 7 2025. nhớ là thêm điều kiện cấm items hơn 15 bộ 1 lần.
+      // ✅ Điều kiện 1: Số dòng không quá 15
+      if (this.dataImport.length > 15) {
+        Swal.fire("Lỗi", "Chỉ được import tối đa 15 dòng mỗi lần", "error");
+        return;
+      }
+
+      // ✅ Điều kiện 2: Chỉ được 1 mã loại hình (duy nhất AR hoặc BI)
+      const uniqueLoaiHinh = new Set(this.dataImport.map((i) => i.maloaihinh));
+      if (uniqueLoaiHinh.size > 1) {
+        Swal.fire(
+          "Lỗi",
+          "Chỉ được import duy nhất 1 loại hình (AR hoặc BI) hãy sửa lại file",
+          "error"
+        );
+        return;
+      }
+
+      // ✅ Điều kiện 3: Tất cả giá trị trong file phải giống với this.maloaihinh
+      const hasKhacMaLoaiHinh = this.dataImport.some(
+        (i) => (i.maloaihinh || "").toString().trim() !== this.maloaihinh
+      );
+
+      if (hasKhacMaLoaiHinh) {
+        Swal.fire(
+          "Lỗi mã loại hình trong file import",
+          `File import cho loại hình ${this.loaihinh} phải có mã loại hình là "${this.maloaihinh}" cho tất cả các dòng`,
+          "error"
+        );
+        return;
+      }
+
+      // ✅ Điều kiện 4: Nếu mã loại hình là AR thì nguoithu phải rỗng
+      if (this.maloaihinh === "AR") {
+        const hasNguoiThu = this.dataImport.some(
+          (i) => i.nguoithu && i.nguoithu.toString().trim() !== ""
+        );
+        if (hasNguoiThu) {
+          Swal.fire(
+            "Lỗi",
+            "Loại hình AR không được có giá trị ở cột người thứ",
+            "error"
+          );
+          return;
+        }
+      }
+
+      this.isLoading = true;
+
+      // load xã theo tỉnh
+      const response = await this.$axios.get(
+        `/api/danhmucs/hanhchinh2cap-xa-with-ma-tinh?province_code=${this.matinh}`
+      );
+      const dataXa = response.data;
+
+      this.dataImport.forEach((importItem) => {
+        const index = this.items.findIndex(
+          (item) => item.masobhxh === importItem.masobhxh
+        );
+        if (index !== -1) {
+          this.items[index] = {
+            ...this.items[index],
+            ...importItem,
+            info_phuongan: this.phuongan,
+            phuongthucdong: this.phuongthucdong,
+            info_xaphuong: dataXa,
+            info_benhvien: this.dmbenhvien,
+            info_nguoithu: this.nguoithu,
+          };
+          // 👉 Tính tiền lại
+          this.tinhSoTien(index);
+        } else {
+          // Thêm mới
+          this.items.push({
+            ...importItem,
+            info_phuongan: this.phuongan,
+            phuongthucdong: this.phuongthucdong,
+            info_xaphuong: dataXa,
+            info_benhvien: this.dmbenhvien,
+            info_nguoithu: this.nguoithu,
+          });
+
+          // 👉 Tính tiền cho dòng mới
+          const newIndex = this.items.length - 1;
+          this.$nextTick(() => {
+            this.tinhSoTien(newIndex);
+          });
+        }
+      });
+
+      // ✅ Giải phóng dữ liệu & modal
+      this.dataImport = [];
+      this.isActive_import = false;
+
+      // ✅ Reset input file (giải phóng file đã chọn)
+      this.$refs.importFileInput.value = null;
+
+      this.isLoading = false;
+
+      // console.log(this.items);
+
+      //   <input
+      //   type="file"
+      //   ref="importFileInput"
+      //   @change="onFileChange"
+      // />
+    },
+
     async importKekhai() {
-      // thêm các thứ sau. 1. import XLSX from "xlsx"
-      // 2. thêm isActive_import (vào data); 3. thêm fileName: "", và selectedFile: null, vào data
-      // thêm @click="importKekhai" cho button trên cùng
       this.isActive_import = true;
     },
 
     cancelImport() {
       this.isActive_import = false;
       this.items = [];
+      this.dataImport = [];
+
+      // ✅ Reset input file (giải phóng file đã chọn)
+      this.$refs.importFileInput.value = null;
+
+      //   <input
+      //   type="file"
+      //   ref="importFileInput"
+      //   @change="onFileChange"
+      // />
+    },
+
+    async clearAllItems() {
+      const result = await Swal.fire({
+        title: `Xác nhận xoán toàn bộ bản kê khai?`,
+        showDenyButton: true,
+        confirmButtonText: "Xác nhận",
+        denyButtonText: `Hủy xoá`,
+      });
+      if (result.isConfirmed) {
+        this.items = [];
+      }
     },
   },
 };
@@ -4283,10 +4747,11 @@ export default {
   padding: 4px 8px;
 }
 
-/* Mặc định cho thiết bị di động */
 .modal-card-predata {
-  max-height: 80vh; /* Chiều cao tối đa là 80% màn hình */
-  overflow-y: auto; /* Cho phép cuộn nếu nội dung quá dài */
+  max-height: 80vh;
+  overflow-y: auto;
+  width: 95vw; /* Chiều rộng 95% màn hình */
+  max-width: 95vw !important; /* Bỏ giới hạn mặc định của Bulma */
 }
 
 /* Cho thiết bị máy tính */
