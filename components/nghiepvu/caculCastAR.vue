@@ -1435,7 +1435,7 @@
     <div class="">
       <div :class="{ 'is-active': isActive_import }" class="modal">
         <div class="modal-background"></div>
-        <div class="modal-content modal-card-body box">
+        <div class="modal-content modal-card-predata box">
           <section class="modal-card-kekhai-body">
             <div>
               <div>
@@ -1503,6 +1503,46 @@
                         <tr style="font-size: small; background-color: #fff8dc">
                           <td style="text-align: center; width: 3%">STT</td>
                           <td style="text-align: center">Mã số BHXH</td>
+                          <td style="text-align: center">Mã loại hình</td>
+                          <td style="text-align: center">Tên loại hình</td>
+                          <td style="text-align: center">Họ tên</td>
+                          <td style="text-align: center">Ngày sinh</td>
+                          <td style="text-align: center">Giới tính</td>
+                          <td style="text-align: center">CCCD</td>
+                          <td style="text-align: center">Điện thoại</td>
+                          <td style="text-align: center">Mã phương án</td>
+                          <td style="text-align: center">Tên phương án</td>
+                          <td style="text-align: center">Người thu</td>
+                          <td style="text-align: center">Tiền lương CS</td>
+                          <td style="text-align: center">Số tiền</td>
+                          <td style="text-align: center">
+                            Tỷ lệ NS địa phương
+                          </td>
+                          <td style="text-align: center">Hỗ trợ khác</td>
+                          <td style="text-align: center">Từ ngày</td>
+                          <td style="text-align: center">Đến ngày</td>
+                          <td style="text-align: center">Tỷ lệ đóng</td>
+                          <td style="text-align: center">Mức tiền đóng</td>
+                          <td style="text-align: center">Số tháng</td>
+                          <td style="text-align: center">
+                            Mã phương thức đóng
+                          </td>
+                          <td style="text-align: center">
+                            Tên phương thức đóng
+                          </td>
+                          <td style="text-align: center">Mã tỉnh</td>
+                          <td style="text-align: center">Tên tỉnh</td>
+                          <td style="text-align: center">Mã quận/huyện</td>
+                          <td style="text-align: center">Tên quận/huyện</td>
+                          <td style="text-align: center">Mã xã/phường</td>
+                          <td style="text-align: center">Tên xã/phường</td>
+                          <td style="text-align: center">Tổ thôn</td>
+                          <td style="text-align: center">BV tuyến tỉnh</td>
+                          <td style="text-align: center">Mã bệnh viện</td>
+                          <td style="text-align: center">Tên bệnh viện</td>
+                          <td style="text-align: center">Ghi chú</td>
+                          <td style="text-align: center">Mã xã/phường mới</td>
+                          <td style="text-align: center">Tên xã/phường mới</td>
                         </tr>
                       </thead>
                       <tbody>
@@ -1516,8 +1556,90 @@
                           >
                             {{ index + 1 }}
                           </td>
-                          <td style="text-align: center; font-weight: 500">
+                          <td style="text-align: center">
                             {{ item.masobhxh }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.maloaihinh }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.tenloaihinh }}
+                          </td>
+                          <td style="text-align: center">{{ item.hoten }}</td>
+                          <td style="text-align: center">
+                            {{ item.ngaysinh }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.gioitinh }}
+                          </td>
+                          <td style="text-align: center">{{ item.cccd }}</td>
+                          <td style="text-align: center">
+                            {{ item.dienthoai }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.maphuongan }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.tenphuongan }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.nguoithu }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.tienluongcs }}
+                          </td>
+                          <td style="text-align: center">{{ item.sotien }}</td>
+                          <td style="text-align: center">
+                            {{ item.tylengansachdiaphuong }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.hotrokhac }}
+                          </td>
+                          <td style="text-align: center">{{ item.tungay }}</td>
+                          <td style="text-align: center">{{ item.denngay }}</td>
+                          <td style="text-align: center">
+                            {{ item.tyledong }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.muctiendong }}
+                          </td>
+                          <td style="text-align: center">{{ item.sothang }}</td>
+                          <td style="text-align: center">
+                            {{ item.maphuongthucdong }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.tenphuongthucdong }}
+                          </td>
+                          <td style="text-align: center">{{ item.matinh }}</td>
+                          <td style="text-align: center">{{ item.tentinh }}</td>
+                          <td style="text-align: center">
+                            {{ item.maquanhuyen }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.tenquanhuyen }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.maxaphuong }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.tenxaphuong }}
+                          </td>
+                          <td style="text-align: center">{{ item.tothon }}</td>
+                          <td style="text-align: center">
+                            {{ item.benhvientinh }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.mabenhvien }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.tenbenhvien }}
+                          </td>
+                          <td style="text-align: center">{{ item.ghichu }}</td>
+                          <td style="text-align: center">
+                            {{ item.maxaphuong_new }}
+                          </td>
+                          <td style="text-align: center">
+                            {{ item.tenxaphuong_new }}
                           </td>
                         </tr>
                       </tbody>
@@ -3486,7 +3608,6 @@ export default {
           return false;
         }
 
-
         if (!this.items[i].maxaphuong || !this.items[i].tenxaphuong) {
           this.$toasted.show("Thiếu xã phường", {
             duration: 3000,
@@ -4066,6 +4187,8 @@ export default {
         return;
       }
 
+      this.isLoading = true;
+
       const reader = new FileReader();
       reader.onload = (e) => {
         const binaryString = e.target.result;
@@ -4074,8 +4197,10 @@ export default {
         // Giả sử file của bạn có dữ liệu ở sheet đầu tiên
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
         const jsonData = XLSX.utils.sheet_to_json(sheet);
-        console.log(jsonData);
+        // console.log(jsonData);
+
         this.dataImport = jsonData;
+        this.isLoading = false;
       };
 
       reader.readAsBinaryString(file);
@@ -4098,114 +4223,18 @@ export default {
         return;
       }
 
-      for (const row of this.dataImport) {
-        const masobhxh = row.masobhxh?.toString().trim();
-        if (!masobhxh) continue;
-
-        // Gọi API để lấy dữ liệu
-        const data = await this.getNguoiHuongBySoBHXH(masobhxh);
-        if (!data) continue;
-
-        // Dùng mẫu addRow
-        const phuongAnMacDinh =
-          this.phuongan.find((p) => p.maphuongan === "ON") || {};
-        const phuongThucMacDinh =
-          this.phuongthucdong.find((p) => p.maphuongthuc === "12") || {};
-
-        const item = {
-          matochuc: this.user.matochuc,
-          tentochuc: this.user.tentochuc,
-          madaily: this.user.madaily,
-          tendaily: this.user.tendaily,
-          maloaihinh: this.maloaihinh,
-          tenloaihinh: this.loaihinh,
-          masobhxh: masobhxh,
-          hoten: data.hoten || "",
-          ngaysinh:
-            data.ngaysinh?.slice(0, 10)?.split("-").reverse().join("/") || "",
-          gioitinh: data.gioitinh === "1" ? "Nam" : "Nữ",
-          cccd: data.cccd || "",
-          dienthoai: data.sodienthoai || "",
-          info_phuongan: this.phuongan,
-          maphuongan: phuongAnMacDinh.maphuongan || "",
-          tenphuongan: phuongAnMacDinh.tenphuongan || "",
-          tienluongcs: this.luongcoso,
-          tylensnnht: this.tylengansachtw,
-          tylensdp: this.tylenngansachdp,
-          hotrokhac: this.hotrokhac,
-          tungay: "", // tính sau nếu cần
-          denngay: "",
-          phuongthucdong: this.phuongthucdong,
-          maphuongthucdong: phuongThucMacDinh.maphuongthuc || "",
-          tenphuongthucdong: phuongThucMacDinh.tenphuongthuc || "",
-          sotien: 0,
-          info_tinh: { matinh: this.matinh, tentinh: this.tentinh },
-          matinh: this.matinh,
-          tentinh: this.tentinh,
-          info_huyen: this.dmquanhuyen,
-          maquanhuyen: data.quanhuyen?.mahuyen || "",
-          tenquanhuyen: data.quanhuyen?.tenhuyen || "",
-          info_xaphuong: [],
-          maxaphuong: data.xa?.maxa || "",
-          tenxaphuong: data.xa?.tenxa || "",
-          tothon: data.diachidangsinhsong || "",
-          info_benhvien: this.dmbenhvien,
-          benhvientinh: this.matinh,
-          mabenhvien: `40${data.benhvien?.mabenhvien}` || "",
-          tenbenhvien: data.benhvien?.tenbenhvien || "",
-          ghichu: "",
-          madoituong: "",
-          tendoituong: "",
-          tuthang: "",
-          denthang: "",
-          nguoithu: "",
-          manguoithu: 0,
-          tylengansachdiaphuong: 0,
-          tyledong: 0,
-          muctiendong: 0,
-          tientunguyendong: 0,
-          tienlai: 0,
-          tiennsnnht: 0,
-          tiennsdp: 0,
-          dotkekhai: "",
-          kykekhai: "",
-          ngaykekhai: "",
-          ngaybienlai: "",
-          sobienlai: "",
-          trangthai: 0,
-          status_hosoloi: 0,
-          status_naptien: 0,
-          hinhthucnap: 1,
-          hanthecu: data.hanthecu || "",
-        };
-
-        // Push vào danh sách
-        this.items.push(item);
-
-        // Tính tiền
-        await this.$nextTick(() => {
-          const index = this.items.length - 1;
-          this.tinhTienPhaiDong(index);
-        });
-      }
-
-      Swal.fire("Thành công", "Đã import dữ liệu kê khai", "success");
-    },
-
-    // Phương thức này sẽ thêm dữ liệu vào danh sách `items` từ file Excel
-    addRowFromImportedData(rowData) {
-      try {
-        this.items.push({
-          ...rowData,
-          // Thêm các trường dữ liệu mặc định nếu cần
-          trangthai: 0,
-          hinhthucnap: 1,
-        });
-      } catch (error) {
-        console.error("Lỗi khi thêm dữ liệu từ file:", error);
-      }
-
-      console.log(this.items);
+      this.dataImport.forEach((importItem) => {
+        const index = this.items.findIndex(
+          (item) => item.masobhxh === importItem.masobhxh
+        );
+        if (index !== -1) {
+          // Nếu đã tồn tại: ghi đè các trường có trong importItem
+          this.items[index] = { ...this.items[index], ...importItem };
+        } else {
+          // Nếu chưa tồn tại: thêm mới
+          this.items.push(importItem);
+        }
+      });
     },
 
     async importKekhai() {
@@ -4243,10 +4272,11 @@ export default {
   transform: translateY(-100%) !important;
 }
 
-/* Mặc định cho thiết bị di động */
 .modal-card-predata {
-  max-height: 80vh; /* Chiều cao tối đa là 80% màn hình */
-  overflow-y: auto; /* Cho phép cuộn nếu nội dung quá dài */
+  max-height: 80vh;
+  overflow-y: auto;
+  width: 95vw; /* Chiều rộng 95% màn hình */
+  max-width: 95vw !important; /* Bỏ giới hạn mặc định của Bulma */
 }
 
 /* Cho thiết bị máy tính */
