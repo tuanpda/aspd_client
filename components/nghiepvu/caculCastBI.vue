@@ -4651,6 +4651,13 @@ export default {
             info_xaphuong: dataXa,
             info_benhvien: this.dmbenhvien,
             info_nguoithu: this.nguoithu,
+            // thêm các trường cần thiết
+            matochuc: this.user.matochuc,
+            tentochuc: this.user.tentochuc,
+            madaily: this.user.madaily,
+            tendaily: this.user.tendaily,
+            status_hosoloi: 0,
+            status_naptien: 0,
           };
           // 👉 Tính tiền lại
           this.tinhSoTien(index);
@@ -4663,6 +4670,8 @@ export default {
             info_xaphuong: dataXa,
             info_benhvien: this.dmbenhvien,
             info_nguoithu: this.nguoithu,
+            status_hosoloi: 0,
+            status_naptien: 0,
           });
 
           // 👉 Tính tiền cho dòng mới

@@ -4337,6 +4337,9 @@ export default {
             phuongthucdong: this.phuongthucdong,
             info_xaphuong: dataXa,
             info_benhvien: this.dmbenhvien,
+            status_hosoloi: 0,
+            status_naptien: 0,
+            manguoithu: 0,
           };
           // 👉 Tính tiền lại
           this.tinhTienPhaiDong(index);
@@ -4348,6 +4351,9 @@ export default {
             phuongthucdong: this.phuongthucdong,
             info_xaphuong: dataXa,
             info_benhvien: this.dmbenhvien,
+            status_hosoloi: 0,
+            status_naptien: 0,
+            manguoithu: 0,
           });
 
           // 👉 Tính tiền cho dòng mới
