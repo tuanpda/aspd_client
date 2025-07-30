@@ -4337,9 +4337,16 @@ export default {
             phuongthucdong: this.phuongthucdong,
             info_xaphuong: dataXa,
             info_benhvien: this.dmbenhvien,
+
+            // thêm các trường cần thiết
+            matochuc: this.user.matochuc,
+            tentochuc: this.user.tentochuc,
+            madaily: this.user.madaily,
+            tendaily: this.user.tendaily,
             status_hosoloi: 0,
             status_naptien: 0,
             manguoithu: 0,
+            nguoithu: "",
           };
           // 👉 Tính tiền lại
           this.tinhTienPhaiDong(index);
@@ -4351,9 +4358,15 @@ export default {
             phuongthucdong: this.phuongthucdong,
             info_xaphuong: dataXa,
             info_benhvien: this.dmbenhvien,
+            // thêm các trường cần thiết
+            matochuc: this.user.matochuc,
+            tentochuc: this.user.tentochuc,
+            madaily: this.user.madaily,
+            tendaily: this.user.tendaily,
             status_hosoloi: 0,
             status_naptien: 0,
             manguoithu: 0,
+            nguoithu: "",
           });
 
           // 👉 Tính tiền cho dòng mới
