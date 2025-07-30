@@ -1799,14 +1799,6 @@ export default {
         return false;
       }
 
-      if (!item.maquanhuyen || !item.tenquanhuyen) {
-        this.$toasted.show("Thiếu quận huyện", {
-          duration: 3000,
-          theme: "bubble",
-        });
-        return false;
-      }
-
       if (!item.maxaphuong || !item.tenxaphuong) {
         this.$toasted.show("Thiếu xã phường", {
           duration: 3000,
@@ -3930,15 +3922,6 @@ async findNguoihuong(masobhxh, index) {
 
         if (!this.items[i].maphuongthucdong || !this.items[i].phuongthucdong) {
           this.$toasted.show("Thiếu phương thức đóng", {
-            duration: 3000,
-            theme: "bubble",
-          });
-
-          return false;
-        }
-
-        if (!this.items[i].maquanhuyen || !this.items[i].tenquanhuyen) {
-          this.$toasted.show("Thiếu quận huyện", {
             duration: 3000,
             theme: "bubble",
           });

@@ -2434,14 +2434,6 @@ export default {
         return false;
       }
 
-      if (!item.maquanhuyen || !item.tenquanhuyen) {
-        this.$toasted.show("Thiếu quận huyện", {
-          duration: 3000,
-          theme: "bubble",
-        });
-        return false;
-      }
-
       if (!item.maxaphuong || !item.tenxaphuong) {
         this.$toasted.show("Thiếu xã phường", {
           duration: 3000,
@@ -3494,14 +3486,6 @@ export default {
           return false;
         }
 
-        if (!this.items[i].maquanhuyen || !this.items[i].tenquanhuyen) {
-          this.$toasted.show("Thiếu quận huyện", {
-            duration: 3000,
-            theme: "bubble",
-          });
-
-          return false;
-        }
 
         if (!this.items[i].maxaphuong || !this.items[i].tenxaphuong) {
           this.$toasted.show("Thiếu xã phường", {
