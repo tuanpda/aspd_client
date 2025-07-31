@@ -4350,15 +4350,22 @@ export default {
         const index = this.items.findIndex(
           (item) => item.masobhxh === importItem.masobhxh
         );
+
+        // 🔹 Tìm bệnh viện một lần dùng chung
+        const selected = this.dmbenhvien.find(
+          (b) => b.mabenhvien === importItem.mabenhvien
+        );
+
         if (index !== -1) {
           this.items[index] = {
             ...this.items[index],
             ...importItem,
+            tenbenhvien: selected ? selected.tenbenhvien : "",
             info_phuongan: this.phuongan,
             phuongthucdong: this.phuongthucdong,
             info_xaphuong: dataXa,
             info_benhvien: this.dmbenhvien,
-
+            info_nguoithu: this.nguoithu,
             // thêm các trường cần thiết
             matochuc: this.user.matochuc,
             tentochuc: this.user.tentochuc,
@@ -4366,19 +4373,18 @@ export default {
             tendaily: this.user.tendaily,
             status_hosoloi: 0,
             status_naptien: 0,
-            manguoithu: 0,
-            nguoithu: "",
           };
           // 👉 Tính tiền lại
-          this.tinhTienPhaiDong(index);
+          this.tinhSoTien(index);
         } else {
-          // Thêm mới
           this.items.push({
             ...importItem,
+            tenbenhvien: selected ? selected.tenbenhvien : "",
             info_phuongan: this.phuongan,
             phuongthucdong: this.phuongthucdong,
             info_xaphuong: dataXa,
             info_benhvien: this.dmbenhvien,
+            info_nguoithu: this.nguoithu,
             // thêm các trường cần thiết
             matochuc: this.user.matochuc,
             tentochuc: this.user.tentochuc,
@@ -4386,14 +4392,12 @@ export default {
             tendaily: this.user.tendaily,
             status_hosoloi: 0,
             status_naptien: 0,
-            manguoithu: 0,
-            nguoithu: "",
           });
 
           // 👉 Tính tiền cho dòng mới
           const newIndex = this.items.length - 1;
           this.$nextTick(() => {
-            this.tinhTienPhaiDong(newIndex);
+            this.tinhSoTien(newIndex);
           });
         }
       });
