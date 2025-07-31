@@ -4664,16 +4664,23 @@ export default {
           (item) => item.masobhxh === importItem.masobhxh
         );
 
-        // 🔹 Tìm bệnh viện một lần dùng chung
-        const selected = this.dmbenhvien.find(
-          (b) => b.mabenhvien === importItem.mabenhvien
+        // ✅ Ép lại mabenhvien để v-select hiển thị tên
+        const option = this.dmbenhvien.find(
+          (b) =>
+            (b.mabenhvien ?? "").toString() ===
+            (importItem.mabenhvien ?? "").toString()
         );
+        if (option) {
+          importItem.mabenhvien = option.mabenhvien; // giữ đúng type
+          importItem.tenbenhvien = option.tenbenhvien;
+          // console.log(importItem.mabenhvien);
+          // console.log(importItem.tenbenhvien);
+        }
 
         if (index !== -1) {
           this.items[index] = {
             ...this.items[index],
             ...importItem,
-            tenbenhvien: selected ? selected.tenbenhvien : "",
             info_phuongan: this.phuongan,
             phuongthucdong: this.phuongthucdong,
             info_xaphuong: dataXa,
@@ -4692,7 +4699,6 @@ export default {
         } else {
           this.items.push({
             ...importItem,
-            tenbenhvien: selected ? selected.tenbenhvien : "",
             info_phuongan: this.phuongan,
             phuongthucdong: this.phuongthucdong,
             info_xaphuong: dataXa,

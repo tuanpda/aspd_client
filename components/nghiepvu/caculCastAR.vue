@@ -4347,20 +4347,28 @@ export default {
       const dataXa = response.data;
 
       this.dataImport.forEach((importItem) => {
+        // console.log(importItem.mabenhvien);
         const index = this.items.findIndex(
           (item) => item.masobhxh === importItem.masobhxh
         );
 
-        // 🔹 Tìm bệnh viện một lần dùng chung
-        const selected = this.dmbenhvien.find(
-          (b) => b.mabenhvien === importItem.mabenhvien
+        // ✅ Ép lại mabenhvien để v-select hiển thị tên
+        const option = this.dmbenhvien.find(
+          (b) =>
+            (b.mabenhvien ?? "").toString() ===
+            (importItem.mabenhvien ?? "").toString()
         );
+        if (option) {
+          importItem.mabenhvien = option.mabenhvien; // giữ đúng type
+          importItem.tenbenhvien = option.tenbenhvien;
+          // console.log(importItem.mabenhvien);
+          // console.log(importItem.tenbenhvien);
+        }
 
         if (index !== -1) {
           this.items[index] = {
             ...this.items[index],
             ...importItem,
-            tenbenhvien: selected ? selected.tenbenhvien : "",
             info_phuongan: this.phuongan,
             phuongthucdong: this.phuongthucdong,
             info_xaphuong: dataXa,
@@ -4375,11 +4383,10 @@ export default {
             status_naptien: 0,
           };
           // 👉 Tính tiền lại
-          this.tinhSoTien(index);
+          this.tinhTienPhaiDong(index);
         } else {
           this.items.push({
             ...importItem,
-            tenbenhvien: selected ? selected.tenbenhvien : "",
             info_phuongan: this.phuongan,
             phuongthucdong: this.phuongthucdong,
             info_xaphuong: dataXa,
@@ -4397,7 +4404,7 @@ export default {
           // 👉 Tính tiền cho dòng mới
           const newIndex = this.items.length - 1;
           this.$nextTick(() => {
-            this.tinhSoTien(newIndex);
+            this.tinhTienPhaiDong(newIndex);
           });
         }
       });
