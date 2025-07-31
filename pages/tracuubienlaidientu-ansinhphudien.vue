@@ -115,28 +115,39 @@ export default {
         sobienlai: this.sobienlai,
       });
 
-      // console.log(res.data);
+      // console.log(res.data.hs);
       if (res.data.hs) {
         this.data = res.data.hs;
         this.viewXacnhan = true;
+        // console.log(this.data);
+        let pdfUrl = "";
+        if (this.data && this.data.urlNameInvoice) {
+          const trangthai = this.data.active;
 
-        console.log(res.data.hs.status);
-        
+          // pdfUrl = `${company.clientURL}/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
+          if (trangthai !== 0) {
+            pdfUrl = `${company.clientURL}/bienlaidientu/daky/${this.data.urlNameInvoice}.pdf`;
+          } else {
+            pdfUrl = `${company.clientURL}/bienlaidientu/bienlaidahuy/${this.data.urlNameInvoice}.pdf`;
+          }
 
-        // tạo tên file PDF từ sobienlai và hoten
-        const urlNameInvoice = res.data.hs.urlNameInvoice;
+          // window.open(pdfUrl, "_blank");
 
-        // encode để tránh lỗi Unicode trong URL
-        let pdfUrl = `${company.clientURL}/bienlaidientu/daky/${urlNameInvoice}.pdf`;
-        // console.log(this.pdfSrc);
-
-        if (window.innerWidth < 768) {
-          // Nếu là mobile, mở tab mới
-          window.open(pdfUrl, "_blank");
+          if (window.innerWidth < 768) {
+            // Nếu là mobile, mở tab mới
+            window.open(pdfUrl, "_blank");
+          } else {
+            // Nếu không phải mobile, hiển thị trong iframe
+            this.viewXacnhan = true;
+            this.pdfSrc = pdfUrl;
+          }
         } else {
-          // Nếu không phải mobile, hiển thị trong iframe
-          this.viewXacnhan = true;
-          this.pdfSrc = pdfUrl;
+          console.warn("Thiếu thông tin số biên lai hoặc họ tên!");
+          this.$swal.fire({
+            icon: "error",
+            title: "Lỗi",
+            text: "Không lấy được thông tin biên lai.",
+          });
         }
       } else {
         const Toast = Swal.mixin({
