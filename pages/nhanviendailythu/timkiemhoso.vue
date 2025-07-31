@@ -1370,8 +1370,8 @@ export default {
     async getFullDataForExport() {
       const baseURL =
         this.user.role === 2
-          ? "/api/kekhai/kykekhai-search-hoso"
-          : "/api/kekhai/kykekhai-search-hoso-diemthu";
+          ? "/api/kekhai/kykekhai-search-hoso-pheduyeths"
+          : "/api/kekhai/kykekhai-search-hoso-diemthu-pheduyeths";
 
       const query = {
         trangthaihs: this.trangthaihs,
