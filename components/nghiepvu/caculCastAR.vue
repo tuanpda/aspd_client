@@ -399,7 +399,7 @@
               </td> -->
 
               <td style="text-align: center">
-                <div class="select is-fullwidth is-small">
+                <!-- <div class="select is-fullwidth is-small">
                   <select
                     v-model="item.mabenhvien"
                     @change="hopChangeReset($event, index)"
@@ -413,7 +413,15 @@
                       {{ nt.tenbenhvien }}
                     </option>
                   </select>
-                </div>
+                </div> -->
+                <v-select
+                  v-model="item.mabenhvien"
+                  :options="item.info_benhvien"
+                  label="tenbenhvien"
+                  :reduce="(b) => b.mabenhvien"
+                  @input="hopChangeReset($event, index)"
+                  :append-to-body="true"
+                />
               </td>
 
               <td>
@@ -3366,15 +3374,28 @@ export default {
       // console.log(this.items[index]);
     },
 
-    async hopChangeReset(e, index) {
-      const mabenhvien = e.target.value;
-      const text = e.target.options[e.target.selectedIndex].text;
-      console.log(mabenhvien);
-      console.log(text);
+    // async hopChangeReset(e, index) {
+    //   const mabenhvien = e.target.value;
+    //   const text = e.target.options[e.target.selectedIndex].text;
+    //   console.log(mabenhvien);
+    //   console.log(text);
 
-      this.items[index].mabenhvien = mabenhvien;
-      this.items[index].tenbenhvien = text;
-      // console.log(this.items[index]);
+    //   this.items[index].mabenhvien = mabenhvien;
+    //   this.items[index].tenbenhvien = text;
+    //   // console.log(this.items[index]);
+    // },
+
+    async hopChangeReset(mabenhvien, index) {
+      const item = this.items[index];
+
+      // Tìm object bệnh viện trong danh sách
+      const selected = item.info_benhvien.find(
+        (b) => b.mabenhvien === mabenhvien
+      );
+
+      // Gán mã và tên bệnh viện
+      item.mabenhvien = mabenhvien;
+      item.tenbenhvien = selected ? selected.tenbenhvien : "";
     },
 
     hinhthucNap(event, index) {
