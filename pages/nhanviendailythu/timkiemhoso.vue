@@ -1532,7 +1532,8 @@ export default {
     },
 
     async xemBienLai(item) {
-      // console.log(item.hosoIdentity);
+      console.log(item);
+      console.log(item.hosoIdentity);
 
       try {
         const res = await this.$axios.get(
@@ -1541,7 +1542,7 @@ export default {
 
         const hs = res.data.hs;
         let pdfUrl = "";
-        if (hs && hs.urlNameInvoice) {
+        if (hs) {
           const trangthai = hs.active;
 
           // pdfUrl = `${company.clientURL}/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;

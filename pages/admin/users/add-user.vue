@@ -1305,7 +1305,7 @@ export default {
         data.append("maxa", this.form.maxa);
         data.append("tenxa", this.form.tenxa);
         data.append("madaily", "");
-        data.append("tendaily", this.form.tendaily);
+        data.append("tendaily", `Điểm thu BHXH, BHYT ${this.form.tendaily}`);
         data.append("nvcongty", this.form.nvcongty);
         data.append("diachi", this.form.diachi);
         data.append("cccd", this.form.cccd);
@@ -1342,7 +1342,7 @@ export default {
             this.fetchDataUsers();
             // tạo chuỗi active
             // this.linkActive = `http://localhost:3000/${this.form.email}/actived`;
-            this.linkActive = `http://ansinhbhxh.online:4042/${this.form.email}/actived`;
+            this.linkActive = `${company.clientURL}${this.form.email}/actived`;
             //   // gửi mail kích hoạt và mật khẩu gọi API send mail
             const data_send_mail = {
               email: this.form.email,
@@ -1619,9 +1619,4 @@ datalist option:not(:checked) {
   max-height: 100px;
   padding: 5px;
 }
-
-
-
-
-
 </style>

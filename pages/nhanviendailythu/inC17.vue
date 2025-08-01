@@ -557,157 +557,163 @@ export default {
     },
 
     async xuatC17() {
-  this.isLoading = true;
+      this.isLoading = true;
 
-  try {
-    const results = await this.getFullDataForExport();
+      try {
+        const results = await this.getFullDataForExport();
 
-    if (!results.length) {
-      this.$swal.fire("Không có dữ liệu để xuất!", "", "warning");
-      this.isLoading = false;
-      return;
-    }
-
-    const data = results.map((item) => {
-      const ngaybienlai = item.ngaybienlai ? item.ngaybienlai.split(" ")[0] : "";
-      const trangthai = item.status_naptien;
-
-      const raw = item.sotien?.toString().replace(/\./g, "").replace(/,/g, "");
-      const sotien = parseFloat(raw);
-      const tien = trangthai && !isNaN(sotien) ? sotien : 0;
-
-      const maloaihinh = item.maloaihinh || "";
-      let bhxh = 0, bhyt_hgd = 0, bhyt_hgd_tb = 0;
-
-      if (["IS", "IL", "IT"].includes(maloaihinh)) {
-        bhxh = tien;
-      } else if (maloaihinh === "BI") {
-        bhyt_hgd = tien;
-      } else if (maloaihinh === "AR") {
-        bhyt_hgd_tb = tien;
-      }
-
-      return {
-        tendaily: item.tendaily,
-        madaily: item.madaily,
-        manhanvienthu: `NVT${item.cccd}`,
-        sobienlai: item.sobienlai,
-        ngaybienlai,
-        hoten: item.hoten,
-        masobhxh: item.masobhxh,
-        bhxh,
-        bhyt_hgd,
-        bhyt_hgd_tb,
-        ghichu: trangthai ? "" : "Đã hủy duyệt hoặc chưa được duyệt",
-      };
-    });
-
-    // 👉 Tính tổng cho từng loại tiền
-    const totalBHXH = data.reduce((sum, row) => sum + row.bhxh, 0);
-    const totalHGD = data.reduce((sum, row) => sum + row.bhyt_hgd, 0);
-    const totalTB = data.reduce((sum, row) => sum + row.bhyt_hgd_tb, 0);
-
-    data.push({
-      sobienlai: "Tổng cộng",
-      ngaybienlai: "",
-      hoten: "",
-      masobhxh: "",
-      bhxh: totalBHXH,
-      bhyt_hgd: totalHGD,
-      bhyt_hgd_tb: totalTB,
-      ghichu: "",
-    });
-
-    const customHeader = [
-      "Tên đại lý",
-      "Mã đại lý",
-      "Mã nhân viên thu",
-      "Số biên lai",
-      "Ngày biên lai",
-      "Họ tên người tham gia",
-      "Mã số BHXH người tham gia",
-      "BHXH",
-      "BHYT HGĐ",
-      "BHYT HGĐ có mức sống trung bình",
-      "Ghi chú",
-    ];
-
-    const worksheet = XLSX.utils.json_to_sheet(data, {
-      header: [
-        "tendaily",
-        "madaily",
-        "manhanvienthu",
-        "sobienlai",
-        "ngaybienlai",
-        "hoten",
-        "masobhxh",
-        "bhxh",
-        "bhyt_hgd",
-        "bhyt_hgd_tb",
-        "ghichu",
-      ],
-      skipHeader: true,
-      origin: "A2",
-    });
-
-    // 👉 Merge từ A đến G cho dòng tổng
-    const totalRow = data.length + 1;
-    worksheet["!merges"] = [
-      {
-        s: { r: totalRow - 1, c: 0 },
-        e: { r: totalRow - 1, c: 6 },
-      },
-    ];
-
-    // 👉 Ghi tiêu đề vào dòng 1
-    XLSX.utils.sheet_add_aoa(worksheet, [customHeader], { origin: "A1" });
-
-    // 👉 Auto-fit column width
-    worksheet["!cols"] = customHeader.map((h, colIdx) => {
-      const maxLength = Math.max(
-        h.length,
-        ...data.map((row) => {
-          const value = row[Object.keys(row)[colIdx]];
-          return value ? value.toString().length : 0;
-        })
-      );
-      return { wch: maxLength + 2 };
-    });
-
-    // 👉 Format số tiền cho cột H, I, J
-    const range = XLSX.utils.decode_range(worksheet["!ref"]);
-    for (let row = 2; row <= range.e.r + 1; row++) {
-      ["H", "I", "J"].forEach((col) => {
-        const cellAddress = `${col}${row}`;
-        if (worksheet[cellAddress]) {
-          worksheet[cellAddress].t = "n";
-          worksheet[cellAddress].z = "#,##0";
+        if (!results.length) {
+          this.$swal.fire("Không có dữ liệu để xuất!", "", "warning");
+          this.isLoading = false;
+          return;
         }
-      });
-    }
 
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "C17");
+        const data = results.map((item) => {
+          const ngaybienlai = item.ngaybienlai
+            ? item.ngaybienlai.split(" ")[0]
+            : "";
+          const trangthai = item.status_naptien;
 
-    const excelBuffer = XLSX.write(workbook, {
-      bookType: "xlsx",
-      type: "array",
-    });
+          const raw = item.sotien
+            ?.toString()
+            .replace(/\./g, "")
+            .replace(/,/g, "");
+          const sotien = parseFloat(raw);
+          const tien = trangthai && !isNaN(sotien) ? sotien : 0;
 
-    const fileName = `C17_${new Date().getTime()}.xlsx`;
-    const dataBlob = new Blob([excelBuffer], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    });
+          const maloaihinh = item.maloaihinh || "";
+          let bhxh = 0,
+            bhyt_hgd = 0,
+            bhyt_hgd_tb = 0;
 
-    saveAs(dataBlob, fileName);
-  } catch (err) {
-    console.error("❌ Lỗi export:", err);
-    this.$swal.fire("Lỗi khi xuất file!", "", "error");
-  } finally {
-    this.isLoading = false;
-  }
-},
+          if (["IS", "IL", "IT"].includes(maloaihinh)) {
+            bhxh = tien;
+          } else if (maloaihinh === "BI") {
+            bhyt_hgd = tien;
+          } else if (maloaihinh === "AR") {
+            bhyt_hgd_tb = tien;
+          }
 
+          return {
+            tendaily: item.tendaily,
+            madaily: item.madaily,
+            manhanvienthu: `NVT${item.cccd}`,
+            sobienlai: item.sobienlai,
+            ngaybienlai,
+            hoten: item.hoten,
+            masobhxh: item.masobhxh,
+            bhxh,
+            bhyt_hgd,
+            bhyt_hgd_tb,
+            ghichu: trangthai ? "" : "Đã hủy duyệt hoặc chưa được duyệt",
+          };
+        });
+
+        // 👉 Tính tổng cho từng loại tiền
+        const totalBHXH = data.reduce((sum, row) => sum + row.bhxh, 0);
+        const totalHGD = data.reduce((sum, row) => sum + row.bhyt_hgd, 0);
+        const totalTB = data.reduce((sum, row) => sum + row.bhyt_hgd_tb, 0);
+
+        data.push({
+          sobienlai: "Tổng cộng",
+          ngaybienlai: "",
+          hoten: "",
+          masobhxh: "",
+          bhxh: totalBHXH,
+          bhyt_hgd: totalHGD,
+          bhyt_hgd_tb: totalTB,
+          ghichu: "",
+        });
+
+        const customHeader = [
+          "Tên đại lý",
+          "Mã đại lý",
+          "Mã nhân viên thu",
+          "Số biên lai",
+          "Ngày biên lai",
+          "Họ tên người tham gia",
+          "Mã số BHXH người tham gia",
+          "BHXH",
+          "BHYT HGĐ",
+          "BHYT HGĐ có mức sống trung bình",
+          "Ghi chú",
+        ];
+
+        const worksheet = XLSX.utils.json_to_sheet(data, {
+          header: [
+            "tendaily",
+            "madaily",
+            "manhanvienthu",
+            "sobienlai",
+            "ngaybienlai",
+            "hoten",
+            "masobhxh",
+            "bhxh",
+            "bhyt_hgd",
+            "bhyt_hgd_tb",
+            "ghichu",
+          ],
+          skipHeader: true,
+          origin: "A2",
+        });
+
+        // 👉 Merge từ A đến G cho dòng tổng
+        const totalRow = data.length + 1;
+        worksheet["!merges"] = [
+          {
+            s: { r: totalRow - 1, c: 0 },
+            e: { r: totalRow - 1, c: 6 },
+          },
+        ];
+
+        // 👉 Ghi tiêu đề vào dòng 1
+        XLSX.utils.sheet_add_aoa(worksheet, [customHeader], { origin: "A1" });
+
+        // 👉 Auto-fit column width
+        worksheet["!cols"] = customHeader.map((h, colIdx) => {
+          const maxLength = Math.max(
+            h.length,
+            ...data.map((row) => {
+              const value = row[Object.keys(row)[colIdx]];
+              return value ? value.toString().length : 0;
+            })
+          );
+          return { wch: maxLength + 2 };
+        });
+
+        // 👉 Format số tiền cho cột H, I, J
+        const range = XLSX.utils.decode_range(worksheet["!ref"]);
+        for (let row = 2; row <= range.e.r + 1; row++) {
+          ["H", "I", "J"].forEach((col) => {
+            const cellAddress = `${col}${row}`;
+            if (worksheet[cellAddress]) {
+              worksheet[cellAddress].t = "n";
+              worksheet[cellAddress].z = "#,##0";
+            }
+          });
+        }
+
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "C17");
+
+        const excelBuffer = XLSX.write(workbook, {
+          bookType: "xlsx",
+          type: "array",
+        });
+
+        const fileName = `C17_${new Date().getTime()}.xlsx`;
+        const dataBlob = new Blob([excelBuffer], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+
+        saveAs(dataBlob, fileName);
+      } catch (err) {
+        console.error("❌ Lỗi export:", err);
+        this.$swal.fire("Lỗi khi xuất file!", "", "error");
+      } finally {
+        this.isLoading = false;
+      }
+    },
 
     async getFullDataForExport() {
       const baseURL =
