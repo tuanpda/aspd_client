@@ -67,7 +67,9 @@
               <template v-else-if="user.nvcongty == 1 && user.role != 2">
                 <span>{{ congty }}</span>
               </template>
-              <template v-else> <span>{{ congty }}</span></template>
+              <template v-else>
+                <span>{{ congty }}</span></template
+              >
             </p>
 
             <button class="button is-dark mt-4 is-fullwidth">
@@ -197,112 +199,6 @@
             </div>
           </div>
         </div>
-
-        <!-- <div class="column is-2">
-          <div class="box has-text-centered">
-            <nuxt-link
-              to="/nhanviendailythu/tongsokekhai"
-              style="text-decoration: none"
-            >
-              <span
-                style="
-                  font-size: 60px;
-                  font-weight: 700;
-                  font-family: 'Roboto', sans-serif;
-                  color: #ffc107;
-                "
-              >
-                {{ reportHoso.tong_hoso }}
-              </span>
-            </nuxt-link>
-
-            <hr class="navbar-divider" />
-            <span style="font-size: 15px; font-weight: 500"
-              >Tổng số người đã kê khai</span
-            >
-          </div>
-          <div class="box has-text-centered">
-            <span
-              style="
-                font-size: 60px;
-                font-weight: 700;
-                font-family: 'Roboto', sans-serif;
-                color: #0d6efd;
-              "
-            >
-              {{ reportHoso.tong_sohoso }}
-            </span>
-            <hr class="navbar-divider" />
-            <span style="font-size: 15px; font-weight: 500"
-              >Số bộ hồ sơ nạp lên</span
-            >
-          </div>
-        </div>
-
-        <div class="column is-2">
-          <div class="box has-text-centered">
-            <nuxt-link
-              to="/nhanviendailythu/hosoloibitrave"
-              style="text-decoration: none"
-            >
-              <span
-                style="
-                  font-size: 60px;
-                  font-weight: 700;
-                  font-family: 'Roboto', sans-serif;
-                  color: #dc3545;
-                "
-              >
-                {{ reportHoso.hoso_dagui }}
-              </span>
-            </nuxt-link>
-            <hr class="navbar-divider" />
-            <span style="font-size: 15px; font-weight: 500"
-              >Hồ sơ đã được DUYỆT</span
-            >
-          </div>
-        </div>
-
-        <div class="column is-3">
-          <div class="box has-text-centered">
-            <nuxt-link
-              to="/nhanviendailythu/hosochuaguilencong"
-              style="text-decoration: none"
-            >
-              <span
-                style="
-                  font-size: 60px;
-                  font-weight: 700;
-                  font-family: 'Roboto', sans-serif;
-                  color: #fd7e14;
-                "
-              >
-                {{ reportHoso.hoso_chuagui }}
-              </span>
-            </nuxt-link>
-
-            <hr class="navbar-divider" />
-            <span style="font-size: 15px; font-weight: 500"
-              >Hồ sơ bị Huỷ duyệt</span
-            >
-          </div>
-          <div class="box has-text-centered">
-            <span
-              style="
-                font-size: 60px;
-                font-weight: 700;
-                font-family: 'Roboto', sans-serif;
-                color: #6610f2;
-              "
-            >
-              {{ reportHoso.tong_sotien | formatNumber }}
-            </span>
-            <hr class="navbar-divider" />
-            <span style="font-size: 15px; font-weight: 500"
-              >Tổng số tiền thu</span
-            >
-          </div>
-        </div> -->
       </div>
 
       <div class="columns">
@@ -334,7 +230,7 @@ export default {
     CharLoaiHinhDaiLy,
     CharTongTienThuTheoThang,
     CharTienTheoDaiLyThu,
-    CharOther
+    CharOther,
   },
   data() {
     return {
@@ -369,7 +265,7 @@ export default {
 
   mounted() {
     // console.log(this.$store.state.user);
-    this.congty = company.companyName
+    this.congty = company.companyName;
     const user = this.user;
     if (user) {
       this.role = user.role;
@@ -379,7 +275,7 @@ export default {
       } else {
         this.madailyChart = 2;
         this.madaily = user.madaily;
-        this.cccd = user.cccd
+        this.cccd = user.cccd;
       }
 
       this.report();
@@ -403,7 +299,10 @@ export default {
     },
 
     async report() {
-      let cccd = ""
+      let cccd = "";
+      const now = new Date();
+      const thang = now.getMonth() + 1; // JavaScript trả về 0-11
+      const nam = now.getFullYear();
 
       if (this.user.cccd !== "") {
         cccd = { cccd: this.user.cccd };
@@ -411,16 +310,22 @@ export default {
 
       try {
         if (this.user.role == 1 || this.user.role == 2) {
-          // console.log(this.user.role);
           const res = await this.$axios.get(
-            `/api/kekhai/thongke-hosokekhai-tonghop`
+            `/api/kekhai/thongke-hosokekhai-tonghop-with-thang-nam`,
+            {
+              params: {
+                thang,
+                nam,
+              },
+            }
           );
           this.reportHoso = res.data.data;
         } else {
-          const res = await this.$axios.post(
-            `/api/kekhai/thongke-hosokekhai`,
-            cccd
-          );
+          const res = await this.$axios.post(`/api/kekhai/thongke-hosokekhai-with-thang-nam`, {
+            ...cccd,
+            thang,
+            nam,
+          });
           this.reportHoso = res.data.data;
         }
       } catch (err) {
