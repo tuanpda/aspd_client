@@ -350,7 +350,7 @@ export default {
 
         // cột L % ngân sách địa phương hỗ trợ
         // row.getCell(12).value = "20";
-        row.getCell(12).value = this.tylediaphuonghotroIs
+        row.getCell(12).value = this.tylediaphuonghotroIs;
 
         // cột M
         const tienNSDP = (((1500000 * 22) / 100) * 20) / 100;
@@ -450,20 +450,20 @@ export default {
         }
 
         // Cột AS 45 - AX 50
-        row.getCell(45).value = item.tentinh; 
+        row.getCell(45).value = item.tentinh;
         row.getCell(46).value = item.matinh;
-        row.getCell(47).value = item.tenquanhuyen; 
-        row.getCell(48).value = item.maquanhuyen; 
-        row.getCell(49).value = item.tenxaphuong; 
-        row.getCell(50).value = item.maxaphuong; 
+        row.getCell(47).value = item.tenquanhuyen;
+        row.getCell(48).value = item.maquanhuyen;
+        row.getCell(49).value = item.tenxaphuong;
+        row.getCell(50).value = item.maxaphuong;
 
         // Cột AY 51 - BD 56
-        row.getCell(51).value = item.tentinh; 
-        row.getCell(52).value = item.matinh; 
+        row.getCell(51).value = item.tentinh;
+        row.getCell(52).value = item.matinh;
         row.getCell(53).value = item.tenquanhuyen;
-        row.getCell(54).value = item.maquanhuyen; 
-        row.getCell(55).value = item.tenxaphuong; 
-        row.getCell(56).value = item.maxaphuong; 
+        row.getCell(54).value = item.maquanhuyen;
+        row.getCell(55).value = item.tenxaphuong;
+        row.getCell(56).value = item.maxaphuong;
 
         row.getCell(57).value = item.tennguoitao; // Cột BE
         row.getCell(59).value = item.dienthoai; // Cột BG
@@ -491,7 +491,6 @@ export default {
       document.body.removeChild(a);
     },
 
-
     async exportExcel() {
       const workbook = new ExcelJS.Workbook();
 
@@ -515,7 +514,9 @@ export default {
         const rowNumber = startRow + index;
         const row = worksheet.getRow(rowNumber);
 
-        const doituong = this.doituongdong.find((d) => d.madoituong === item.madoituong);
+        const doituong = this.doituongdong.find(
+          (d) => d.madoituong === item.madoituong
+        );
         const tyleHotroTW = doituong ? doituong.tylehotro : 0;
 
         const base = 1500000;
@@ -537,20 +538,27 @@ export default {
         // row.getCell(12).value = this.tylediaphuonghotroIs;
         // row.getCell(13).value = tienNSDP * item.maphuongthucdong;
         row.getCell(10).value = item.tylensnnht;
-        row.getCell(11).value = parseFloat(item.tiennsnnht) * parseFloat(item.maphuongthucdong)
+        row.getCell(11).value =
+          parseFloat(item.tiennsnnht) * parseFloat(item.maphuongthucdong);
         row.getCell(12).value = item.tylensdp;
-        row.getCell(13).value = parseFloat(item.tiennsdp) * parseFloat(item.maphuongthucdong)
+        row.getCell(13).value =
+          parseFloat(item.tiennsdp) * parseFloat(item.maphuongthucdong);
 
         row.getCell(16).value = Number(item.sotien);
-        row.getCell(17).value = Number(item.sotien) + tienNSDP * item.maphuongthucdong + tienNSNNHT;
+        row.getCell(17).value =
+          Number(item.sotien) + tienNSDP * item.maphuongthucdong + tienNSNNHT;
         row.getCell(18).value = item.tentinh;
         row.getCell(19).value = item.matinh;
-        row.getCell(20).value = item.tenquanhuyen;
-        row.getCell(21).value = item.maquanhuyen;
-        row.getCell(22).value = item.tenxaphuong;
-        row.getCell(23).value = item.maxaphuong;
+        // row.getCell(20).value = item.tenquanhuyen;
+        // row.getCell(21).value = item.maquanhuyen;
+        // row.getCell(22).value = item.tenxaphuong;
+        // row.getCell(23).value = item.maxaphuong;
+        row.getCell(22).value = item.tenxaphuong_new;
+        row.getCell(23).value = item.maxaphuong_new;
         row.getCell(24).value = item.tothon;
-        row.getCell(25).value = `Số biên lai: ${item.sobienlai}. Người nhập: ${item.tennguoitao}`;
+        row.getCell(
+          25
+        ).value = `Số biên lai: ${item.sobienlai}. Người nhập: ${item.tennguoitao}`;
         row.getCell(26).value = item.maphuongthucdong;
 
         let mucdong = item.muctiendong || 0;
@@ -576,17 +584,22 @@ export default {
 
         row.getCell(45).value = item.tentinh;
         row.getCell(46).value = item.matinh;
-        row.getCell(47).value = item.tenquanhuyen;
-        row.getCell(48).value = item.maquanhuyen;
-        row.getCell(49).value = item.tenxaphuong;
-        row.getCell(50).value = item.maxaphuong;
+        // row.getCell(47).value = item.tenquanhuyen;
+        // row.getCell(48).value = item.maquanhuyen;
+        // row.getCell(49).value = item.tenxaphuong;
+        // row.getCell(50).value = item.maxaphuong;
+        row.getCell(49).value = item.tenxaphuong_new;
+        row.getCell(50).value = item.maxaphuong_new;
+
         row.getCell(51).value = item.tentinh;
         row.getCell(52).value = item.matinh;
-        row.getCell(53).value = item.tenquanhuyen;
-        row.getCell(54).value = item.maquanhuyen;
-        row.getCell(55).value = item.tenxaphuong;
-        
-        row.getCell(56).value = item.maxaphuong;
+        // row.getCell(53).value = item.tenquanhuyen;
+        // row.getCell(54).value = item.maquanhuyen;
+        // row.getCell(55).value = item.tenxaphuong;
+        // row.getCell(56).value = item.maxaphuong;
+        row.getCell(55).value = item.tenxaphuong_new;
+        row.getCell(56).value = item.maxaphuong_new;
+
         row.getCell(57).value = item.tennguoitao;
         row.getCell(59).value = item.dienthoai;
         row.getCell(74).value = item.ghichu;
@@ -605,8 +618,7 @@ export default {
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-    }
-
+    },
   },
 };
 </script>
