@@ -239,7 +239,11 @@
 
                 <td style="text-align: center">{{ index + 1 }}</td>
                 <td style="">{{ item._id }}</td>
-                <td style="">{{ item.sobienlai }}</td>
+                <td
+                  style="font-weight: 800; color: #dc3545; text-align: center"
+                >
+                  {{ item.sobienlai }}
+                </td>
                 <td style="text-align: center">
                   <template v-if="item.trangthai === 1">
                     <span style="font-weight: 700; color: #ffc107"
@@ -278,8 +282,8 @@
                     @click="taolaiBienLaiDienTu(item)"
                     v-show="user.role === 2"
                   >
-                    <span style="color: #d63384" class="icon is-small is-left">
-                      <i class="fas fa-print"></i>
+                    <span style="color: #0d6efd" class="icon is-small is-left">
+                      <i class="far fa-clock"></i>
                     </span>
                   </a>
                 </td>
@@ -1080,7 +1084,7 @@ export default {
     },
 
     async taolaiBienLaiDienTu(item) {
-      console.log(item);
+      // console.log(item);
       // NẾU HỦY THÀNH CÔNG THÌ HỦY BIÊN LAI VÀ GHI VÀO DỮ LIỆU
       // gọi hàm tạo lại hóa đơn
       // gọi lại tìm biên lai
@@ -1142,6 +1146,11 @@ export default {
       if (result.isConfirmed) {
         await this.inLaiBienlaidosaisot(dataPost);
       }
+
+      Swal.fire({
+        title: "Đã tạo lại thành công biên lai điện tử!",
+        icon: "success",
+      });
     },
 
     // HÀM XÁC NHẬN HỒ SƠ KE KHAI CHO TRƯỜNG STATUS_NAPTIEN==1
@@ -1571,8 +1580,8 @@ export default {
     },
 
     async xemBienLai(item) {
-      console.log(item);
-      console.log(item.hosoIdentity);
+      // console.log(item);
+      // console.log(item.hosoIdentity);
 
       try {
         const res = await this.$axios.get(
