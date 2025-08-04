@@ -179,6 +179,8 @@
                 </td>
 
                 <td style="text-align: center">Biên lai</td>
+                <td style="text-align: center">Biên lai đã in ra</td>
+                <td style="text-align: center">Biên lai đối soát</td>
                 <td rowspan="2" style="text-align: center">
                   Reset <br />
                   hồ sơ
@@ -255,6 +257,20 @@
                 </td>
                 <td style="text-align: center">
                   <a @click="xemBienLai(item)">
+                    <span style="color: #ff69b4" class="icon is-small is-left">
+                      <i class="fas fa-print"></i>
+                    </span>
+                  </a>
+                </td>
+                <td style="text-align: center">
+                  <a @click="xemBienLaiDain(item)">
+                    <span style="color: #ff69b4" class="icon is-small is-left">
+                      <i class="fas fa-print"></i>
+                    </span>
+                  </a>
+                </td>
+                <td style="text-align: center">
+                  <a @click="xemBienLaiDoisoat(item)">
                     <span style="color: #ff69b4" class="icon is-small is-left">
                       <i class="fas fa-print"></i>
                     </span>
@@ -1547,7 +1563,86 @@ export default {
 
           // pdfUrl = `${company.clientURL}/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
           if (trangthai !== 0) {
-            // pdfUrl = `${company.clientURL}/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
+            pdfUrl = `${company.clientURL}/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
+          } else {
+            pdfUrl = `${company.clientURL}/bienlaidientu/bienlaidahuy/${hs.urlNameInvoice}.pdf`;
+          }
+
+          window.open(pdfUrl, "_blank");
+        } else {
+          console.warn("Thiếu thông tin số biên lai hoặc họ tên!");
+          this.$swal.fire({
+            icon: "error",
+            title: "Lỗi",
+            text: "Không lấy được thông tin biên lai.",
+          });
+        }
+      } catch (error) {
+        console.error("Lỗi khi gọi API:", error);
+        this.$swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: "Không thể kết nối đến máy chủ.",
+        });
+      }
+    },
+
+    async xemBienLaiDain(item) {
+      console.log(item);
+      console.log(item.hosoIdentity);
+
+      try {
+        const res = await this.$axios.get(
+          `/api/kekhai/view-item-bienlai?hosoIdentity=${item.hosoIdentity}`
+        );
+
+        const hs = res.data.hs;
+        let pdfUrl = "";
+        if (hs) {
+          const trangthai = hs.active;
+
+          // pdfUrl = `${company.clientURL}/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
+          if (trangthai !== 0) {
+            pdfUrl = `${company.clientURL}/bienlaidientu/bienlai/${hs.urlNameInvoice}.pdf`;
+          } else {
+            pdfUrl = `${company.clientURL}/bienlaidientu/bienlaidahuy/${hs.urlNameInvoice}.pdf`;
+          }
+
+          window.open(pdfUrl, "_blank");
+        } else {
+          console.warn("Thiếu thông tin số biên lai hoặc họ tên!");
+          this.$swal.fire({
+            icon: "error",
+            title: "Lỗi",
+            text: "Không lấy được thông tin biên lai.",
+          });
+        }
+      } catch (error) {
+        console.error("Lỗi khi gọi API:", error);
+        this.$swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: "Không thể kết nối đến máy chủ.",
+        });
+      }
+    },
+
+    async xemBienLaiDoisoat(item) {
+      console.log(item);
+      console.log(item.hosoIdentity);
+
+      try {
+        const res = await this.$axios.get(
+          `/api/kekhai/view-item-bienlai?hosoIdentity=${item.hosoIdentity}`
+        );
+
+        const hs = res.data.hs;
+        let pdfUrl = "";
+        if (hs) {
+          const trangthai = hs.active;
+
+          // pdfUrl = `${company.clientURL}/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
+          if (trangthai !== 0) {
             pdfUrl = `${company.clientURL}/bienlaidientu/bienlaidoisoat/${hs.urlNameInvoice}.pdf`;
           } else {
             pdfUrl = `${company.clientURL}/bienlaidientu/bienlaidahuy/${hs.urlNameInvoice}.pdf`;
