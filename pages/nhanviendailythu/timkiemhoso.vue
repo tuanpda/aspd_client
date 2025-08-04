@@ -119,7 +119,7 @@
               <span>HUỶ duyệt hồ sơ</span>
             </button>
 
-            <button
+            <!-- <button
               :disabled="user.role !== 2"
               @click="xacnhanInlaibienlai()"
               class="button is-small"
@@ -128,7 +128,7 @@
                 <i class="far fa-file-pdf"></i>
               </span>
               <span>In lại biên lai</span>
-            </button>
+            </button> -->
 
             <ExportExcel_VNPT_D05
               :disabled="!isExport"
@@ -167,6 +167,7 @@
                 </td>
                 <td rowspan="2" style="text-align: center; width: 3%">STT</td>
                 <td rowspan="2" style="text-align: center">_ID</td>
+                <td rowspan="2" style="text-align: center">Số biên lai</td>
                 <td
                   style="text-align: center; cursor: pointer"
                   @click="sortByField('trangthai')"
@@ -182,6 +183,10 @@
                 <td rowspan="2" style="text-align: center">
                   Reset <br />
                   hồ sơ
+                </td>
+                <td rowspan="2" style="text-align: center">
+                  In lại <br />
+                  biên lai
                 </td>
                 <td rowspan="2" style="text-align: center">Mã đại lý</td>
                 <td rowspan="2" style="text-align: center">Tên đại lý</td>
@@ -234,6 +239,7 @@
 
                 <td style="text-align: center">{{ index + 1 }}</td>
                 <td style="">{{ item._id }}</td>
+                <td style="">{{ item.sobienlai }}</td>
                 <td style="text-align: center">
                   <template v-if="item.trangthai === 1">
                     <span style="font-weight: 700; color: #ffc107"
@@ -264,6 +270,16 @@
                   <a @click="resetHoso(item)" v-show="user.role === 2">
                     <span style="color: #dc3545" class="icon is-small is-left">
                       <i class="fas fa-compress-alt"></i>
+                    </span>
+                  </a>
+                </td>
+                <td style="text-align: center">
+                  <a
+                    @click="taolaiBienLaiDienTu(item)"
+                    v-show="user.role === 2"
+                  >
+                    <span style="color: #d63384" class="icon is-small is-left">
+                      <i class="fas fa-print"></i>
                     </span>
                   </a>
                 </td>
@@ -1063,46 +1079,69 @@ export default {
       await this.inBienLaiDientu(dataPost);
     },
 
-    async taolaiBienLaiDienTu(dataBienlaidientu) {
+    async taolaiBienLaiDienTu(item) {
+      console.log(item);
       // NẾU HỦY THÀNH CÔNG THÌ HỦY BIÊN LAI VÀ GHI VÀO DỮ LIỆU
       // gọi hàm tạo lại hóa đơn
-      const dateStr = dataBienlaidientu.ngaybienlai;
+      // gọi lại tìm biên lai
+      const dataFindbl = {
+        hosoIdentity: item.hosoIdentity,
+      };
+      const res_finbl = await this.$axios.post(
+        `/api/kekhai/find-bienlaidientu-huybienlai`,
+        dataFindbl
+      );
+      // console.log(res_finbl.data.hs);
+      // const payloadBienlai = res_finbl.data.hs;
+      // console.log(payloadBienlai);
+      const payloadBienlai = res_finbl.data.hs;
+
+      const dateStr = payloadBienlai.ngaybienlai;
       const year = dateStr.split(" ")[0].split("-")[2];
       // console.log(dateStr, year);
 
       const dataPost = {
-        hosoIdentity: dataBienlaidientu.hosoIdentity,
-        maSoBhxh: dataBienlaidientu.masobhxh,
-        hoTen: dataBienlaidientu.hoten,
-        soCccd: dataBienlaidientu.cccd,
-        ngaySinh: dataBienlaidientu.ngaysinh,
-        gioiTinh: dataBienlaidientu.gioitinh,
-        soDienThoai: dataBienlaidientu.sodienthoai,
-        nguoithutien: dataBienlaidientu.nguoithutien,
-        maloaihinh: dataBienlaidientu.loaihinh,
-        soTien: dataBienlaidientu.sotien,
-        soThang: dataBienlaidientu.sothang,
-        tuNgay: dataBienlaidientu.tungay,
-        denNgay: dataBienlaidientu.denngay,
-        tuThang: dataBienlaidientu.tuthang,
-        denThang: dataBienlaidientu.denthang,
-        maDaiLy: dataBienlaidientu.madaily,
-        tenDaiLy: dataBienlaidientu.tendaily,
-        sobienlai: dataBienlaidientu.sobienlai,
-        ngaybienlai: dataBienlaidientu.ngaybienlai,
-        tothon: dataBienlaidientu.tothon,
-        tenquanhuyen: dataBienlaidientu.tenquanhuyen,
-        tentinh: dataBienlaidientu.tentinh,
+        hosoIdentity: payloadBienlai.hosoIdentity,
+        maSoBhxh: payloadBienlai.masobhxh,
+        hoTen: payloadBienlai.hoten,
+        soCccd: payloadBienlai.cccd,
+        ngaySinh: payloadBienlai.ngaysinh,
+        gioiTinh: payloadBienlai.gioitinh,
+        soDienThoai: payloadBienlai.sodienthoai,
+        nguoithutien: payloadBienlai.nguoithutien,
+        maloaihinh: payloadBienlai.loaihinh,
+        soTien: payloadBienlai.sotien,
+        soThang: payloadBienlai.sothang,
+        tuNgay: payloadBienlai.tungay,
+        denNgay: payloadBienlai.denngay,
+        tuThang: payloadBienlai.tuthang,
+        denThang: payloadBienlai.denthang,
+        maDaiLy: payloadBienlai.madaily,
+        tenDaiLy: payloadBienlai.tendaily,
+        sobienlai: payloadBienlai.sobienlai,
+        ngaybienlai: payloadBienlai.ngaybienlai,
+        tothon: payloadBienlai.tothon,
+        tenquanhuyen: payloadBienlai.tenquanhuyen,
+        tentinh: payloadBienlai.tentinh,
         currentYear: year,
-        urlNameInvoice: dataBienlaidientu.urlNameInvoice,
-        cccd_nguoithutien: dataBienlaidientu.cccd_nguoithutien,
-        lydohuy: dataBienlaidientu.lydohuy,
-        ngayhuybienlai: dataBienlaidientu.ngayhuybienlai,
-        nguoihuybienlai: dataBienlaidientu.nguoihuybienlai,
+        urlNameInvoice: payloadBienlai.urlNameInvoice,
+        cccd_nguoithutien: payloadBienlai.cccd_nguoithutien,
+        lydohuy: payloadBienlai.lydohuy,
+        ngayhuybienlai: payloadBienlai.ngayhuybienlai,
+        nguoihuybienlai: payloadBienlai.nguoihuybienlai,
       };
       // console.log(dataPost);
 
-      await this.inBienLaiDientu(dataPost);
+      const result = await Swal.fire({
+        title: `Xác nhận in lại biên lai ?`,
+        showDenyButton: true,
+        confirmButtonText: "Xác nhận",
+        denyButtonText: `Hủy in lại`,
+      });
+
+      if (result.isConfirmed) {
+        await this.inLaiBienlaidosaisot(dataPost);
+      }
     },
 
     // HÀM XÁC NHẬN HỒ SƠ KE KHAI CHO TRƯỜNG STATUS_NAPTIEN==1
@@ -1965,32 +2004,6 @@ export default {
       const img = new Image();
       img.src = backgroundImage; // hoặc base64 string
 
-      const imageWidthHUY = 100; // Chiều rộng của ảnh
-      const imageHeightHUY = 70; // Chiều cao của ảnh
-      // // ĐOẠN NÀY PHẢI XEM XÉT VIỆC CHÈN ẢNH ĐÃ HỦY HOẶC XÁC NHẬN BIÊN LAI
-      doc.addImage(huyHoadon, "PNG", x, y, imageWidthHUY, imageHeightHUY);
-      const img_trangthai = new Image();
-      img_trangthai.src = huyHoadon; // hoặc base64 string
-
-      // lấy lại tâm trang
-      const centerXLydoHuy = pageWidth / 2; // Tâm ngang trang
-      doc.addFont("OpenSans-Bold-normal.ttf", "OpenSans-Bold", "bold");
-      doc.setFont("OpenSans-Bold", "bold");
-      doc.setFontSize(11);
-      doc.setTextColor("#ff0000");
-      doc.text(`Lý do hủy biên lai: ${data.lydohuy}`, centerXLydoHuy, y + 75, {
-        align: "center",
-        fontWeight: "bold",
-      });
-      doc.text(`Người hủy: ${data.nguoihuybienlai}`, centerXLydoHuy, y + 80, {
-        align: "center",
-        fontWeight: "bold",
-      });
-      doc.text(`Ngày hủy: ${data.ngayhuybienlai}`, centerXLydoHuy, y + 85, {
-        align: "center",
-        fontWeight: "bold",
-      });
-
       // img.onload = () => {
       //   console.log("✅ Ảnh đã load xong");
       //   doc.addImage(img, "PNG", x, y, imageWidth, imageHeight);
@@ -2295,6 +2308,15 @@ export default {
           "Content-Type": "multipart/form-data",
         },
       });
+
+      // In hoá đơn đối soát
+      await this.$axios.post("/api/kekhai/upload-bienlai-doisoat", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log("inxong");
     },
 
     capitalizeFirstLetter(str) {
