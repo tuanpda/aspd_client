@@ -1547,8 +1547,8 @@ export default {
 
           // pdfUrl = `${company.clientURL}/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
           if (trangthai !== 0) {
-            // pdfUrl = `${company.clientURL}/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
-            pdfUrl = `${company.clientURL}/bienlaidientu/bienlaidoisoat/${hs.urlNameInvoice}.pdf`;
+            pdfUrl = `${company.clientURL}/bienlaidientu/daky/${hs.urlNameInvoice}.pdf`;
+            // pdfUrl = `${company.clientURL}/bienlaidientu/bienlaidoisoat/${hs.urlNameInvoice}.pdf`;
           } else {
             pdfUrl = `${company.clientURL}/bienlaidientu/bienlaidahuy/${hs.urlNameInvoice}.pdf`;
           }
