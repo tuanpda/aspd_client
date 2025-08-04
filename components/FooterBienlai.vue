@@ -22,10 +22,11 @@
         <!-- Cột giữa -->
         <div class="column has-text-centered">
           <div class="footer-row">
-            <span>
+            <!-- <span>
               Designed & Developed by
               <span class="highlighted">司.馬.懿</span>
-            </span>
+            </span> -->
+            <span>Công ty TNHHH An sinh Xã hội Phủ Diễn</span>
           </div>
           <div class="footer-row">
             <span>Copyright from @2023</span>

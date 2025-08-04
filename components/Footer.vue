@@ -28,7 +28,7 @@
             </span>
           </div>
           <div class="footer-row">
-            <span>Copyright from @2023</span>
+            <span>Công ty TNHHH An sinh Xã hội Phủ Diễn</span>
           </div>
         </div>
 

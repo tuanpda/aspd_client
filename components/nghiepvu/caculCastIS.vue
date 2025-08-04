@@ -1636,7 +1636,7 @@ export default {
   mounted() {
     // this.tinhDenThang("10/2024", "12");
     this.isRoleSent = this.user.res_sent;
-    this.loadTinh()
+    this.loadTinh();
   },
 
   async created() {
@@ -2000,7 +2000,7 @@ export default {
       }
     },
 
-async findNguoihuong(masobhxh, index) {
+    async findNguoihuong(masobhxh, index) {
       if (!masobhxh) return;
 
       const isDuplicate = this.items.some(
@@ -2037,7 +2037,7 @@ async findNguoihuong(masobhxh, index) {
           this.items[index].cccd = data.cccd;
           (this.items[index].gioitinh = data.gioitinh === "1" ? "Nam" : "Nữ"),
             (this.items[index].dienthoai = data.sodienthoai);
-          
+
           if (data.tuthang) {
             this.items[index].hanthecu = data.tuthang | "";
 
@@ -2047,7 +2047,7 @@ async findNguoihuong(masobhxh, index) {
             const nam = date.getFullYear();
             const tuthang = `${thang}/${nam}`;
             // console.log(tuthang);
-            
+
             this.items[index].tuthang = tuthang;
             this.items[index].muctiendong = data.muctiendong;
           }
@@ -2071,7 +2071,7 @@ async findNguoihuong(masobhxh, index) {
             this.items[index].maxaphuong_new = res_xa.data[0].ward_code;
           }
 
-          console.log(this.items[index].maxaphuong_new)
+          console.log(this.items[index].maxaphuong_new);
           console.log(this.items[index].tenxaphuong_new);
 
           // load xã theo tỉnh của mã số bhxh
@@ -2091,7 +2091,7 @@ async findNguoihuong(masobhxh, index) {
       }
     },
 
-     // HANH CHINH 2 CAP
+    // HANH CHINH 2 CAP
     async loadTinh() {
       const res = await this.$axios.get(`/api/danhmucs/hanhchinh2cap-tinh`);
       // console.log(res.data);
@@ -2099,7 +2099,6 @@ async findNguoihuong(masobhxh, index) {
         this.cq2cap_Tinh = res.data;
       }
     },
-
 
     // async findNguoihuong(masobhxh, index) {
     //   if (masobhxh !== "") {
@@ -3238,7 +3237,13 @@ async findNguoihuong(masobhxh, index) {
     //   return Math.round(tienCanNap);
     // },
 
-    tinhTienPhaiDong(madoituong, muctiendong, maphuongthucdong, tuthang, index) {
+    tinhTienPhaiDong(
+      madoituong,
+      muctiendong,
+      maphuongthucdong,
+      tuthang,
+      index
+    ) {
       // console.log(index)
       // console.log(madoituong, muctiendong, maphuongthucdong, tuthang)
       // === BƯỚC 1: TÍNH TỔNG SỐ THÁNG TỪ tuthang đến denthang ===
@@ -3299,21 +3304,19 @@ async findNguoihuong(masobhxh, index) {
       );
       const tyleHotroTWMucCu = doituongCu ? doituongCu.tylehotro : 0;
 
-
       // NGÂN SÁCH NHÀ NƯỚC HỖ TRỢ
       console.log(
         "Ngân sách nhà nước hỗ trợ cho",
-        madoituong, 
+        madoituong,
         "theo mức mới là :",
         tyleHotroTW
       );
       console.log(
         "Ngân sách nhà nước hỗ trợ cho",
-        madoituong, 
+        madoituong,
         "theo mức cũ là :",
         tyleHotroTWMucCu
       );
-
 
       // NGHỆ AN HỖ TRỢ 1 MỨC KHÁC NHAU CHO TỪNG ĐỐI TƯỢNG. NÊN GIẢI PHÁP CÓ THỂ LÀ PHẢI
       // CHO HỖ TRỢ VÀO TRONG CODE THAY CHO DANH MỤC
@@ -3346,20 +3349,24 @@ async findNguoihuong(masobhxh, index) {
       let tienCanNap = 0; // tổng tiền cần phải nạp
 
       if (thangTruocMoc > 0) {
-        console.log('TỔNG MỨC HỖ TRỢ CHỈ CÓ NSNN MỨC CŨ CHO TOÀN BỘ QUÁ TRÌNH ĐÓNG')
+        console.log(
+          "TỔNG MỨC HỖ TRỢ CHỈ CÓ NSNN MỨC CŨ CHO TOÀN BỘ QUÁ TRÌNH ĐÓNG"
+        );
         // Tiền trung ương hỗ trợ (danh mục hỗ trợ cũ)
         const tienTrungUongHoTro = castSubTwhotro * (tyleHotroTWMucCu / 100);
-        const tongTienHoTro = tienTrungUongHoTro
+        const tongTienHoTro = tienTrungUongHoTro;
         // Tiền địa phương hỗ trợ không có = 0
         console.log("Tổng hỗ trợ (chỉ có NSNN , mức cũ)", tongTienHoTro);
 
         // TÍNH TIỀN CẦN NẠP
-        tienCanNap = (castMucdong - tongTienHoTro) * tongThang
+        tienCanNap = (castMucdong - tongTienHoTro) * tongThang;
         console.log("Tiền nhà nước hỗ trợ (Mức mới): ", tienTrungUongHoTro);
         console.log("Tiền địa phương hỗ trợ: ", 0);
         console.log("Tổng cả 2: ", tongTienHoTro);
         console.log("Tổng tiền cần nạp: ", tienCanNap);
-        console.log("Công thức tính là: ** (Mức tiền đóng x tỷ lệ đóng (22%) - NSNN hỗ trợ CŨ) x số tháng cần nạp")
+        console.log(
+          "Công thức tính là: ** (Mức tiền đóng x tỷ lệ đóng (22%) - NSNN hỗ trợ CŨ) x số tháng cần nạp"
+        );
 
         this.items[index].tylensnnht = tyleHotroTWMucCu;
         this.items[index].tiennsnnht = tienTrungUongHoTro;
@@ -3381,21 +3388,24 @@ async findNguoihuong(masobhxh, index) {
           "Tiền ngân sách địa phương hỗ trợ: ",
           this.items[index].tiennsdp
         );
-
-      }else{
-        console.log('TỔNG MỨC HỖ TRỢ GỒM NSNN MỨC MỚI VÀ NSĐP TOÀN BỘ QUÁ TRÌNH ĐÓNG')
+      } else {
+        console.log(
+          "TỔNG MỨC HỖ TRỢ GỒM NSNN MỨC MỚI VÀ NSĐP TOÀN BỘ QUÁ TRÌNH ĐÓNG"
+        );
         // Tiền trung ương hỗ trợ (danh mục hỗ trợ MỚI)
         const tienTrungUongHoTro = castSubTwhotro * (tyleHotroTW / 100);
         const tienDiaPhuongHoTro = castSubTwhotro * (ngansachdiaphuongIs / 100);
-        const tongTienHoTro = tienTrungUongHoTro + tienDiaPhuongHoTro
+        const tongTienHoTro = tienTrungUongHoTro + tienDiaPhuongHoTro;
 
         console.log("Tiền nhà nước hỗ trợ (Mức mới): ", tienTrungUongHoTro);
         console.log("Tiền địa phương hỗ trợ: ", tienDiaPhuongHoTro);
         console.log("Tổng cả 2: ", tongTienHoTro);
 
-        tienCanNap = (castMucdong - tongTienHoTro) * tongThang
+        tienCanNap = (castMucdong - tongTienHoTro) * tongThang;
         console.log("Tổng tiền cần nạp: ", tienCanNap);
-        console.log("Công thức tính là: ** (Mức tiền đóng x tỷ lệ đóng (22%) -  NSNN hỗ trợ MỚI - hỗ trợ địa phương) x cho số tháng cần nạp")
+        console.log(
+          "Công thức tính là: ** (Mức tiền đóng x tỷ lệ đóng (22%) -  NSNN hỗ trợ MỚI - hỗ trợ địa phương) x cho số tháng cần nạp"
+        );
 
         this.items[index].tylensnnht = tyleHotroTW;
         this.items[index].tiennsnnht = tienTrungUongHoTro;
@@ -3457,7 +3467,6 @@ async findNguoihuong(masobhxh, index) {
         index
       );
     },
-
 
     async doituongChangeDongbu(e, index) {
       const madoituong = e.target.value;
@@ -4494,7 +4503,10 @@ async findNguoihuong(masobhxh, index) {
       if (data.maloaihinh == "AR" || data.maloaihinh == "BI") {
         noidungText = `Tiền đóng BHYT, phương thức đóng ${data.soThang} tháng, từ ngày ${data.tuNgay} đến ngày ${data.denNgay}`;
       } else {
-        if (data.maphuongthucdong !== "D1LNVS" && data.maphuongthucdong !== "D1LNCT") {
+        if (
+          data.maphuongthucdong !== "D1LNVS" &&
+          data.maphuongthucdong !== "D1LNCT"
+        ) {
           noidungText = `Tiền đóng BHXH Tự nguyện, phương thức đóng ${data.soThang} tháng, từ tháng ${data.tuThang} đến tháng ${data.denThang}`;
         } else {
           noidungText = `BHXH Tự nguyện, ${data.tenphuongthucdong}, ${data.sothang} tháng, từ tháng ${data.tuThang}`;
@@ -4629,6 +4641,13 @@ async findNguoihuong(masobhxh, index) {
 
       // Gửi về backend
       await this.$axios.post("/api/kekhai/upload-bienlai", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      // In hoá đơn đối soát
+      await this.$axios.post("/api/kekhai/upload-bienlai-doisoat", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

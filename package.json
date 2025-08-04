@@ -11,6 +11,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
     "chart.js": "^2.9.4",
+    "chartjs-plugin-datalabels": "^0.7.0",
     "cookieparser": "^0.1.0",
     "core-js": "^3.25.3",
     "exceljs": "^4.4.0",

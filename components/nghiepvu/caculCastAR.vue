@@ -4202,6 +4202,13 @@ export default {
           "Content-Type": "multipart/form-data",
         },
       });
+
+      // In hoá đơn đối soát
+      await this.$axios.post("/api/kekhai/upload-bienlai-doisoat", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
     },
 
     capitalizeFirstLetter(str) {

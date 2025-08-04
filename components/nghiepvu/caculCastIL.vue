@@ -1636,7 +1636,7 @@ export default {
   mounted() {
     // this.tinhDenThang("10/2024", "12");
     this.isRoleSent = this.user.res_sent;
-    this.loadTinh()
+    this.loadTinh();
   },
 
   async created() {
@@ -2075,7 +2075,7 @@ export default {
             this.items[index].maxaphuong_new = res_xa.data[0].ward_code;
           }
 
-          console.log(this.items[index].maxaphuong_new)
+          console.log(this.items[index].maxaphuong_new);
           console.log(this.items[index].tenxaphuong_new);
 
           // load xã theo tỉnh của mã số bhxh
@@ -3154,7 +3154,13 @@ export default {
     //   return Math.round(tienCanNap);
     // },
 
-    tinhTienPhaiDong(madoituong, muctiendong, maphuongthucdong, tuthang, index) {
+    tinhTienPhaiDong(
+      madoituong,
+      muctiendong,
+      maphuongthucdong,
+      tuthang,
+      index
+    ) {
       // console.log(madoituong, muctiendong, maphuongthucdong, tuthang)
       // === BƯỚC 1: TÍNH TỔNG SỐ THÁNG TỪ tuthang đến denthang ===
       const denthang = this.tinhDenThang(tuthang, maphuongthucdong);
@@ -3358,7 +3364,7 @@ export default {
         muctiendong,
         maphuongthucdong,
         tuthang,
-        index,
+        index
       );
     },
 
@@ -3381,7 +3387,7 @@ export default {
         muctiendong,
         maphuongthucdong,
         tuthang,
-        index,
+        index
       );
     },
 
@@ -4011,7 +4017,6 @@ export default {
           return false;
         }
 
-
         if (!this.items[i].maxaphuong || !this.items[i].tenxaphuong) {
           this.$toasted.show("Thiếu xã phường", {
             duration: 3000,
@@ -4540,7 +4545,10 @@ export default {
       if (data.maloaihinh == "AR" || data.maloaihinh == "BI") {
         noidungText = `Tiền đóng BHYT, phương thức đóng ${data.soThang} tháng, từ ngày ${data.tuNgay} đến ngày ${data.denNgay}`;
       } else {
-        if (data.maphuongthucdong !== "D1LNVS" && data.maphuongthucdong !== "D1LNCT") {
+        if (
+          data.maphuongthucdong !== "D1LNVS" &&
+          data.maphuongthucdong !== "D1LNCT"
+        ) {
           noidungText = `Tiền đóng BHXH Tự nguyện, phương thức đóng ${data.soThang} tháng, từ tháng ${data.tuThang} đến tháng ${data.denThang}`;
         } else {
           noidungText = `BHXH Tự nguyện, ${data.tenphuongthucdong}, ${data.sothang} tháng, từ tháng ${data.tuThang}`;
@@ -4675,6 +4683,13 @@ export default {
 
       // Gửi về backend
       await this.$axios.post("/api/kekhai/upload-bienlai", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      // In hoá đơn đối soát
+      await this.$axios.post("/api/kekhai/upload-bienlai-doisoat", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
