@@ -129,8 +129,8 @@
                 &ensp; Phê duyệt hồ sơ
               </nuxt-link>
               <nuxt-link to="/nhanviendailythu/timkiemhoso-doisoat" class="navbar-item">
-                <span style="color: #198754" class="icon is-small is-left">
-                  <i class="far fa-edit"></i>
+                <span style="color: #6610f2" class="icon is-small is-left">
+                  <i class="	far fa-calendar-times"></i>
                 </span>
                 &ensp; Đối soát
               </nuxt-link>
