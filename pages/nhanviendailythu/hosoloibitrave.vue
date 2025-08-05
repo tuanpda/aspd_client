@@ -198,7 +198,6 @@
 </template>
 
 <script>
-import ExportExcel_Viettel from "@/components/exportExecl/viettel";
 import ExportExcel_Vnpt from "@/components/exportExecl/vnpt";
 import Swal from "sweetalert2";
 import ExcelJS from "exceljs";
@@ -222,7 +221,6 @@ import num2words from "vn-num2words";
 export default {
   name: "DanhsachKekhaiPage",
   components: {
-    ExportExcel_Viettel,
     ExportExcel_Vnpt,
   },
 
@@ -278,7 +276,7 @@ export default {
 
     this.dailyview = user.madaily;
     this.tochuc = user.matochuc;
-    this.cccd = user.cccd
+    this.cccd = user.cccd;
     this.isRoleSent = user.res_sent;
     this.madaily = user.madaily;
     this.diemthu = user.tendaily;

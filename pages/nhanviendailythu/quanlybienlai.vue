@@ -143,7 +143,9 @@
                     <span style="font-weight: 700; color: #dc3545">Đã huỷ</span>
                   </template>
                   <template v-else>
-                    <span style="font-weight: 700; color: #ffc107">Chưa duyệt</span>
+                    <span style="font-weight: 700; color: #ffc107"
+                      >Chưa duyệt</span
+                    >
                   </template>
                 </td>
                 <td style="text-align: center">
@@ -244,7 +246,6 @@
 
 <script>
 import company from "@/config.company";
-import ExportExcel_Viettel from "@/components/exportExecl/viettel";
 import ExportExcel_Vnpt from "@/components/exportExecl/vnpt";
 import Swal from "sweetalert2";
 import ExcelJS from "exceljs";
@@ -255,11 +256,9 @@ import "~/assets/font/OpenSans-Bold-normal";
 import "~/assets/font/OpenSans_SemiCondensed-Italic-normal";
 import "~/assets/font/OpenSans-ExtraBold-normal";
 
-
 export default {
   name: "DanhsachKekhaiPage",
   components: {
-    ExportExcel_Viettel,
     ExportExcel_Vnpt,
   },
 
@@ -329,7 +328,7 @@ export default {
 
     this.dailyview = user.madaily;
     this.tochuc = user.matochuc;
-    this.cccd = user.cccd
+    this.cccd = user.cccd;
     this.isRoleSent = user.res_sent;
     this.madaily = user.madaily;
     this.diemthu = user.tendaily;
@@ -653,7 +652,7 @@ export default {
         });
       }
     },
-    
+
     capitalizeFirstLetter(str) {
       if (!str) return "";
       return str.charAt(0).toUpperCase() + str.slice(1);

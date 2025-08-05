@@ -8,7 +8,7 @@
       <span class="icon">
         <i class="fas fa-file-download"></i>
       </span>
-      <span>Xuất D05</span>
+      <span>D05 VNPT</span>
     </button>
   </div>
 </template>

@@ -236,7 +236,7 @@
                 <td>{{ item.tenloaihinh }}</td>
                 <td style="text-align: center">{{ item.maloaihinh }}</td>
                 <td style="text-align: center">{{ item.sohoso }}</td>
-                <td style="color: red; font-weight: 600">
+                <td style="color: red; font-weight: 600; text-align: right">
                   {{ item.tongtien.toLocaleString("vi-VN") }} đ
                 </td>
               </tr>
@@ -282,6 +282,7 @@ export default {
       hosodenhanbhyt: [],
       hosodenhanbhxh: [],
       reportcanhan: {},
+      role: "",
     };
   },
 
@@ -309,6 +310,7 @@ export default {
       this.madaily = user.madaily;
       this.diemthu = user.role === 2 ? "Tài khoản tổng hợp" : user.tendaily;
       this.isDiemthu = user.role !== 2;
+      this.role = user.role;
     },
 
     async fetchData() {
@@ -386,11 +388,18 @@ export default {
     async fetchLoaihinh() {
       this.isLoading = true;
       const dataByLoai = {};
+      let res;
       try {
         for (let month = 1; month <= 12; month++) {
-          const res = await this.$axios.get(
-            `/api/kekhai/baocao-loaihinh-kekhai-theo-thang-nam-daily?nam=${this.selectedYearLoaihinh}&thang=${month}&cccd=${this.cccd}`
-          );
+          if (this.role == 2) {
+            res = await this.$axios.get(
+              `/api/kekhai/baocao-loaihinh-kekhai-theo-thang-nam-daily-tonghop?nam=${this.selectedYearLoaihinh}&thang=${month}&cccd=${this.cccd}`
+            );
+          } else {
+            res = await this.$axios.get(
+              `/api/kekhai/baocao-loaihinh-kekhai-theo-thang-nam-daily?nam=${this.selectedYearLoaihinh}&thang=${month}&cccd=${this.cccd}`
+            );
+          }
 
           if (res.status === 200) {
             for (const item of res.data.data) {
@@ -457,19 +466,32 @@ export default {
 
     async fetchHosodenhan() {
       this.isLoading = true;
-
       try {
-        const res = await this.$axios.get(
-          `/api/kekhai/hosocanhbaodenhanbhyt?cccd=${this.cccd}`
-        );
-        // console.log(res.data.hs);
-        this.hosodenhanbhyt = res.data.hs;
+        if (this.role == 2) {
+          const res = await this.$axios.get(
+            `/api/kekhai/hosocanhbaodenhanbhyt-tonghop`
+          );
+          // console.log(res.data.hs);
+          this.hosodenhanbhyt = res.data.hs;
 
-        const resbhxh = await this.$axios.get(
-          `/api/kekhai/hosocanhbaodenhanbhxh?cccd=${this.cccd}`
-        );
-        // console.log(resbhxh.data.hs);
-        this.hosodenhanbhxh = resbhxh.data.hs;
+          const resbhxh = await this.$axios.get(
+            `/api/kekhai/hosocanhbaodenhanbhxh-tonghop`
+          );
+          // console.log(resbhxh.data.hs);
+          this.hosodenhanbhxh = resbhxh.data.hs;
+        } else {
+          const res = await this.$axios.get(
+            `/api/kekhai/hosocanhbaodenhanbhyt?cccd=${this.cccd}`
+          );
+          // console.log(res.data.hs);
+          this.hosodenhanbhyt = res.data.hs;
+
+          const resbhxh = await this.$axios.get(
+            `/api/kekhai/hosocanhbaodenhanbhxh?cccd=${this.cccd}`
+          );
+          // console.log(resbhxh.data.hs);
+          this.hosodenhanbhxh = resbhxh.data.hs;
+        }
       } catch (error) {
         console.error("Lỗi tải dữ liệu:", error);
       } finally {
@@ -479,19 +501,34 @@ export default {
 
     async fetchReportCanhan() {
       this.isLoading = true;
-      console.log(this.selectedMonth);
-      console.log(this.selectedYear);
+      // console.log(this.selectedMonth);
+      // console.log(this.selectedYear);
+      console.log(this.role);
       try {
-        const res = await this.$axios.get(`/api/kekhai/baocaotaichinhcanhan`, {
-          params: {
-            cccd: this.cccd,
-            thang: this.selectedMonth,
-            nam: this.selectedYear,
-          },
-        });
-        // console.log(res);
-
-        this.reportcanhan = res.data.hs;
+        if (this.role == 2) {
+          const res = await this.$axios.get(
+            `/api/kekhai/baocaotaichinhtonghop`,
+            {
+              params: {
+                thang: this.selectedMonth,
+                nam: this.selectedYear,
+              },
+            }
+          );
+          this.reportcanhan = res.data.hs;
+        } else {
+          const res = await this.$axios.get(
+            `/api/kekhai/baocaotaichinhcanhan`,
+            {
+              params: {
+                cccd: this.cccd,
+                thang: this.selectedMonth,
+                nam: this.selectedYear,
+              },
+            }
+          );
+          this.reportcanhan = res.data.hs;
+        }
       } catch (error) {
         console.error("Lỗi tải dữ liệu báo cáo tài chính:", error);
       } finally {

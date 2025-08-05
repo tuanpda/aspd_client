@@ -128,9 +128,13 @@
                 </span>
                 &ensp; Phê duyệt hồ sơ
               </nuxt-link>
-              <nuxt-link to="/nhanviendailythu/timkiemhoso-doisoat" class="navbar-item">
+              <nuxt-link
+                v-if="user && user.role === 2"
+                to="/nhanviendailythu/timkiemhoso-doisoat"
+                class="navbar-item"
+              >
                 <span style="color: #6610f2" class="icon is-small is-left">
-                  <i class="	far fa-calendar-times"></i>
+                  <i class="far fa-calendar-times"></i>
                 </span>
                 &ensp; Đối soát
               </nuxt-link>
@@ -185,7 +189,7 @@
               </a>
               <nuxt-link to="/help" class="navbar-item">
                 <span class="icon is-small is-left" style="color: #198754">
-                  <i class="	fab fa-youtube-square"></i>
+                  <i class="fab fa-youtube-square"></i>
                 </span>
                 &ensp; Hướng dẫn sử dụng
               </nuxt-link>

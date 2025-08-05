@@ -3,22 +3,17 @@
     <button
       @click="exportExcel"
       :disabled="disabled"
-      class="button is-small is-primary"
+      class="button is-small is-info"
     >
       <span class="icon">
         <i class="fas fa-file-download"></i>
       </span>
-      <span>D03 VNPT</span>
+      <span>D03 VIETTEL</span>
     </button>
   </div>
 </template>
 <script>
 import company from "@/config.company";
-const countries = require("../../data/countries");
-const dantoc = require("../../data/dantoc");
-const reles = require("../../data/moiquanhe");
-const mhbhyt = require("../../data/muchuongbhyt");
-const titleVnpt = require("../../data/titleVnpt");
 
 import ExcelJS from "exceljs";
 const { DateTime } = require("luxon");
@@ -41,7 +36,9 @@ export default {
       const workbook = new ExcelJS.Workbook();
 
       // Tải file mẫu D03
-      const response = await fetch(`${company.apiBaseURL}/static/d03.xlsx`);
+      const response = await fetch(
+        `${company.apiBaseURL}/static/d03viettel.xls`
+      );
       // console.log(response);
 
       const arrayBuffer = await response.arrayBuffer();
@@ -56,7 +53,7 @@ export default {
       }
 
       // Xử lý dữ liệu và ghi vào Excel
-      const startRow = 4;
+      const startRow = 6;
       this.data_execl.sort((a, b) => a._id - b._id);
 
       this.data_execl.forEach((item, index) => {
@@ -197,7 +194,7 @@ export default {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "D03_VNPT.xlsx";
+      a.download = "D03_VIETTEL.xls";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

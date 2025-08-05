@@ -97,7 +97,7 @@
               <span>Tìm kiếm hồ sơ</span>
             </button>
 
-            <button
+            <!-- <button
               :disabled="user.role !== 2"
               @click="xacNhanBienLai()"
               class="button is-small is-danger"
@@ -137,7 +137,7 @@
             <ExportExcel_Vnpt
               :disabled="!isExport"
               :data_execl="selectedItems_execl_export"
-            />
+            /> -->
           </div>
         </footer>
       </div>
